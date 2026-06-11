@@ -3,6 +3,7 @@ import time
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.api.v1.endpoints import router as v1_router
@@ -63,6 +64,21 @@ def create_app() -> FastAPI:
         redoc_url=settings.redoc_url,
         lifespan=lifespan,
     )
+
+    origins = [
+        "https://fuelkenya.com",
+        "https://www.fuelkenya.com",
+        "http://localhost:3000",
+    ]
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["GET", "POST", "OPTIONS"],
+        allow_headers=["*"],
+    )
+
     app.add_middleware(RequestTimingMiddleware)
     app.add_middleware(RateLimitMiddleware)
     app.include_router(v1_router, prefix=settings.api_prefix)

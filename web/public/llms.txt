@@ -1,0 +1,16 @@
+# Fuel Kenya
+
+> High-precision, historical, and current EPRA-regulated fuel prices in Kenya. Updated monthly on the 14th.
+
+## Core API Endpoints
+
+All endpoints return raw JSON. No authentication is required for read-only GET requests.
+
+- [Current National Prices](https://api.fuelkenya.com/api/v1/prices/latest): Returns a JSON list of prices for all ~150 towns in the active EPRA cycle.
+- [Town Specific History](https://api.fuelkenya.com/api/v1/prices/history?town={town}): Returns chronological pricing cycles for a given town.
+- [Town List](https://api.fuelkenya.com/api/v1/towns): Returns a flat JSON array of all registered towns.
+
+## Web Directory Structure
+
+- [/](https://fuelkenya.com/): National dashboard, visual trend charts, and maximum/minimum price indices.
+- [/town/{slug}](https://fuelkenya.com/town/{slug}): Dedicated, crawlable landing pages for every town (e.g., `/town/nairobi`, `/town/mombasa`).

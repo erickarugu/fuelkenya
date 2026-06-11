@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  color: #121212;
+  background-color: #fff8ee;
+  --surface: rgba(255, 255, 255, 0.87);
+  --surface-strong: rgba(255, 255, 255, 0.95);
+}
+
+html {
+  min-height: 100%;
+  background: radial-gradient(
+    circle at top left,
+    #fff7e8,
+    #f7f1e8 20%,
+    #eff3ea 55%,
+    #faf5f0 100%
+  );
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family:
+    var(--font-inter),
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  background: radial-gradient(
+    circle at top left,
+    #fff7e8,
+    #f7f1e8 20%,
+    #eff3ea 55%,
+    #faf5f0 100%
+  );
+  color: #121212;
+  text-rendering: optimizeLegibility;
+  font-feature-settings:
+    "rlig" 1,
+    "calt" 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: rgba(0, 77, 49, 0.22);
+  color: #121212;
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-white/75 border border-white/70 backdrop-blur-xl;
+  }
+
+  .hero-glow {
+    box-shadow: 0 40px 120px rgba(0, 77, 49, 0.12);
+  }
+
+  .float-up {
+    animation: floatUp 8s ease-in-out infinite;
+  }
+
+  @keyframes floatUp {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+}
