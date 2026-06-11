@@ -16,7 +16,7 @@ from fastapi import (
     UploadFile,
     status,
 )
-from sqlalchemy import func, select
+from sqlalchemy import func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.cache import clear_latest_cache, get_latest_cache, set_latest_cache
@@ -138,8 +138,12 @@ def transform_row(row: Dict[str, Any]) -> Dict[str, Any]:
 
 
 @router.get("/health", tags=["health"])
-async def health_check(settings: Settings = Depends(get_settings)):
-    return {"status": "ok", "app": settings.app_name, "version": settings.app_version}
+async def health_check(db: AsyncSession = Depends(get_db)):
+    try:
+        await db.execute(text("SELECT 1"))
+        return {"status": "healthy"}
+    except Exception:
+        raise HTTPException(status_code=500, detail="Database unreachable")
 
 
 @router.post(

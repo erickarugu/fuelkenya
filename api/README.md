@@ -25,6 +25,8 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 Copy `.env.example` to `.env` and update `DATABASE_URL` for your PostgreSQL database. If you want to protect ingestion, set `INGEST_TOKEN` and send `Authorization: Bearer <token>` when calling `/api/v1/ingest/csv`.
 
+To enable SQL query logging, add `SQL_ECHO=true` to `.env`.
+
 ## Rate limiting
 
 For public API usage, the backend enforces a default limit of `60` requests per minute per client IP. You can adjust this behavior by setting:

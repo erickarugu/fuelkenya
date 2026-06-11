@@ -1,5 +1,6 @@
 from __future__ import annotations
 from collections.abc import AsyncGenerator
+import logging
 
 from sqlalchemy import (
     Column,
@@ -12,6 +13,7 @@ from sqlalchemy import (
     String,
     Table,
     UniqueConstraint,
+    event,
     func,
 )
 from sqlalchemy.dialects.postgresql import insert as pg_insert
@@ -22,9 +24,24 @@ from app.core.config import get_settings
 
 settings = get_settings()
 
-engine = create_async_engine(settings.database_url, future=True, echo=False)
+logger = logging.getLogger("fuelkenya.sql")
+engine = create_async_engine(
+    settings.database_url,
+    future=True,
+    echo=False,
+)
 async_session = async_sessionmaker(engine, expire_on_commit=False)
 metadata = MetaData()
+
+if settings.sql_echo:
+    logger.setLevel(getattr(logging, settings.log_level.upper(), logging.INFO))
+
+    @event.listens_for(engine.sync_engine, "before_cursor_execute")
+    def before_cursor_execute(
+        conn, cursor, statement, parameters, context, executemany
+    ):
+        logger.info("SQL QUERY: %s | params=%s", statement, parameters)
+
 
 fuel_prices = Table(
     "fuel_prices",

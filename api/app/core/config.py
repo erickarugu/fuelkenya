@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     rate_limit_max_requests: int = 60
     rate_limit_window_seconds: int = 60
     rate_limit_exempt_paths: list[str] = ["/api/v1/health"]
+    sql_echo: bool = True
+    log_level: str = "INFO"
 
     class Config:
         env_file = ".env"
