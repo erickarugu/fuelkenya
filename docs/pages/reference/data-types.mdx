@@ -1,0 +1,105 @@
+---
+title: Data Types
+description: Field definitions and formats for FuelKenya API response objects.
+---
+
+# Data Types
+
+## FuelPrice
+
+The core object returned by `/prices` and `/prices/latest`.
+
+```ts
+interface FuelPrice {
+  id:            number;
+  town:          string;
+  super_petrol:  number;
+  diesel:        number;
+  kerosene:      number;
+  valid_from:    string;  // ISO 8601 date: "YYYY-MM-DD"
+  valid_to:      string;  // ISO 8601 date: "YYYY-MM-DD"
+}
+```
+
+### Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `integer` | Auto-incrementing internal database ID. Stable once written; do not rely on ordering relative to other towns within the same cycle. |
+| `town` | `string` | Town name, title-cased (e.g. `"Nairobi"`, `"Homa Bay"`). The canonical form is what the `GET /towns` endpoint returns. |
+| `super_petrol` | `float` | Maximum retail price for Super Petrol (PMS) in **KSh per litre**. |
+| `diesel` | `float` | Maximum retail price for Diesel (AGO) in **KSh per litre**. |
+| `kerosene` | `float` | Maximum retail price for Kerosene (IK) in **KSh per litre**. |
+| `valid_from` | `string` | First date this price is valid. ISO 8601 (`YYYY-MM-DD`). Always the 15th of a month. |
+| `valid_to` | `string` | Last date this price is valid. ISO 8601 (`YYYY-MM-DD`). Always the 14th of the following month. |
+
+### Example
+
+```json
+{
+  "id": 1042,
+  "town": "Nairobi",
+  "super_petrol": 214.03,
+  "diesel": 199.73,
+  "kerosene": 196.53,
+  "valid_from": "2026-06-15",
+  "valid_to": "2026-07-14"
+}
+```
+
+---
+
+## IngestResponse
+
+Returned by `POST /ingest/csv` on success.
+
+```ts
+interface IngestResponse {
+  status:             string;  // always "success"
+  records_processed:  number;
+  timestamp:          string;  // ISO 8601 UTC datetime
+}
+```
+
+### Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `status` | `string` | Ingestion result. Currently always `"success"` for a 201 response. |
+| `records_processed` | `integer` | Number of rows from the CSV that were upserted into the database. |
+| `timestamp` | `string` | UTC ISO 8601 datetime string (`YYYY-MM-DDTHH:MM:SSZ`) of when the operation completed on the server. |
+
+### Example
+
+```json
+{
+  "status": "success",
+  "records_processed": 224,
+  "timestamp": "2026-06-15T08:00:00Z"
+}
+```
+
+---
+
+## Pricing cycle dates
+
+EPRA pricing cycles run from the **15th of one month to the 14th of the next**. The cycle identifiers map to calendar periods as follows:
+
+| Cycle | `valid_from` | `valid_to` |
+|---|---|---|
+| Jun–Jul 2026 | `2026-06-15` | `2026-07-14` |
+| May–Jun 2026 | `2026-05-15` | `2026-06-14` |
+| Apr–May 2026 | `2026-04-15` | `2026-05-14` |
+
+To determine the **active cycle** for a given calendar date:
+
+- If the date's day ≥ 15: `valid_from = YYYY-MM-15`, `valid_to = next month's 14th`
+- If the date's day < 15: `valid_from = previous month's 15th`, `valid_to = YYYY-MM-14`
+
+## Notes on precision
+
+Prices are stored with two decimal places in the database (`NUMERIC(6,2)`). The JSON representation is a JavaScript `float64`, which is exact for values in the KSh price range. When displaying prices, format to **2 decimal places**:
+
+```js
+price.super_petrol.toFixed(2)  // "214.03"
+```

@@ -1,0 +1,105 @@
+---
+title: GET /prices
+description: List price records with optional filters and pagination.
+---
+
+import { Callout } from "nextra/components";
+
+# GET /prices
+
+Return a paginated list of price records across all towns and pricing cycles. Supports filtering by town and date range. Results are sorted **newest-first** by `valid_from`.
+
+## Request
+
+```http
+GET /v1/prices
+```
+
+### Query parameters
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `town` | `string` | — | Filter to a single town. Case-insensitive. Omit to get all towns. |
+| `start_date` | `date` | — | Return records with `valid_from` on or after this date. Format: `YYYY-MM-DD`. |
+| `end_date` | `date` | — | Return records with `valid_to` on or before this date. Format: `YYYY-MM-DD`. |
+| `limit` | `integer` | `100` | Maximum number of records to return. Min: `1`, max: `1000`. |
+| `offset` | `integer` | `0` | Number of records to skip. Use with `limit` for pagination. |
+
+<Callout type="info">
+  `start_date` filters on `valid_from ≥ start_date`. `end_date` filters on `valid_to ≤ end_date`. To get a specific cycle, pass both dates bounding that cycle.
+</Callout>
+
+## Response
+
+### 200 OK
+
+An array of [`FuelPriceOut`](/reference/data-types#fuelprice) objects:
+
+```json
+[
+  {
+    "id": 1042,
+    "town": "Nairobi",
+    "super_petrol": 214.03,
+    "diesel": 199.73,
+    "kerosene": 196.53,
+    "valid_from": "2026-06-15",
+    "valid_to": "2026-07-14"
+  },
+  {
+    "id": 1041,
+    "town": "Nairobi",
+    "super_petrol": 217.36,
+    "diesel": 203.15,
+    "kerosene": 200.00,
+    "valid_from": "2026-05-15",
+    "valid_to": "2026-06-14"
+  }
+]
+```
+
+Returns an empty array `[]` when no records match the filters.
+
+## Examples
+
+### Fetch the last 12 cycles for Nairobi
+
+```bash
+curl "https://api.fuelkenya.com/v1/prices?town=Nairobi&limit=12"
+```
+
+### Fetch all towns for a specific cycle
+
+```bash
+curl "https://api.fuelkenya.com/v1/prices?start_date=2026-06-15&end_date=2026-07-14"
+```
+
+### Paginate through all records
+
+```bash
+# Page 1 — first 100 records
+curl "https://api.fuelkenya.com/v1/prices?limit=100&offset=0"
+
+# Page 2 — next 100 records
+curl "https://api.fuelkenya.com/v1/prices?limit=100&offset=100"
+```
+
+### Date-range filtered history for a town
+
+```bash
+curl "https://api.fuelkenya.com/v1/prices?town=Mombasa&start_date=2025-01-01&end_date=2025-12-31"
+```
+
+## Pagination notes
+
+- Results are always sorted by `valid_from` descending (newest first)
+- There is no `total` count in the response; increase `offset` until you get an empty array or a result shorter than `limit`
+- Maximum page size is **1 000 records** per request
+
+## Cache behaviour
+
+```
+Cache-Control: public, max-age=86400, s-maxage=604800
+```
+
+Historical prices never change once published by EPRA. Responses are safe to cache for the full 7-day `s-maxage` period.

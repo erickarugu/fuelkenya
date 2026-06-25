@@ -1,0 +1,137 @@
+---
+title: GET /prices/latest
+description: Fetch the most recent EPRA maximum pump prices for all Kenyan towns or filter by a single town. Returns Super Petrol, Diesel, and Kerosene prices per litre.
+---
+
+import { Callout } from "nextra/components";
+
+# GET /prices/latest
+
+Return prices for the **most recently published EPRA pricing cycle**. This is the primary endpoint for displaying current pump prices — you do not need to know the exact cycle dates.
+
+<Callout type="info">
+  Results are **in-memory cached** after the first request following a new ingestion. Subsequent calls for the same cycle are served from cache with no database round-trip, making this endpoint fast and suitable for high-traffic use.
+</Callout>
+
+## Request
+
+```http
+GET /v1/prices/latest
+```
+
+### Query parameters
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `town` | `string` | — | Filter to a single town. Case-insensitive. Omit to return all towns. |
+
+## Response
+
+### 200 OK — with town filter
+
+A single-element array containing the price record for the requested town:
+
+```json
+[
+  {
+    "id": 1042,
+    "town": "Nairobi",
+    "super_petrol": 214.03,
+    "diesel": 199.73,
+    "kerosene": 196.53,
+    "valid_from": "2026-06-15",
+    "valid_to": "2026-07-14"
+  }
+]
+```
+
+### 200 OK — without town filter
+
+An array of records for every town in the latest cycle (224+ records):
+
+```json
+[
+  {
+    "id": 1001,
+    "town": "Bungoma",
+    "super_petrol": 213.10,
+    "diesel": 198.85,
+    "kerosene": 195.72,
+    "valid_from": "2026-06-15",
+    "valid_to": "2026-07-14"
+  },
+  {
+    "id": 1002,
+    "town": "Eldoret",
+    "super_petrol": 212.50,
+    "diesel": 198.12,
+    "kerosene": 194.85,
+    "valid_from": "2026-06-15",
+    "valid_to": "2026-07-14"
+  }
+]
+```
+
+### 200 OK — town not found
+
+Returns an **empty array** if the town name does not match any record:
+
+```json
+[]
+```
+
+This is not an error — unknown towns simply produce no results. Check the canonical town name via [`GET /towns`](/endpoints/towns).
+
+### 200 OK — no data in database
+
+Returns an empty array if the database has never been seeded:
+
+```json
+[]
+```
+
+## Examples
+
+### Current prices for Mombasa
+
+```bash
+curl "https://api.fuelkenya.com/v1/prices/latest?town=Mombasa"
+```
+
+### All towns, latest cycle
+
+```bash
+curl https://api.fuelkenya.com/v1/prices/latest
+```
+
+### JavaScript — build a price comparison
+
+```js
+const BASE = "https://api.fuelkenya.com/v1";
+
+async function comparePetrolPrices() {
+  const prices = await fetch(`${BASE}/prices/latest`).then(r => r.json());
+
+  return prices
+    .sort((a, b) => a.super_petrol - b.super_petrol)
+    .map((p, i) => ({
+      rank: i + 1,
+      town: p.town,
+      petrol: p.super_petrol,
+    }));
+}
+
+const ranking = await comparePetrolPrices();
+console.log("Cheapest petrol:", ranking[0]);
+// { rank: 1, town: "Mombasa", petrol: 208.24 }
+```
+
+## Cache behaviour
+
+Responses carry:
+
+```
+Cache-Control: public, max-age=86400, s-maxage=604800
+```
+
+The server-side in-memory cache is invalidated automatically when a new CSV is ingested. Edge caches (CDN, reverse proxy) may serve stale data for up to 7 days; this is acceptable given that prices only change monthly.

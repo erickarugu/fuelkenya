@@ -1,0 +1,92 @@
+---
+title: GET /towns
+description: Fetch a sorted list of all Kenyan towns covered by the FuelKenya API, sourced from EPRA pricing data.
+---
+
+# GET /towns
+
+Return an alphabetically sorted list of every town that has at least one price record in the database.
+
+## Request
+
+```http
+GET /v1/towns
+```
+
+No parameters or headers required.
+
+## Response
+
+### 200 OK
+
+An array of town name strings, sorted case-insensitively:
+
+```json
+[
+  "Bungoma",
+  "Busia",
+  "Eldoret",
+  "Embu",
+  "Garissa",
+  "Homabay",
+  "Isiolo",
+  "Kajiado",
+  "Kakamega",
+  "Kericho",
+  "Kiambu",
+  "Kisii",
+  "Kisumu",
+  "Kitale",
+  "Kitui",
+  "Lamu",
+  "Machakos",
+  "Malindi",
+  "Mandera",
+  "Meru",
+  "Mombasa",
+  "Moyale",
+  "Murang'a",
+  "Nairobi",
+  "Nakuru",
+  "Nanyuki",
+  "Narok",
+  "Nyeri",
+  "Thika",
+  "Voi",
+  "Wajir"
+]
+```
+
+Town names are title-cased (e.g. `"Nairobi"` not `"NAIROBI"`). When filtering other endpoints by town, the comparison is **case-insensitive**, so `nairobi`, `Nairobi`, and `NAIROBI` all work.
+
+## Cache behaviour
+
+Responses carry:
+
+```
+Cache-Control: public, max-age=86400, s-maxage=604800
+```
+
+The town list is stable within a pricing cycle. New towns are only added when a new EPRA dataset is ingested.
+
+## Example
+
+```bash
+curl https://api.fuelkenya.com/v1/towns
+```
+
+JavaScript:
+
+```js
+const towns = await fetch("https://api.fuelkenya.com/v1/towns")
+  .then(r => r.json());
+
+console.log(`${towns.length} towns available`);
+// e.g. "224 towns available"
+```
+
+## Usage notes
+
+- Use this endpoint to **populate a search dropdown** or autocomplete input
+- Town names returned here are the canonical forms to use when constructing filters for `/prices` and `/prices/latest`
+- The list reflects the database at request time; towns with no price records will not appear

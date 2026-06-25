@@ -95,7 +95,7 @@ export default function SearchBar({ activeTown, towns }: SearchBarProps) {
               </svg>
               <span>{t}</span>
               {t === activeTown && (
-                <span className="ml-auto text-[10px] text-emerald-500">current</span>
+                <span className="ml-auto text-xs text-emerald-500">current</span>
               )}
             </button>
           ))}

@@ -1,4 +1,5 @@
 import dynamicImport from "next/dynamic";
+import type { Metadata } from "next";
 import Link from "next/link";
 import PriceCard from "@/components/PriceCard";
 import RegionVariance from "@/components/RegionVariance";
@@ -12,7 +13,51 @@ import { fetchHistory, fetchLatestPrices, fetchTowns } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
 
-const POPULAR_TOWNS = ["Nairobi", "Mombasa", "Kisumu", "Nakuru", "Eldoret", "Thika"];
+export const metadata: Metadata = {
+  title: "Kenya Fuel Prices Today | EPRA Petrol, Diesel & Kerosene Tracker",
+  description:
+    "Live EPRA fuel prices across all towns in Kenya — Super Petrol, Diesel, and Kerosene. Official maximum pump prices updated every cycle on the 14th of each month.",
+  keywords: [
+    "EPRA fuel prices Kenya today",
+    "petrol price today Kenya",
+    "diesel price Kenya today",
+    "kerosene price Kenya",
+    "fuel prices Kenya",
+    "EPRA maximum pump prices 2026",
+    "super petrol price Kenya",
+    "fuel tracker Kenya",
+    "Kenya petrol cost per litre",
+    "Nairobi fuel prices",
+    "Mombasa fuel prices",
+    "Kisumu fuel prices",
+    "EPRA price update Kenya",
+    "cheapest petrol Kenya"
+  ],
+  alternates: {
+    canonical: "https://fuelkenya.com"
+  },
+  openGraph: {
+    title: "Kenya Fuel Prices Today | EPRA Petrol, Diesel & Kerosene Tracker",
+    description:
+      "Live EPRA fuel prices across all towns in Kenya. Super Petrol, Diesel, and Kerosene — updated every pricing cycle on the 14th.",
+    url: "https://fuelkenya.com",
+    type: "website"
+  },
+  twitter: {
+    title: "Kenya Fuel Prices Today | EPRA Petrol, Diesel & Kerosene Tracker",
+    description:
+      "Live EPRA fuel prices across all towns in Kenya. Super Petrol, Diesel, and Kerosene — updated every pricing cycle on the 14th."
+  }
+};
+
+const POPULAR_TOWNS = [
+  "Nairobi",
+  "Mombasa",
+  "Kisumu",
+  "Nakuru",
+  "Eldoret",
+  "Thika"
+];
 
 const TrendChart = dynamicImport(() => import("@/components/TrendChart"), {
   ssr: false,
@@ -44,16 +89,20 @@ function getActiveCycle() {
     const sm = month === 0 ? 11 : month - 1;
     const sy = month === 0 ? year - 1 : year;
     startDate = new Date(sy, sm, 15);
-    endDate   = new Date(year, month, 14);
+    endDate = new Date(year, month, 14);
   } else {
     startDate = new Date(year, month, 15);
-    const em  = month === 11 ? 0 : month + 1;
-    const ey  = month === 11 ? year + 1 : year;
-    endDate   = new Date(ey, em, 14);
+    const em = month === 11 ? 0 : month + 1;
+    const ey = month === 11 ? year + 1 : year;
+    endDate = new Date(ey, em, 14);
   }
 
   const fmt = (d: Date, yr = false) =>
-    d.toLocaleDateString("en-GB", { day: "numeric", month: "short", ...(yr ? { year: "numeric" } : {}) });
+    d.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      ...(yr ? { year: "numeric" } : {})
+    });
 
   return { display: `${fmt(startDate)} – ${fmt(endDate, true)}` };
 }
@@ -62,7 +111,9 @@ function SectionHeader({ label, sub }: { label: string; sub?: string }) {
   return (
     <div className="mb-4">
       <div className="flex items-center gap-3">
-        <span className="text-xs font-semibold uppercase tracking-widest text-stone-400">{label}</span>
+        <span className="text-xs font-semibold uppercase tracking-widest text-stone-400">
+          {label}
+        </span>
         {sub && (
           <>
             <span className="text-stone-700">·</span>
@@ -78,40 +129,61 @@ function SectionHeader({ label, sub }: { label: string; sub?: string }) {
 export default async function Page({ searchParams }: Props) {
   const activeTown = searchParams?.town ? String(searchParams.town) : "Nairobi";
   const towns = await fetchTowns();
-  const town  = towns.includes(activeTown) ? activeTown : (towns[0] ?? activeTown);
+  const town = towns.includes(activeTown)
+    ? activeTown
+    : (towns[0] ?? activeTown);
 
-  const [history, latestPrices] = await Promise.all([
+  const [history, latestPrices, allLatestPrices] = await Promise.all([
     fetchHistory(town),
-    fetchLatestPrices(town)
+    fetchLatestPrices(town),
+    fetchLatestPrices()
   ]);
 
-  const latest  = latestPrices[0] ?? history[0] ?? null;
-  const prev    = history.length > 1 ? history[1] : null;
+  const latest = latestPrices[0] ?? history[0] ?? null;
+  const prev = history.length > 1 ? history[1] : null;
   const histAsc = [...history].reverse();
 
-  const petrolDelta   = latest ? calculateDelta(latest.super_petrol, prev?.super_petrol ?? null) : null;
-  const dieselDelta   = latest ? calculateDelta(latest.diesel,       prev?.diesel       ?? null) : null;
-  const keroseneDelta = latest ? calculateDelta(latest.kerosene,     prev?.kerosene     ?? null) : null;
+  const petrolDelta = latest
+    ? calculateDelta(latest.super_petrol, prev?.super_petrol ?? null)
+    : null;
+  const dieselDelta = latest
+    ? calculateDelta(latest.diesel, prev?.diesel ?? null)
+    : null;
+  const keroseneDelta = latest
+    ? calculateDelta(latest.kerosene, prev?.kerosene ?? null)
+    : null;
 
   // Sparklines: last 8 price points per fuel type
-  const sparklinePetrol   = histAsc.map(h => h.super_petrol).slice(-8);
-  const sparklineDiesel   = histAsc.map(h => h.diesel).slice(-8);
-  const sparklineKerosene = histAsc.map(h => h.kerosene).slice(-8);
+  const sparklinePetrol = histAsc.map((h) => h.super_petrol).slice(-8);
+  const sparklineDiesel = histAsc.map((h) => h.diesel).slice(-8);
+  const sparklineKerosene = histAsc.map((h) => h.kerosene).slice(-8);
 
   const cycle = getActiveCycle();
 
-  const regionalOverview = [
-    { name: "Mombasa",  price: 208.24 },
-    { name: "Eldoret",  price: 212.50 },
-    { name: "Nakuru",   price: 212.92 },
-    { name: "Kisumu",   price: 213.69 },
-    { name: "Nairobi",  price: 214.03 },
-    { name: "Mandera",  price: 221.75 },
+  const REGIONAL_TOWNS = [
+    "Mombasa",
+    "Eldoret",
+    "Nakuru",
+    "Kisumu",
+    "Nairobi",
+    "Mandera"
   ];
+  const regionalOverview = allLatestPrices
+    .filter((r) => REGIONAL_TOWNS.includes(r.town))
+    .map((r) => ({ name: r.town, super_petrol: r.super_petrol, diesel: r.diesel, kerosene: r.kerosene }));
+
+  const heroTowns = allLatestPrices
+    .filter((r) => REGIONAL_TOWNS.includes(r.town))
+    .slice(0, 5)
+    .map((r) => ({
+      city: r.town,
+      petrol: r.super_petrol.toFixed(2),
+      diesel: r.diesel.toFixed(2),
+      kerosene: r.kerosene.toFixed(2)
+    }));
 
   return (
     <div className="min-h-screen page-bg grid-bg">
-
       {/* ── Nav ────────────────────────────────────────────────────────────── */}
       <nav className="sticky top-0 z-50 border-b border-white/[0.07] bg-black/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5 sm:px-8">
@@ -119,81 +191,119 @@ export default async function Page({ searchParams }: Props) {
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-base">
               ⛽
             </div>
-            <span className="text-sm font-bold tracking-tight text-stone-100">FuelKenya</span>
+            <span className="text-sm font-bold tracking-tight text-stone-100">
+              FuelKenya
+            </span>
             <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/[0.09] px-2.5 py-1">
               <span className="live-dot" />
-              <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">Live</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-emerald-400">
+                Live
+              </span>
             </div>
           </div>
           <div className="hidden items-center gap-3 text-xs sm:flex">
-            <span className="font-medium text-stone-500">EPRA · Max pump prices</span>
+            <span className="font-medium text-stone-500">
+              EPRA · Max pump prices
+            </span>
             <span className="text-stone-700">·</span>
             <div className="flex items-center gap-1.5 rounded-lg border border-white/[0.07] bg-white/[0.04] px-2.5 py-1">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="#a8a29e" aria-hidden="true">
+              <svg
+                width="10"
+                height="10"
+                viewBox="0 0 24 24"
+                fill="#a8a29e"
+                aria-hidden="true"
+              >
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
               </svg>
               <span className="font-semibold text-stone-300">{town}</span>
             </div>
+            <span className="text-stone-700">·</span>
+            <a
+              href="https://docs.fuelkenya.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-stone-500 transition-colors hover:text-stone-300"
+            >
+              Docs
+            </a>
+            <a
+              href="https://github.com/erickarugu/fuelkenya"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-stone-600 transition-colors hover:text-stone-400"
+              aria-label="GitHub"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+              </svg>
+            </a>
           </div>
         </div>
       </nav>
 
-      <div className="mx-auto max-w-6xl px-6 py-14 sm:px-8 lg:px-12">
-
-        {/* ── Hero ───────────────────────────────────────────────────────────── */}
-        <div className="mb-10 fade-up">
-          <div className="grid lg:grid-cols-[1fr_420px] lg:items-center lg:gap-6">
+      <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
+        {/* ── Hero ─────────────────────────────────────────────────────────── */}
+        <div className="fade-up py-20 sm:py-24">
+          <div className="grid items-center gap-12 lg:grid-cols-[1fr_440px] lg:gap-16">
+            {/* left */}
             <div>
-              <h1 className="mb-3 text-5xl font-extrabold leading-tight tracking-tight text-white sm:text-6xl">
+              <div className="mb-3 flex items-center gap-2">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                </span>
+                <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-500">
+                  Updated every cycle · {cycle.display}
+                </span>
+              </div>
+
+              <h1 className="mb-5 text-5xl font-extrabold leading-[1.08] tracking-tight text-white sm:text-6xl">
                 Kenya Fuel
                 <br />
                 <span className="font-light text-stone-400">Price Tracker</span>
               </h1>
-              <p className="mb-5 max-w-lg text-sm leading-relaxed text-stone-400">
-                Official EPRA maximum pump prices across all towns in Kenya, updated every cycle on the 14th.
+
+              <p className="mb-8 max-w-md text-base leading-relaxed text-stone-400">
+                Official EPRA maximum pump prices across all {towns.length}{" "}
+                towns in Kenya - Super Petrol, Diesel, and Kerosene.
               </p>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full border border-white/[0.07] bg-white/[0.03] px-3 py-1 text-xs font-medium text-stone-400">
-                  {towns.length} towns
-                </span>
-                <span className="text-stone-700">·</span>
-                <span className="rounded-full border border-white/[0.07] bg-white/[0.03] px-3 py-1 text-xs font-medium text-stone-400">
-                  Petrol · Diesel · Kerosene
-                </span>
-                <span className="text-stone-700">·</span>
-                <span className="rounded-full border border-emerald-500/20 bg-emerald-500/[0.06] px-3 py-1 text-xs font-medium text-emerald-400">
-                  {cycle.display}
-                </span>
+
+              <div className="relative z-[100]">
+                <div className="mb-3">
+                  <SearchBar key={town} activeTown={town} towns={towns} />
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {POPULAR_TOWNS.filter((t) => towns.includes(t)).map((t) => (
+                    <Link
+                      key={t}
+                      href={`?town=${encodeURIComponent(t)}`}
+                      className={`rounded-full border px-3 py-1 text-xs font-medium transition-all duration-200 ${
+                        t === town
+                          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
+                          : "border-white/[0.07] bg-white/[0.02] text-stone-500 hover:border-white/15 hover:bg-white/[0.04] hover:text-stone-300"
+                      }`}
+                    >
+                      {t}
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
-            <HeroVisual />
-          </div>
-        </div>
 
-        {/* ── Search + quick links ────────────────────────────────────────────── */}
-        <div className="relative z-[100] mb-12 fade-up delay-1">
-          <div className="mb-3">
-            <SearchBar key={town} activeTown={town} towns={towns} />
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {POPULAR_TOWNS.filter(t => towns.includes(t)).map(t => (
-              <Link
-                key={t}
-                href={`?town=${encodeURIComponent(t)}`}
-                className={`rounded-full border px-3 py-1 text-xs font-medium transition-all duration-200 ${
-                  t === town
-                    ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
-                    : "border-white/[0.07] bg-white/[0.02] text-stone-500 hover:border-white/15 hover:bg-white/[0.04] hover:text-stone-300"
-                }`}
-              >
-                {t}
-              </Link>
-            ))}
+            {/* right */}
+            <HeroVisual towns={heroTowns} />
           </div>
         </div>
 
         {/* ── Live prices ── animated on town change ──────────────────────────── */}
-        <div className="mb-14 fade-up delay-2">
+        <div className="mb-14 fade-up delay-1">
           <SectionHeader label="Live prices" sub={town} />
           <AnimatedTownSection town={town}>
             <div className="grid gap-4 lg:grid-cols-3">
@@ -208,7 +318,7 @@ export default async function Page({ searchParams }: Props) {
                 title="Diesel"
                 value={latest?.diesel ?? 0}
                 delta={dieselDelta}
-                accent="maasai"
+                accent="azure"
                 sparkline={sparklineDiesel}
               />
               <PriceCard
@@ -235,7 +345,10 @@ export default async function Page({ searchParams }: Props) {
 
         {/* ── Town comparison ────────────────────────────────────────────────── */}
         <div className="mb-14 fade-up delay-4">
-          <SectionHeader label="Town comparison" sub="Current cycle · Super Petrol" />
+          <SectionHeader
+            label="Town comparison"
+            sub="Current cycle"
+          />
           <RegionVariance overview={regionalOverview} activeTown={town} />
         </div>
 
@@ -244,8 +357,7 @@ export default async function Page({ searchParams }: Props) {
           <SectionHeader label="Fuel cost estimator" sub={town} />
           <FuelEstimator
             petrolPrice={latest?.super_petrol ?? 0}
-            dieselPrice={latest?.diesel       ?? 0}
-            kerosenePrice={latest?.kerosene   ?? 0}
+            dieselPrice={latest?.diesel ?? 0}
             town={town}
           />
         </div>
@@ -255,30 +367,134 @@ export default async function Page({ searchParams }: Props) {
           <SectionHeader label="About fuel pricing in Kenya" />
           <InfoCards />
         </div>
-
       </div>
 
       {/* ── Footer ─────────────────────────────────────────────────────────── */}
       <footer className="border-t border-white/[0.06] px-6 py-6 sm:px-8">
-        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
-          <p className="max-w-md text-xs text-stone-500">
-            Data sourced from the Energy & Petroleum Regulatory Authority (EPRA) of Kenya.
-            Maximum pump prices are set monthly on the 14th.
+        <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="max-w-md text-sm text-stone-500">
+            Data sourced from the{" "}
+            <a
+              href="https://www.epra.go.ke"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2 hover:text-stone-400"
+            >
+              Energy & Petroleum Regulatory Authority (EPRA)
+            </a>{" "}
+            of Kenya. Maximum pump prices are set monthly on the 14th.
           </p>
-          <p className="text-xs text-stone-600">FuelKenya © 2026</p>
+          <div className="flex items-center gap-4 text-xs text-stone-600">
+            <a
+              href="https://docs.fuelkenya.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-colors hover:text-stone-400"
+            >
+              API Docs
+            </a>
+            <a
+              href="https://github.com/erickarugu/fuelkenya"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 transition-colors hover:text-stone-400"
+            >
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+              </svg>
+              GitHub
+            </a>
+            <span className="text-stone-700">FuelKenya © 2026</span>
+          </div>
         </div>
       </footer>
 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Dataset",
-            name: "FuelKenya Price Dataset",
-            description: "Latest EPRA fuel prices for Kenyan towns including Super Petrol, Diesel, and Kerosene.",
-            distribution: [{ "@type": "DataDownload", encodingFormat: "application/json", contentUrl: "https://fuel.co.ke/api/v1/prices/latest" }]
-          })
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "FuelKenya",
+              url: "https://fuelkenya.com",
+              description:
+                "Live EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across all towns in Kenya.",
+              potentialAction: {
+                "@type": "SearchAction",
+                target: {
+                  "@type": "EntryPoint",
+                  urlTemplate:
+                    "https://fuelkenya.com/?town={search_term_string}"
+                },
+                "query-input": "required name=search_term_string"
+              }
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: [
+                {
+                  "@type": "Question",
+                  name: "What are the current EPRA fuel prices in Kenya?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "EPRA (Energy and Petroleum Regulatory Authority) publishes maximum pump prices on the 14th of every month. FuelKenya displays the latest official prices for Super Petrol, Diesel, and Kerosene across all towns in Kenya."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  name: "How often do EPRA fuel prices change in Kenya?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "EPRA updates maximum retail fuel prices on the 14th of every month. The new prices take effect at midnight on the 15th and remain in force until the 14th of the following month."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  name: "Why are fuel prices different across Kenyan towns?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "EPRA sets town-specific pump prices based on pipeline and road transport costs from Mombasa port. Coastal towns like Mombasa pay the lowest prices, while inland and remote towns like Mandera pay the highest due to longer distribution distances."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  name: "What is the cheapest town for fuel in Kenya?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Mombasa consistently has the lowest fuel prices in Kenya because it is the entry point for petroleum products imported through the port. Prices rise with distance from Mombasa along the pipeline and road network."
+                  }
+                }
+              ]
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "Dataset",
+              name: "Kenya EPRA Fuel Price Dataset",
+              description:
+                "Official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across all towns in Kenya, updated every pricing cycle.",
+              url: "https://fuelkenya.com",
+              creator: {
+                "@type": "Organization",
+                name: "FuelKenya",
+                url: "https://fuelkenya.com"
+              },
+              distribution: [
+                {
+                  "@type": "DataDownload",
+                  encodingFormat: "application/json",
+                  contentUrl: "https://api.fuelkenya.com/v1/prices/latest"
+                }
+              ]
+            }
+          ])
         }}
       />
     </div>

@@ -1,0 +1,54 @@
+---
+title: GET /health
+description: Database health check endpoint.
+---
+
+import { Callout } from "nextra/components";
+
+# GET /health
+
+Check whether the API and its database are reachable. Use this for uptime monitoring or deployment readiness checks.
+
+<Callout type="info">
+  This endpoint is **exempt from rate limiting** and can be called freely.
+</Callout>
+
+## Request
+
+```http
+GET /v1/health
+```
+
+No parameters, headers, or body required.
+
+## Response
+
+### 200 OK — healthy
+
+```json
+{
+  "status": "healthy"
+}
+```
+
+### 500 Internal Server Error — database unreachable
+
+```json
+{
+  "detail": "Database unreachable"
+}
+```
+
+This response means the API process is running but cannot connect to PostgreSQL. Typically caused by a misconfigured `DATABASE_URL` or a stopped database service.
+
+## Example
+
+```bash
+curl https://api.fuelkenya.com/v1/health
+```
+
+## Usage notes
+
+- Suitable as a **liveness probe** in Kubernetes or a Docker health check
+- Suitable as an **uptime monitor** in tools like UptimeRobot or Better Uptime
+- Not suitable as a deep application health check — it only verifies database connectivity, not data integrity or ingestion pipeline health

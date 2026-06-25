@@ -2,7 +2,7 @@ interface PriceCardProps {
   title: string;
   value: number;
   delta: number | null;
-  accent: "forest" | "maasai" | "obsidian";
+  accent: "forest" | "maasai" | "azure" | "obsidian";
   sparkline?: number[];
 }
 
@@ -17,10 +17,12 @@ function PetrolIcon() {
   );
 }
 
-function FlameIcon() {
+function DieselIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+      <ellipse cx="12" cy="5" rx="9" ry="3" />
+      <path d="M3 5v6c0 1.66 4.03 3 9 3s9-1.34 9-3V5" />
+      <path d="M3 11v6c0 1.66 4.03 3 9 3s9-1.34 9-3v-6" />
     </svg>
   );
 }
@@ -89,6 +91,17 @@ const ACCENT = {
     deltaDown: "text-emerald-300 bg-emerald-500/10 border-emerald-500/25",
     deltaUp:   "text-red-300 bg-red-500/10 border-red-500/20",
   },
+  azure: {
+    bar:       "from-blue-400 via-blue-500 to-blue-600",
+    glow:      "from-blue-500/[0.10]",
+    iconBg:    "bg-blue-500/[0.08] border-blue-500/20",
+    iconText:  "text-blue-300",
+    border:    "border-blue-500/[0.18]",
+    hover:     "hover:border-blue-500/40 hover:shadow-[0_8px_48px_rgba(96,165,250,0.14)]",
+    spark:     "#60a5fa",
+    deltaDown: "text-emerald-300 bg-emerald-500/10 border-emerald-500/25",
+    deltaUp:   "text-red-300 bg-red-500/10 border-red-500/20",
+  },
   obsidian: {
     bar:       "from-amber-300 via-amber-400 to-amber-600",
     glow:      "from-amber-500/[0.09]",
@@ -104,7 +117,7 @@ const ACCENT = {
 
 export default function PriceCard({ title, value, delta, accent, sparkline }: PriceCardProps) {
   const c = ACCENT[accent];
-  const Icon = accent === "forest" ? PetrolIcon : accent === "maasai" ? FlameIcon : LanternIcon;
+  const Icon = accent === "forest" ? PetrolIcon : accent === "azure" ? DieselIcon : LanternIcon;
 
   const dir = delta === null ? "neutral" : delta < 0 ? "down" : delta > 0 ? "up" : "flat";
 
@@ -145,7 +158,7 @@ export default function PriceCard({ title, value, delta, accent, sparkline }: Pr
                 {badgeLabel}
               </span>
               {pct && (
-                <span className={`text-[10px] font-medium tabular-nums ${dir === "down" ? "text-emerald-600" : "text-red-600"}`}>
+                <span className={`text-xs font-medium tabular-nums ${dir === "down" ? "text-emerald-600" : "text-red-600"}`}>
                   {pct}% vs last cycle
                 </span>
               )}
@@ -166,7 +179,7 @@ export default function PriceCard({ title, value, delta, accent, sparkline }: Pr
 
         {/* sparkline + per litre */}
         <div className="flex items-end justify-between">
-          <span className="text-[10px] text-stone-600">per litre</span>
+          <span className="text-xs text-stone-600">per litre</span>
           {sparkline && sparkline.length >= 2 && (
             <Sparkline data={sparkline} color={c.spark} />
           )}

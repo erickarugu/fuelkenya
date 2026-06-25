@@ -3,7 +3,7 @@ import { ImageResponse } from "@vercel/og";
 export const runtime = "edge";
 
 const apiBase =
-  process.env.NEXT_PUBLIC_FUELKENYA_API_URL ?? "https://api.fuel.co.ke/api/v1";
+  process.env.NEXT_PUBLIC_FUELKENYA_API_URL ?? "https://api.fuelkenya.com/v1";
 
 export default async function OpenGraphImage({
   params

@@ -1,0 +1,120 @@
+---
+title: POST /ingest/csv
+description: Upload a new EPRA pricing cycle CSV to the database.
+---
+
+import { Callout } from "nextra/components";
+
+# POST /ingest/csv
+
+Upload a CSV file containing a new EPRA pricing cycle. Records are **upserted** — if a `(town, valid_from)` combination already exists, its values are updated rather than duplicated.
+
+<Callout type="warning">
+  This endpoint requires a **Bearer token**. See [Authentication](/authentication) for details. It is intended for the FuelKenya data pipeline and is not a public endpoint.
+</Callout>
+
+## Request
+
+```http
+POST /v1/ingest/csv
+Content-Type: multipart/form-data
+Authorization: Bearer <token>
+```
+
+### Form field
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `file` | file | Yes | The CSV file. Accepted MIME types: `text/csv`, `application/vnd.ms-excel`, `application/octet-stream`. |
+
+## CSV format
+
+The CSV must include the following columns (in any order). The header row is required. Column names are parsed leniently — spaces, punctuation, and case are normalised.
+
+| EPRA column header | Canonical name | Example value |
+|---|---|---|
+| `From` | `valid_from` | `15-06-2026` |
+| `To` | `valid_to` | `14-07-2026` |
+| `Town` | `town` | `Nairobi` |
+| `Super (PMS)` | `super_petrol` | `214.03` |
+| `Diesel (AGO)` | `diesel` | `199.73` |
+| `Kerosene (IK)` | `kerosene` | `196.53` |
+
+### Date formats
+
+Both `DD-MM-YYYY` and `YYYY-MM-DD` are accepted. Do not mix formats within a single file.
+
+### Decimal separator
+
+Use `.` as the decimal separator. Comma-separated decimals (`199,73`) are not supported.
+
+### Example CSV
+
+```csv
+From,To,Town,Super (PMS),Diesel (AGO),Kerosene (IK)
+15-06-2026,14-07-2026,Nairobi,214.03,199.73,196.53
+15-06-2026,14-07-2026,Mombasa,208.24,194.53,191.20
+15-06-2026,14-07-2026,Kisumu,213.69,199.20,196.10
+15-06-2026,14-07-2026,Nakuru,212.92,198.54,195.40
+15-06-2026,14-07-2026,Eldoret,212.50,198.12,194.85
+```
+
+## Response
+
+### 201 Created
+
+```json
+{
+  "status": "success",
+  "records_processed": 224,
+  "timestamp": "2026-06-15T08:00:00Z"
+}
+```
+
+| Field | Description |
+|---|---|
+| `status` | Always `"success"` on a 201 response. |
+| `records_processed` | Number of rows that were inserted or updated. |
+| `timestamp` | UTC ISO 8601 timestamp of when the ingestion completed. |
+
+### Error responses
+
+| Status | Condition | Detail |
+|---|---|---|
+| `400` | CSV header columns do not match expected columns | `"CSV header must include From, To, Town, Super (PMS), Diesel (AGO), Kerosene (IK)"` |
+| `400` | A date value cannot be parsed | `"Invalid date format: <value>"` |
+| `400` | File contains no data rows | `"CSV payload contains no rows."` |
+| `401` | Missing or incorrect Authorization header | `"Invalid authorization token for ingestion endpoint."` |
+| `415` | Uploaded file is not a CSV | `"Uploaded file must be a CSV file."` |
+
+## Example
+
+```bash
+curl -X POST https://api.fuelkenya.com/v1/ingest/csv \
+  -H "Authorization: Bearer YOUR_INGEST_TOKEN" \
+  -F "file=@epra_june_2026.csv"
+```
+
+Python:
+
+```python
+import httpx
+
+def ingest_csv(csv_path: str, token: str) -> dict:
+    with open(csv_path, "rb") as f:
+        r = httpx.post(
+            "https://api.fuelkenya.com/v1/ingest/csv",
+            headers={"Authorization": f"Bearer {token}"},
+            files={"file": ("prices.csv", f, "text/csv")},
+        )
+    r.raise_for_status()
+    return r.json()
+
+result = ingest_csv("epra_june_2026.csv", token="secret-token")
+print(result)
+# {'status': 'success', 'records_processed': 224, 'timestamp': '2026-06-15T08:00:00Z'}
+```
+
+## Side effects
+
+After a successful ingest the server **clears its in-memory price cache**. The next call to `/prices/latest` will hit the database and repopulate the cache with the newly ingested cycle.

@@ -1,0 +1,43 @@
+---
+title: API Reference
+description: Complete reference for all FuelKenya API v1 endpoints — fetch EPRA fuel prices, historical data, and town listings for Kenya.
+---
+
+# API Reference
+
+**Base URL:** `https://api.fuelkenya.com/v1`
+
+All endpoints return `application/json`. Dates are ISO 8601 strings (`YYYY-MM-DD`). Prices are floating-point numbers in KSh per litre.
+
+## Endpoint summary
+
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `GET` | `/health` | None | Database health check |
+| `GET` | `/towns` | None | List all available towns |
+| `GET` | `/prices` | None | List prices with optional filters and pagination |
+| `GET` | `/prices/latest` | None | Latest pricing cycle prices |
+| `POST` | `/ingest/csv` | Bearer token | Upload a new EPRA pricing cycle CSV |
+
+## HTTP methods
+
+The API uses standard HTTP semantics:
+
+- `GET` — read-only, safe to cache and retry
+- `POST` — used only for the ingest endpoint; creates/updates records
+
+## Content negotiation
+
+All responses are `Content-Type: application/json; charset=utf-8`. The ingest endpoint accepts `multipart/form-data` for the file upload.
+
+## Error format
+
+All errors follow FastAPI's default error envelope:
+
+```json
+{
+  "detail": "Human-readable error message"
+}
+```
+
+Validation errors (status `422`) include a richer `detail` array describing which fields failed and why. See [Errors](/reference/errors) for the full list.
