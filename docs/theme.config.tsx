@@ -26,10 +26,40 @@ const config: DocsThemeConfig = {
     link: "https://github.com/erickarugu/fuelkenya"
   },
   docsRepositoryBase: "https://github.com/erickarugu/fuelkenya/tree/main/docs",
+  navbar: {
+    extraContent: (
+      <a
+        href="https://fuelkenya.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          fontSize: 13,
+          fontWeight: 500,
+          color: "#6b7280",
+          textDecoration: "none",
+          whiteSpace: "nowrap"
+        }}
+      >
+        <span>⛽</span>
+        <span>Live tracker</span>
+      </a>
+    )
+  },
   footer: {
     text: (
       <span>
-        FuelKenya API Documentation · Data sourced from{" "}
+        FuelKenya API Documentation ·{" "}
+        <a
+          href="https://fuelkenya.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Live price tracker
+        </a>{" "}
+        · Data sourced from{" "}
         <a
           href="https://www.epra.go.ke"
           target="_blank"
