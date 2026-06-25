@@ -1,0 +1,224 @@
+---
+title: Python
+description: FuelKenya API client examples in Python.
+---
+
+# Python
+
+## Client class
+
+A full-featured synchronous client using `httpx`:
+
+```python
+from __future__ import annotations
+
+from dataclasses import dataclass
+from datetime import date
+from typing import Optional
+
+import httpx
+
+
+BASE_URL = "https://api.fuelkenya.com/api/v1"
+
+
+@dataclass
+class FuelPrice:
+    id: int
+    town: str
+    super_petrol: float
+    diesel: float
+    kerosene: float
+    valid_from: date
+    valid_to: date
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "FuelPrice":
+        return cls(
+            id=d["id"],
+            town=d["town"],
+            super_petrol=d["super_petrol"],
+            diesel=d["diesel"],
+            kerosene=d["kerosene"],
+            valid_from=date.fromisoformat(d["valid_from"]),
+            valid_to=date.fromisoformat(d["valid_to"]),
+        )
+
+
+class FuelKenyaClient:
+    def __init__(self, base_url: str = BASE_URL, ingest_token: str | None = None):
+        self._http = httpx.Client(base_url=base_url, timeout=10)
+        self._token = ingest_token
+
+    def towns(self) -> list[str]:
+        """Return all towns with price data, alphabetically sorted."""
+        r = self._http.get("/towns")
+        r.raise_for_status()
+        return r.json()
+
+    def latest_prices(self, town: str | None = None) -> list[FuelPrice]:
+        """Latest EPRA cycle prices. Pass town to filter to one location."""
+        params = {"town": town} if town else {}
+        r = self._http.get("/prices/latest", params=params)
+        r.raise_for_status()
+        return [FuelPrice.from_dict(row) for row in r.json()]
+
+    def price_history(
+        self,
+        town: str,
+        limit: int = 12,
+        offset: int = 0,
+        start_date: date | None = None,
+        end_date: date | None = None,
+    ) -> list[FuelPrice]:
+        """Historical prices for a town, newest first."""
+        params: dict = {"town": town, "limit": limit, "offset": offset}
+        if start_date:
+            params["start_date"] = start_date.isoformat()
+        if end_date:
+            params["end_date"] = end_date.isoformat()
+        r = self._http.get("/prices", params=params)
+        r.raise_for_status()
+        return [FuelPrice.from_dict(row) for row in r.json()]
+
+    def ingest_csv(self, csv_path: str) -> dict:
+        """Upload a new EPRA pricing cycle CSV (requires ingest token)."""
+        if not self._token:
+            raise ValueError("ingest_token required for this operation")
+        with open(csv_path, "rb") as f:
+            r = self._http.post(
+                "/ingest/csv",
+                headers={"Authorization": f"Bearer {self._token}"},
+                files={"file": ("prices.csv", f, "text/csv")},
+            )
+        r.raise_for_status()
+        return r.json()
+
+    def health(self) -> dict:
+        r = self._http.get("/health")
+        r.raise_for_status()
+        return r.json()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        self._http.close()
+```
+
+## Usage examples
+
+### Print current prices for a town
+
+```python
+with FuelKenyaClient() as client:
+    prices = client.latest_prices("Nairobi")
+    if prices:
+        p = prices[0]
+        print(f"Nairobi  —  valid {p.valid_from} to {p.valid_to}")
+        print(f"  Super Petrol : KSh {p.super_petrol:.2f}")
+        print(f"  Diesel       : KSh {p.diesel:.2f}")
+        print(f"  Kerosene     : KSh {p.kerosene:.2f}")
+```
+
+### Find the cheapest town for petrol
+
+```python
+with FuelKenyaClient() as client:
+    all_prices = client.latest_prices()   # all 224+ towns
+
+all_prices.sort(key=lambda p: p.super_petrol)
+cheapest = all_prices[0]
+print(f"Cheapest petrol: {cheapest.town} at KSh {cheapest.super_petrol:.2f}")
+```
+
+### Compute average price trend over the last year
+
+```python
+from statistics import mean
+
+with FuelKenyaClient() as client:
+    history = client.price_history("Nairobi", limit=24)
+
+history.reverse()  # oldest first
+
+for record in history:
+    avg = mean([record.super_petrol, record.diesel, record.kerosene])
+    print(f"{record.valid_from}  avg={avg:.2f}")
+```
+
+### Export all current prices to CSV
+
+```python
+import csv
+
+with FuelKenyaClient() as client:
+    prices = client.latest_prices()
+
+with open("prices_export.csv", "w", newline="") as f:
+    writer = csv.DictWriter(f, fieldnames=[
+        "town", "super_petrol", "diesel", "kerosene", "valid_from", "valid_to"
+    ])
+    writer.writeheader()
+    for p in prices:
+        writer.writerow({
+            "town": p.town,
+            "super_petrol": p.super_petrol,
+            "diesel": p.diesel,
+            "kerosene": p.kerosene,
+            "valid_from": p.valid_from.isoformat(),
+            "valid_to": p.valid_to.isoformat(),
+        })
+
+print(f"Exported {len(prices)} towns.")
+```
+
+### Ingest a new CSV (admin)
+
+```python
+import os
+
+with FuelKenyaClient(ingest_token=os.environ["INGEST_TOKEN"]) as client:
+    result = client.ingest_csv("epra_july_2026.csv")
+    print(result)
+    # {'status': 'success', 'records_processed': 224, 'timestamp': '2026-07-15T08:00:00Z'}
+```
+
+## Async client
+
+For async frameworks (FastAPI, aiohttp apps, Django async views):
+
+```python
+import httpx
+
+class AsyncFuelKenyaClient:
+    def __init__(self, base_url: str = BASE_URL):
+        self._http = httpx.AsyncClient(base_url=base_url, timeout=10)
+
+    async def latest_prices(self, town: str | None = None) -> list[FuelPrice]:
+        params = {"town": town} if town else {}
+        r = await self._http.get("/prices/latest", params=params)
+        r.raise_for_status()
+        return [FuelPrice.from_dict(row) for row in r.json()]
+
+    async def towns(self) -> list[str]:
+        r = await self._http.get("/towns")
+        r.raise_for_status()
+        return r.json()
+
+    async def aclose(self):
+        await self._http.aclose()
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, *_):
+        await self.aclose()
+
+
+# Usage
+async def main():
+    async with AsyncFuelKenyaClient() as client:
+        prices = await client.latest_prices("Kisumu")
+        print(prices[0].super_petrol)
+```

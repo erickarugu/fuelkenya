@@ -1,0 +1,122 @@
+---
+title: Error Reference
+description: HTTP status codes and error shapes returned by the FuelKenya API.
+---
+
+# Error Reference
+
+All error responses use the standard FastAPI error envelope:
+
+```json
+{
+  "detail": "Human-readable description of what went wrong"
+}
+```
+
+For validation errors (status `422`), `detail` is an array of objects:
+
+```json
+{
+  "detail": [
+    {
+      "loc": ["query", "limit"],
+      "msg": "ensure this value is less than or equal to 1000",
+      "type": "value_error.number.not_le"
+    }
+  ]
+}
+```
+
+---
+
+## Status code reference
+
+### 400 Bad Request
+
+The request was understood but contained invalid data.
+
+| Endpoint | Cause | Detail message |
+|---|---|---|
+| `POST /ingest/csv` | CSV header columns are wrong or missing | `"CSV header must include From, To, Town, Super (PMS), Diesel (AGO), Kerosene (IK)"` |
+| `POST /ingest/csv` | A date cell cannot be parsed | `"Invalid date format: <raw value>"` |
+| `POST /ingest/csv` | CSV has no data rows | `"CSV payload contains no rows."` |
+
+### 401 Unauthorized
+
+The `Authorization` header is missing or the token is wrong. Only applies to the ingest endpoint.
+
+```json
+{
+  "detail": "Invalid authorization token for ingestion endpoint."
+}
+```
+
+Fix: provide the correct `Authorization: Bearer <token>` header.
+
+### 415 Unsupported Media Type
+
+The file uploaded to `POST /ingest/csv` is not a CSV.
+
+```json
+{
+  "detail": "Uploaded file must be a CSV file."
+}
+```
+
+Accepted MIME types: `text/csv`, `application/vnd.ms-excel`, `application/octet-stream`.
+
+### 422 Unprocessable Entity
+
+Query parameter or path parameter validation failed. FastAPI returns a structured array in `detail`:
+
+```json
+{
+  "detail": [
+    {
+      "loc": ["query", "limit"],
+      "msg": "ensure this value is less than or equal to 1000",
+      "type": "value_error.number.not_le"
+    }
+  ]
+}
+```
+
+Common causes:
+
+| Parameter | Constraint | Error |
+|---|---|---|
+| `limit` | Must be between `1` and `1000` | `value_error.number.not_ge` / `value_error.number.not_le` |
+| `offset` | Must be `≥ 0` | `value_error.number.not_ge` |
+| `start_date` / `end_date` | Must be valid `YYYY-MM-DD` | `value_error.date` |
+
+### 429 Too Many Requests
+
+The client has exceeded 60 requests in 60 seconds.
+
+```json
+{
+  "detail": "Rate limit exceeded. Try again later."
+}
+```
+
+Wait until your window resets (up to 60 seconds) before retrying. See [Rate Limiting](/rate-limiting) for strategies to avoid hitting this limit.
+
+### 500 Internal Server Error
+
+Returned by `GET /health` when the database is unreachable:
+
+```json
+{
+  "detail": "Database unreachable"
+}
+```
+
+All other 500 errors represent unexpected server-side failures. If you encounter one consistently, please open an issue.
+
+---
+
+## Retrying safely
+
+- **400, 401, 415, 422** — do not retry; the request itself is the problem. Fix the request.
+- **429** — wait and retry after the rate limit window resets.
+- **500** — safe to retry with exponential backoff (start at 1 second, cap at 30 seconds). If the error persists after 3 attempts, surface it to the user.

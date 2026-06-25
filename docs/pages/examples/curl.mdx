@@ -1,0 +1,163 @@
+---
+title: curl
+description: FuelKenya API examples using curl.
+---
+
+# curl
+
+All examples assume `jq` is installed for pretty-printing JSON. If not, remove the `| jq` portion.
+
+## Basic queries
+
+### Health check
+
+```bash
+curl -s https://api.fuelkenya.com/api/v1/health | jq
+```
+
+```json
+{
+  "status": "healthy"
+}
+```
+
+### All available towns
+
+```bash
+curl -s https://api.fuelkenya.com/api/v1/towns | jq
+```
+
+### Latest prices for all towns
+
+```bash
+curl -s https://api.fuelkenya.com/api/v1/prices/latest | jq
+```
+
+### Latest prices for one town
+
+```bash
+curl -s "https://api.fuelkenya.com/api/v1/prices/latest?town=Mombasa" | jq
+```
+
+### Price history — last 12 cycles for Nairobi
+
+```bash
+curl -s "https://api.fuelkenya.com/api/v1/prices?town=Nairobi&limit=12" | jq
+```
+
+### Price history with date range
+
+```bash
+curl -s "https://api.fuelkenya.com/api/v1/prices?town=Nairobi&start_date=2025-01-01&end_date=2025-12-31" | jq
+```
+
+---
+
+## Filtering with jq
+
+### Extract only Super Petrol prices, sorted cheapest first
+
+```bash
+curl -s https://api.fuelkenya.com/api/v1/prices/latest \
+  | jq '[.[] | {town, super_petrol}] | sort_by(.super_petrol)'
+```
+
+### Find the cheapest town for diesel
+
+```bash
+curl -s https://api.fuelkenya.com/api/v1/prices/latest \
+  | jq 'min_by(.diesel) | {town, diesel}'
+```
+
+### Get all towns where petrol is below 210
+
+```bash
+curl -s https://api.fuelkenya.com/api/v1/prices/latest \
+  | jq '[.[] | select(.super_petrol < 210) | {town, super_petrol}]'
+```
+
+### Print just the current cycle date range
+
+```bash
+curl -s https://api.fuelkenya.com/api/v1/prices/latest \
+  | jq -r 'first | "Valid \(.valid_from) to \(.valid_to)"'
+```
+
+---
+
+## Pagination
+
+The default page size is 100. To walk through all records:
+
+```bash
+# Page 1
+curl -s "https://api.fuelkenya.com/api/v1/prices?limit=100&offset=0" | jq length
+
+# Page 2
+curl -s "https://api.fuelkenya.com/api/v1/prices?limit=100&offset=100" | jq length
+
+# Continue until result length < 100
+```
+
+---
+
+## Ingest CSV (admin)
+
+```bash
+curl -X POST https://api.fuelkenya.com/api/v1/ingest/csv \
+  -H "Authorization: Bearer $INGEST_TOKEN" \
+  -F "file=@epra_july_2026.csv" \
+  | jq
+```
+
+Expected response:
+
+```json
+{
+  "status": "success",
+  "records_processed": 224,
+  "timestamp": "2026-07-15T08:00:00Z"
+}
+```
+
+---
+
+## Shell script — export prices to CSV file
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+API="https://api.fuelkenya.com/api/v1"
+OUTPUT="fuel_prices_$(date +%Y%m%d).csv"
+
+echo "town,super_petrol,diesel,kerosene,valid_from,valid_to" > "$OUTPUT"
+
+curl -s "${API}/prices/latest" | jq -r \
+  '.[] | [.town, .super_petrol, .diesel, .kerosene, .valid_from, .valid_to] | @csv' \
+  >> "$OUTPUT"
+
+echo "Exported to $OUTPUT ($(wc -l < "$OUTPUT") rows)"
+```
+
+## Shell script — check if prices have changed since last run
+
+```bash
+#!/usr/bin/env bash
+CACHE_FILE="/tmp/fuelkenya_valid_from.txt"
+CURRENT=$(curl -s "https://api.fuelkenya.com/api/v1/prices/latest" \
+  | jq -r 'first.valid_from')
+
+if [[ -f "$CACHE_FILE" ]]; then
+  LAST=$(cat "$CACHE_FILE")
+  if [[ "$CURRENT" != "$LAST" ]]; then
+    echo "Prices updated! New cycle starts $CURRENT"
+    echo "$CURRENT" > "$CACHE_FILE"
+  else
+    echo "No change. Still on cycle starting $CURRENT"
+  fi
+else
+  echo "First run. Cycle: $CURRENT"
+  echo "$CURRENT" > "$CACHE_FILE"
+fi
+```

@@ -1,0 +1,67 @@
+---
+title: Rate Limiting
+description: Request limits for the FuelKenya API.
+---
+
+import { Callout } from "nextra/components";
+
+# Rate Limiting
+
+## Default limits
+
+| Window | Max requests per IP |
+|---|---|
+| 60 seconds | 60 requests |
+
+The limit is applied **per client IP address** using a sliding window. Every IP gets a fresh 60-request allowance per 60-second window.
+
+If you are behind a proxy or load balancer, the API reads the `X-Forwarded-For` header to determine your real IP. If the header contains multiple IPs, the first (left-most) value is used.
+
+## Exempt paths
+
+The health check endpoint is exempt from rate limiting and can be called without restriction:
+
+```
+GET /api/v1/health
+```
+
+## When you hit the limit
+
+Exceeding the limit returns:
+
+```http
+HTTP/1.1 429 Too Many Requests
+Content-Type: application/json
+
+{
+  "detail": "Rate limit exceeded. Try again later."
+}
+```
+
+## Best practices
+
+**Cache aggressively.** Fuel prices only change on the **14th of each month**. Once you have fetched the current cycle, you can safely cache the response for the duration of the cycle (up to 30 days).
+
+The API itself sets the following cache header on all responses to signal this:
+
+```
+Cache-Control: public, max-age=86400, s-maxage=604800
+```
+
+This means edge/CDN caches may store responses for up to 7 days. Your own application cache can follow the same policy.
+
+**Batch over pagination.** If you need prices for multiple towns, use a single `/prices/latest` call without a `town` filter — it returns all towns at once — rather than making one request per town.
+
+```bash
+# Efficient — one request for all towns
+curl https://api.fuelkenya.com/api/v1/prices/latest
+
+# Inefficient — 224 requests for 224 towns
+for town in "${TOWNS[@]}"; do
+  curl "https://api.fuelkenya.com/api/v1/prices/latest?town=$town"
+done
+```
+
+<Callout type="info">
+  If you are building a high-traffic application and need higher limits, the recommended approach is to **mirror the data** locally: fetch the full price list once per cycle and serve it from your own infrastructure.
+</Callout>

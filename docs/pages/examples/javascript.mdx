@@ -1,0 +1,160 @@
+---
+title: JavaScript / TypeScript
+description: FuelKenya API client examples in JavaScript and TypeScript.
+---
+
+import { Tabs, Tab } from "nextra/components";
+
+# JavaScript / TypeScript
+
+## Typed client
+
+A minimal TypeScript client covering all read endpoints:
+
+```ts
+const BASE_URL = "https://api.fuelkenya.com/api/v1";
+
+export interface FuelPrice {
+  id: number;
+  town: string;
+  super_petrol: number;
+  diesel: number;
+  kerosene: number;
+  valid_from: string;
+  valid_to: string;
+}
+
+async function get<T>(path: string, params?: Record<string, string>): Promise<T> {
+  const url = new URL(`${BASE_URL}${path}`);
+  if (params) {
+    Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  }
+  const res = await fetch(url.toString());
+  if (!res.ok) throw new Error(`FuelKenya API error ${res.status}: ${await res.text()}`);
+  return res.json();
+}
+
+export const fuelKenya = {
+  /** All towns with price data */
+  towns: () => get<string[]>("/towns"),
+
+  /** Latest cycle prices — optionally filtered to one town */
+  latestPrices: (town?: string) =>
+    get<FuelPrice[]>("/prices/latest", town ? { town } : undefined),
+
+  /** Price history — newest first */
+  priceHistory: (town: string, limit = 12, offset = 0) =>
+    get<FuelPrice[]>("/prices", {
+      town,
+      limit: String(limit),
+      offset: String(offset),
+    }),
+
+  /** Health check */
+  health: () => get<{ status: string }>("/health"),
+};
+```
+
+## Usage examples
+
+### Get current prices for a town
+
+```ts
+const prices = await fuelKenya.latestPrices("Nairobi");
+const [nairobi] = prices;
+
+console.log(`Super Petrol: KSh ${nairobi.super_petrol.toFixed(2)}`);
+console.log(`Diesel:       KSh ${nairobi.diesel.toFixed(2)}`);
+console.log(`Kerosene:     KSh ${nairobi.kerosene.toFixed(2)}`);
+```
+
+### Build a price ranking (cheapest to most expensive)
+
+```ts
+const all = await fuelKenya.latestPrices();
+
+const ranking = [...all]
+  .sort((a, b) => a.super_petrol - b.super_petrol)
+  .map((p, i) => ({
+    rank: i + 1,
+    town: p.town,
+    petrol: p.super_petrol,
+    savings: p.super_petrol - all[0]?.super_petrol,
+  }));
+
+console.table(ranking.slice(0, 10)); // top 10 cheapest
+```
+
+### Fetch historical trend data
+
+```ts
+const history = await fuelKenya.priceHistory("Mombasa", 12);
+
+// Oldest → newest for charting
+const chronological = [...history].reverse();
+
+const labels = chronological.map(h =>
+  new Date(h.valid_from).toLocaleDateString("en-GB", { month: "short", year: "2-digit" })
+);
+const petrolSeries = chronological.map(h => h.super_petrol);
+```
+
+### Populate a React dropdown
+
+```tsx
+import { useEffect, useState } from "react";
+import { fuelKenya } from "./fuelKenya";
+
+export function TownSelector({ onChange }: { onChange: (town: string) => void }) {
+  const [towns, setTowns] = useState<string[]>([]);
+
+  useEffect(() => {
+    fuelKenya.towns().then(setTowns);
+  }, []);
+
+  return (
+    <select onChange={e => onChange(e.target.value)}>
+      {towns.map(t => <option key={t} value={t}>{t}</option>)}
+    </select>
+  );
+}
+```
+
+### Check price for a given date
+
+```ts
+async function priceOnDate(town: string, date: Date): Promise<FuelPrice | null> {
+  const d = date.toISOString().slice(0, 10); // YYYY-MM-DD
+  const records = await fuelKenya.priceHistory(town, 24);
+
+  return records.find(r => r.valid_from <= d && d <= r.valid_to) ?? null;
+}
+
+const price = await priceOnDate("Nakuru", new Date("2026-03-01"));
+console.log(price?.super_petrol); // e.g. 217.36
+```
+
+## Next.js integration
+
+The FuelKenya web app uses `fetch` with `{ cache: "no-store" }` on the server side to always load fresh cycle prices:
+
+```ts
+// lib/api.ts — server-side fetching in Next.js App Router
+
+const BASE = process.env.NEXT_PUBLIC_FUELKENYA_API_URL ?? "http://localhost:8000/api/v1";
+
+export async function fetchLatestPrices(town?: string): Promise<FuelPrice[]> {
+  const query = town ? `?town=${encodeURIComponent(town)}` : "";
+  const res = await fetch(`${BASE}/prices/latest${query}`, { cache: "no-store" });
+  if (!res.ok) throw new Error(`Failed to fetch prices: ${res.status}`);
+  return res.json();
+}
+```
+
+For a static site you can use `revalidate` instead:
+
+```ts
+const res = await fetch(`${BASE}/prices/latest`, {
+  next: { revalidate: 86400 }, // revalidate daily
+});
+```

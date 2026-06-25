@@ -1,0 +1,48 @@
+---
+title: Overview
+description: FuelKenya REST API — official EPRA pump prices across all towns in Kenya.
+---
+
+import { Cards, Card, Callout } from "nextra/components";
+
+# FuelKenya API
+
+The FuelKenya API provides programmatic access to **official EPRA maximum pump prices** across all towns in Kenya. Prices are updated every pricing cycle on the 14th of each month.
+
+<Callout type="info">
+  **Base URL** — `https://api.fuelkenya.com/api/v1`
+
+  All endpoints return JSON. Dates follow ISO 8601 (`YYYY-MM-DD`). Prices are in **Kenyan Shillings (KSh) per litre**.
+</Callout>
+
+## What you can build
+
+- **Price comparison tools** — surface the cheapest fuel town for a given route
+- **Fleet management dashboards** — track fuel cost across depots and cycles
+- **Budget calculators** — estimate monthly fuel spend based on real pump prices
+- **Price alert systems** — notify users when prices change on the 14th
+
+## Fuel types covered
+
+| Field | Description |
+|---|---|
+| `super_petrol` | Super Petrol (PMS) — the most common road fuel |
+| `diesel` | Diesel (AGO) — trucks, buses, generators |
+| `kerosene` | Kerosene (IK) — household cooking and lighting |
+
+## Pricing cycles
+
+EPRA publishes new maximum pump prices on the **14th of every month**. Each record carries a `valid_from` and `valid_to` date that defines the cycle it applies to. When querying `/prices/latest`, you always get the most recently published set regardless of calendar date.
+
+## Versioning
+
+The current API version is **v1**. All v1 endpoints are prefixed with `/api/v1`. Breaking changes will be released under a new version prefix; v1 will remain stable.
+
+## Quick navigation
+
+<Cards>
+  <Card title="Quickstart →" href="/quickstart" />
+  <Card title="Authentication →" href="/authentication" />
+  <Card title="Rate Limiting →" href="/rate-limiting" />
+  <Card title="API Reference →" href="/endpoints" />
+</Cards>

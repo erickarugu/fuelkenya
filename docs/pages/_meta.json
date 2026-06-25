@@ -1,0 +1,9 @@
+{
+  "index": "Overview",
+  "quickstart": "Quickstart",
+  "authentication": "Authentication",
+  "rate-limiting": "Rate Limiting",
+  "endpoints": "API Reference",
+  "reference": "Data Reference",
+  "examples": "Code Examples"
+}

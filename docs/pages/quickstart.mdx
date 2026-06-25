@@ -1,0 +1,128 @@
+---
+title: Quickstart
+description: Get EPRA fuel prices in under a minute.
+---
+
+import { Steps, Callout, Tabs, Tab } from "nextra/components";
+
+# Quickstart
+
+Get up and running in under a minute. No API key required for read endpoints.
+
+<Steps>
+
+### Pick a town
+
+The API covers **224+ towns** across Kenya. Fetch the full list at any time:
+
+```bash
+curl https://api.fuelkenya.com/api/v1/towns
+```
+
+Response (truncated):
+
+```json
+["Bungoma", "Eldoret", "Kisumu", "Mombasa", "Nairobi", "Nakuru", ...]
+```
+
+### Fetch the latest prices
+
+Get the current cycle prices for a specific town. Town names are case-insensitive.
+
+```bash
+curl "https://api.fuelkenya.com/api/v1/prices/latest?town=Nairobi"
+```
+
+Response:
+
+```json
+[
+  {
+    "id": 1042,
+    "town": "Nairobi",
+    "super_petrol": 214.03,
+    "diesel": 199.73,
+    "kerosene": 196.53,
+    "valid_from": "2026-06-15",
+    "valid_to": "2026-07-14"
+  }
+]
+```
+
+### Fetch price history
+
+Pull up to 12 previous pricing cycles for trend analysis:
+
+```bash
+curl "https://api.fuelkenya.com/api/v1/prices?town=Nairobi&limit=12"
+```
+
+Results are returned newest-first. Use `offset` for pagination.
+
+</Steps>
+
+---
+
+## Language examples
+
+<Tabs items={['curl', 'JavaScript', 'Python']}>
+  <Tab>
+```bash
+# Latest prices — all towns
+curl https://api.fuelkenya.com/api/v1/prices/latest
+
+# Latest prices — specific town
+curl "https://api.fuelkenya.com/api/v1/prices/latest?town=Mombasa"
+
+# Price history — last 6 cycles
+curl "https://api.fuelkenya.com/api/v1/prices?town=Kisumu&limit=6"
+```
+  </Tab>
+  <Tab>
+```js
+const BASE = "https://api.fuelkenya.com/api/v1";
+
+async function getLatestPrices(town) {
+  const url = town
+    ? `${BASE}/prices/latest?town=${encodeURIComponent(town)}`
+    : `${BASE}/prices/latest`;
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+// Usage
+const prices = await getLatestPrices("Nairobi");
+console.log(`Nairobi petrol: KSh ${prices[0].super_petrol}`);
+```
+  </Tab>
+  <Tab>
+```python
+import httpx
+
+BASE = "https://api.fuelkenya.com/api/v1"
+
+def get_latest_prices(town: str | None = None) -> list[dict]:
+    params = {"town": town} if town else {}
+    r = httpx.get(f"{BASE}/prices/latest", params=params)
+    r.raise_for_status()
+    return r.json()
+
+prices = get_latest_prices("Nairobi")
+print(f"Nairobi petrol: KSh {prices[0]['super_petrol']}")
+```
+  </Tab>
+</Tabs>
+
+---
+
+<Callout type="warning">
+  **Rate limit** — public endpoints allow **60 requests per minute** per IP. Cache responses locally rather than polling; prices only change on the 14th of each month.
+</Callout>
+
+## Next steps
+
+- [API Reference](/api) — full endpoint documentation with all parameters
+- [Code Examples](/examples) — more complete client implementations
+- [Data Types](/reference/data-types) — field definitions and formats

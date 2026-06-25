@@ -1,0 +1,8 @@
+{
+  "index": "Endpoints overview",
+  "health": "GET /health",
+  "towns": "GET /towns",
+  "prices": "GET /prices",
+  "prices-latest": "GET /prices/latest",
+  "ingest-csv": "POST /ingest/csv"
+}

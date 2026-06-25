@@ -1,0 +1,49 @@
+---
+title: Authentication
+description: How to authenticate with the FuelKenya API.
+---
+
+import { Callout } from "nextra/components";
+
+# Authentication
+
+## Public endpoints
+
+All **read endpoints** — `/prices`, `/prices/latest`, `/towns`, and `/health` — are **publicly accessible** with no authentication required. There is no API key or account needed to query fuel prices.
+
+## Ingest endpoint
+
+The `POST /api/v1/ingest/csv` endpoint is **admin-only** and requires a Bearer token. This endpoint is used to load new EPRA pricing cycles into the database and is not intended for public use.
+
+### Sending the token
+
+Pass your token in the `Authorization` header:
+
+```bash
+curl -X POST https://api.fuelkenya.com/api/v1/ingest/csv \
+  -H "Authorization: Bearer YOUR_INGEST_TOKEN" \
+  -F "file=@epra_prices.csv"
+```
+
+### Error responses
+
+| Scenario | Status | Detail |
+|---|---|---|
+| Missing `Authorization` header | `401` | `"Invalid authorization token for ingestion endpoint."` |
+| Wrong token value | `401` | `"Invalid authorization token for ingestion endpoint."` |
+
+<Callout type="warning">
+  The ingest token is set via the `INGEST_TOKEN` environment variable on the API server. If `INGEST_TOKEN` is not set, the ingest endpoint accepts all requests without checking the header. This is intended for local development only — always set a token in production.
+</Callout>
+
+## CORS
+
+The API allows cross-origin requests from the following origins:
+
+```
+https://fuelkenya.com
+https://www.fuelkenya.com
+http://localhost:3000
+```
+
+If you are building a browser-based client that needs to call the API from a different origin, contact the FuelKenya team to have your domain added.
