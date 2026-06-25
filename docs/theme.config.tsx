@@ -33,9 +33,6 @@ const config: DocsThemeConfig = {
         target="_blank"
         rel="noopener noreferrer"
         style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 6,
           fontSize: 13,
           fontWeight: 500,
           color: "#6b7280",
@@ -43,7 +40,6 @@ const config: DocsThemeConfig = {
           whiteSpace: "nowrap"
         }}
       >
-        <span>⛽</span>
         <span>Live tracker</span>
       </a>
     )
