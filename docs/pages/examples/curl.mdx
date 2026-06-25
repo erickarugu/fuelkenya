@@ -1,6 +1,6 @@
 ---
 title: curl
-description: FuelKenya API examples using curl.
+description: curl examples for querying EPRA fuel prices in Kenya via the FuelKenya REST API — copy-paste ready commands for Super Petrol, Diesel, and Kerosene data.
 ---
 
 # curl
@@ -12,7 +12,7 @@ All examples assume `jq` is installed for pretty-printing JSON. If not, remove t
 ### Health check
 
 ```bash
-curl -s https://api.fuelkenya.com/api/v1/health | jq
+curl -s https://api.fuelkenya.com/v1/health | jq
 ```
 
 ```json
@@ -24,31 +24,31 @@ curl -s https://api.fuelkenya.com/api/v1/health | jq
 ### All available towns
 
 ```bash
-curl -s https://api.fuelkenya.com/api/v1/towns | jq
+curl -s https://api.fuelkenya.com/v1/towns | jq
 ```
 
 ### Latest prices for all towns
 
 ```bash
-curl -s https://api.fuelkenya.com/api/v1/prices/latest | jq
+curl -s https://api.fuelkenya.com/v1/prices/latest | jq
 ```
 
 ### Latest prices for one town
 
 ```bash
-curl -s "https://api.fuelkenya.com/api/v1/prices/latest?town=Mombasa" | jq
+curl -s "https://api.fuelkenya.com/v1/prices/latest?town=Mombasa" | jq
 ```
 
 ### Price history — last 12 cycles for Nairobi
 
 ```bash
-curl -s "https://api.fuelkenya.com/api/v1/prices?town=Nairobi&limit=12" | jq
+curl -s "https://api.fuelkenya.com/v1/prices?town=Nairobi&limit=12" | jq
 ```
 
 ### Price history with date range
 
 ```bash
-curl -s "https://api.fuelkenya.com/api/v1/prices?town=Nairobi&start_date=2025-01-01&end_date=2025-12-31" | jq
+curl -s "https://api.fuelkenya.com/v1/prices?town=Nairobi&start_date=2025-01-01&end_date=2025-12-31" | jq
 ```
 
 ---
@@ -58,28 +58,28 @@ curl -s "https://api.fuelkenya.com/api/v1/prices?town=Nairobi&start_date=2025-01
 ### Extract only Super Petrol prices, sorted cheapest first
 
 ```bash
-curl -s https://api.fuelkenya.com/api/v1/prices/latest \
+curl -s https://api.fuelkenya.com/v1/prices/latest \
   | jq '[.[] | {town, super_petrol}] | sort_by(.super_petrol)'
 ```
 
 ### Find the cheapest town for diesel
 
 ```bash
-curl -s https://api.fuelkenya.com/api/v1/prices/latest \
+curl -s https://api.fuelkenya.com/v1/prices/latest \
   | jq 'min_by(.diesel) | {town, diesel}'
 ```
 
 ### Get all towns where petrol is below 210
 
 ```bash
-curl -s https://api.fuelkenya.com/api/v1/prices/latest \
+curl -s https://api.fuelkenya.com/v1/prices/latest \
   | jq '[.[] | select(.super_petrol < 210) | {town, super_petrol}]'
 ```
 
 ### Print just the current cycle date range
 
 ```bash
-curl -s https://api.fuelkenya.com/api/v1/prices/latest \
+curl -s https://api.fuelkenya.com/v1/prices/latest \
   | jq -r 'first | "Valid \(.valid_from) to \(.valid_to)"'
 ```
 
@@ -91,10 +91,10 @@ The default page size is 100. To walk through all records:
 
 ```bash
 # Page 1
-curl -s "https://api.fuelkenya.com/api/v1/prices?limit=100&offset=0" | jq length
+curl -s "https://api.fuelkenya.com/v1/prices?limit=100&offset=0" | jq length
 
 # Page 2
-curl -s "https://api.fuelkenya.com/api/v1/prices?limit=100&offset=100" | jq length
+curl -s "https://api.fuelkenya.com/v1/prices?limit=100&offset=100" | jq length
 
 # Continue until result length < 100
 ```
@@ -104,7 +104,7 @@ curl -s "https://api.fuelkenya.com/api/v1/prices?limit=100&offset=100" | jq leng
 ## Ingest CSV (admin)
 
 ```bash
-curl -X POST https://api.fuelkenya.com/api/v1/ingest/csv \
+curl -X POST https://api.fuelkenya.com/v1/ingest/csv \
   -H "Authorization: Bearer $INGEST_TOKEN" \
   -F "file=@epra_july_2026.csv" \
   | jq
@@ -128,7 +128,7 @@ Expected response:
 #!/usr/bin/env bash
 set -euo pipefail
 
-API="https://api.fuelkenya.com/api/v1"
+API="https://api.fuelkenya.com/v1"
 OUTPUT="fuel_prices_$(date +%Y%m%d).csv"
 
 echo "town,super_petrol,diesel,kerosene,valid_from,valid_to" > "$OUTPUT"
@@ -145,7 +145,7 @@ echo "Exported to $OUTPUT ($(wc -l < "$OUTPUT") rows)"
 ```bash
 #!/usr/bin/env bash
 CACHE_FILE="/tmp/fuelkenya_valid_from.txt"
-CURRENT=$(curl -s "https://api.fuelkenya.com/api/v1/prices/latest" \
+CURRENT=$(curl -s "https://api.fuelkenya.com/v1/prices/latest" \
   | jq -r 'first.valid_from')
 
 if [[ -f "$CACHE_FILE" ]]; then

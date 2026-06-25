@@ -12,7 +12,7 @@ Return a paginated list of price records across all towns and pricing cycles. Su
 ## Request
 
 ```http
-GET /api/v1/prices
+GET /v1/prices
 ```
 
 ### Query parameters
@@ -65,29 +65,29 @@ Returns an empty array `[]` when no records match the filters.
 ### Fetch the last 12 cycles for Nairobi
 
 ```bash
-curl "https://api.fuelkenya.com/api/v1/prices?town=Nairobi&limit=12"
+curl "https://api.fuelkenya.com/v1/prices?town=Nairobi&limit=12"
 ```
 
 ### Fetch all towns for a specific cycle
 
 ```bash
-curl "https://api.fuelkenya.com/api/v1/prices?start_date=2026-06-15&end_date=2026-07-14"
+curl "https://api.fuelkenya.com/v1/prices?start_date=2026-06-15&end_date=2026-07-14"
 ```
 
 ### Paginate through all records
 
 ```bash
 # Page 1 — first 100 records
-curl "https://api.fuelkenya.com/api/v1/prices?limit=100&offset=0"
+curl "https://api.fuelkenya.com/v1/prices?limit=100&offset=0"
 
 # Page 2 — next 100 records
-curl "https://api.fuelkenya.com/api/v1/prices?limit=100&offset=100"
+curl "https://api.fuelkenya.com/v1/prices?limit=100&offset=100"
 ```
 
 ### Date-range filtered history for a town
 
 ```bash
-curl "https://api.fuelkenya.com/api/v1/prices?town=Mombasa&start_date=2025-01-01&end_date=2025-12-31"
+curl "https://api.fuelkenya.com/v1/prices?town=Mombasa&start_date=2025-01-01&end_date=2025-12-31"
 ```
 
 ## Pagination notes

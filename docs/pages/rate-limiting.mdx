@@ -22,7 +22,7 @@ If you are behind a proxy or load balancer, the API reads the `X-Forwarded-For` 
 The health check endpoint is exempt from rate limiting and can be called without restriction:
 
 ```
-GET /api/v1/health
+GET /v1/health
 ```
 
 ## When you hit the limit
@@ -54,11 +54,11 @@ This means edge/CDN caches may store responses for up to 7 days. Your own applic
 
 ```bash
 # Efficient — one request for all towns
-curl https://api.fuelkenya.com/api/v1/prices/latest
+curl https://api.fuelkenya.com/v1/prices/latest
 
 # Inefficient — 224 requests for 224 towns
 for town in "${TOWNS[@]}"; do
-  curl "https://api.fuelkenya.com/api/v1/prices/latest?town=$town"
+  curl "https://api.fuelkenya.com/v1/prices/latest?town=$town"
 done
 ```
 

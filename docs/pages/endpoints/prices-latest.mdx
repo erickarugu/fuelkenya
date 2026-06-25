@@ -1,6 +1,6 @@
 ---
 title: GET /prices/latest
-description: Fetch the most recent EPRA pricing cycle for all towns or a single town.
+description: Fetch the most recent EPRA maximum pump prices for all Kenyan towns or filter by a single town. Returns Super Petrol, Diesel, and Kerosene prices per litre.
 ---
 
 import { Callout } from "nextra/components";
@@ -16,7 +16,7 @@ Return prices for the **most recently published EPRA pricing cycle**. This is th
 ## Request
 
 ```http
-GET /api/v1/prices/latest
+GET /v1/prices/latest
 ```
 
 ### Query parameters
@@ -95,19 +95,19 @@ Returns an empty array if the database has never been seeded:
 ### Current prices for Mombasa
 
 ```bash
-curl "https://api.fuelkenya.com/api/v1/prices/latest?town=Mombasa"
+curl "https://api.fuelkenya.com/v1/prices/latest?town=Mombasa"
 ```
 
 ### All towns, latest cycle
 
 ```bash
-curl https://api.fuelkenya.com/api/v1/prices/latest
+curl https://api.fuelkenya.com/v1/prices/latest
 ```
 
 ### JavaScript — build a price comparison
 
 ```js
-const BASE = "https://api.fuelkenya.com/api/v1";
+const BASE = "https://api.fuelkenya.com/v1";
 
 async function comparePetrolPrices() {
   const prices = await fetch(`${BASE}/prices/latest`).then(r => r.json());

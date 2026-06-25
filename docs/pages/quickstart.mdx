@@ -1,6 +1,6 @@
 ---
 title: Quickstart
-description: Get EPRA fuel prices in under a minute.
+description: Start fetching live EPRA fuel prices for Kenya — Super Petrol, Diesel, and Kerosene — in under a minute. No authentication required for public endpoints.
 ---
 
 import { Steps, Callout, Tabs, Tab } from "nextra/components";
@@ -16,7 +16,7 @@ Get up and running in under a minute. No API key required for read endpoints.
 The API covers **224+ towns** across Kenya. Fetch the full list at any time:
 
 ```bash
-curl https://api.fuelkenya.com/api/v1/towns
+curl https://api.fuelkenya.com/v1/towns
 ```
 
 Response (truncated):
@@ -30,7 +30,7 @@ Response (truncated):
 Get the current cycle prices for a specific town. Town names are case-insensitive.
 
 ```bash
-curl "https://api.fuelkenya.com/api/v1/prices/latest?town=Nairobi"
+curl "https://api.fuelkenya.com/v1/prices/latest?town=Nairobi"
 ```
 
 Response:
@@ -54,7 +54,7 @@ Response:
 Pull up to 12 previous pricing cycles for trend analysis:
 
 ```bash
-curl "https://api.fuelkenya.com/api/v1/prices?town=Nairobi&limit=12"
+curl "https://api.fuelkenya.com/v1/prices?town=Nairobi&limit=12"
 ```
 
 Results are returned newest-first. Use `offset` for pagination.
@@ -69,18 +69,18 @@ Results are returned newest-first. Use `offset` for pagination.
   <Tab>
 ```bash
 # Latest prices — all towns
-curl https://api.fuelkenya.com/api/v1/prices/latest
+curl https://api.fuelkenya.com/v1/prices/latest
 
 # Latest prices — specific town
-curl "https://api.fuelkenya.com/api/v1/prices/latest?town=Mombasa"
+curl "https://api.fuelkenya.com/v1/prices/latest?town=Mombasa"
 
 # Price history — last 6 cycles
-curl "https://api.fuelkenya.com/api/v1/prices?town=Kisumu&limit=6"
+curl "https://api.fuelkenya.com/v1/prices?town=Kisumu&limit=6"
 ```
   </Tab>
   <Tab>
 ```js
-const BASE = "https://api.fuelkenya.com/api/v1";
+const BASE = "https://api.fuelkenya.com/v1";
 
 async function getLatestPrices(town) {
   const url = town
@@ -101,7 +101,7 @@ console.log(`Nairobi petrol: KSh ${prices[0].super_petrol}`);
 ```python
 import httpx
 
-BASE = "https://api.fuelkenya.com/api/v1"
+BASE = "https://api.fuelkenya.com/v1"
 
 def get_latest_prices(town: str | None = None) -> list[dict]:
     params = {"town": town} if town else {}

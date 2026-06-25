@@ -4,14 +4,36 @@ __pycache__/
 *.pyo
 *.pyd
 *.env
+.env
 .venv/
 .venv/**
+*.egg-info/
+dist/
+build/
+.mypy_cache/
 
-# VS Code
+# Node
+node_modules/
+.next/
+out/
+.vercel/
+
+# pnpm
+pnpm-debug.log*
+
+# Env files (never commit secrets)
+.env.local
+.env.production
+.env.*.local
+
+# Editor
 .vscode/
+.idea/
+*.swp
+*.swo
 
 # macOS
 .DS_Store
 
-# Node
-node_modules/
+# Logs
+*.log

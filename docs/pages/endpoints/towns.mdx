@@ -1,6 +1,6 @@
 ---
 title: GET /towns
-description: Return a sorted list of all towns with price data.
+description: Fetch a sorted list of all Kenyan towns covered by the FuelKenya API, sourced from EPRA pricing data.
 ---
 
 # GET /towns
@@ -10,7 +10,7 @@ Return an alphabetically sorted list of every town that has at least one price r
 ## Request
 
 ```http
-GET /api/v1/towns
+GET /v1/towns
 ```
 
 No parameters or headers required.
@@ -72,13 +72,13 @@ The town list is stable within a pricing cycle. New towns are only added when a 
 ## Example
 
 ```bash
-curl https://api.fuelkenya.com/api/v1/towns
+curl https://api.fuelkenya.com/v1/towns
 ```
 
 JavaScript:
 
 ```js
-const towns = await fetch("https://api.fuelkenya.com/api/v1/towns")
+const towns = await fetch("https://api.fuelkenya.com/v1/towns")
   .then(r => r.json());
 
 console.log(`${towns.length} towns available`);

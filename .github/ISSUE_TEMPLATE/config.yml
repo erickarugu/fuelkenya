@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: API Documentation
+    url: https://docs.fuelkenya.com
+    about: Read the API docs before opening an issue about endpoint behaviour.

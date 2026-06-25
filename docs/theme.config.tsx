@@ -23,9 +23,9 @@ const config: DocsThemeConfig = {
     </span>
   ),
   project: {
-    link: "https://github.com/fuelkenya/fuelkenya"
+    link: "https://github.com/erickarugu/fuelkenya"
   },
-  docsRepositoryBase: "https://github.com/fuelkenya/fuelkenya/tree/main/docs",
+  docsRepositoryBase: "https://github.com/erickarugu/fuelkenya/tree/main/docs",
   footer: {
     text: (
       <span>
@@ -41,21 +41,46 @@ const config: DocsThemeConfig = {
     )
   },
   head: function useHead() {
-    const { title } = useConfig();
+    const { title, frontMatter } = useConfig();
     const { route } = useRouter();
     const pageTitle =
       title && route !== "/"
         ? `${title} – FuelKenya API`
-        : "FuelKenya API Docs";
+        : "FuelKenya API Docs | EPRA Fuel Prices for Kenya";
+    const description =
+      (frontMatter.description as string | undefined) ||
+      "FuelKenya REST API — programmatic access to official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across all towns in Kenya.";
+    const canonical =
+      route === "/" ? "https://docs.fuelkenya.com" : `https://docs.fuelkenya.com${route}`;
+    const ogImage = "https://fuelkenya.com/petrol-station.png";
     return (
       <>
         <title>{pageTitle}</title>
+        <meta name="description" content={description} />
         <meta
-          name="description"
-          content="FuelKenya REST API documentation — EPRA fuel prices across Kenya."
+          name="keywords"
+          content="EPRA fuel prices API Kenya, Kenya fuel price REST API, petrol prices API, diesel prices Kenya API, fuel data API, EPRA API, Kenya fuel tracker developer, FuelKenya API, super petrol price API Kenya"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <link rel="canonical" href={canonical} />
         <link rel="icon" href="/favicon.ico" />
+        {/* Open Graph */}
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:site_name" content="FuelKenya API Docs" />
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="en_KE" />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="FuelKenya API — EPRA Fuel Prices Kenya" />
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImage} />
       </>
     );
   },

@@ -13,14 +13,14 @@ All **read endpoints** — `/prices`, `/prices/latest`, `/towns`, and `/health` 
 
 ## Ingest endpoint
 
-The `POST /api/v1/ingest/csv` endpoint is **admin-only** and requires a Bearer token. This endpoint is used to load new EPRA pricing cycles into the database and is not intended for public use.
+The `POST /v1/ingest/csv` endpoint is **admin-only** and requires a Bearer token. This endpoint is used to load new EPRA pricing cycles into the database and is not intended for public use.
 
 ### Sending the token
 
 Pass your token in the `Authorization` header:
 
 ```bash
-curl -X POST https://api.fuelkenya.com/api/v1/ingest/csv \
+curl -X POST https://api.fuelkenya.com/v1/ingest/csv \
   -H "Authorization: Bearer YOUR_INGEST_TOKEN" \
   -F "file=@epra_prices.csv"
 ```

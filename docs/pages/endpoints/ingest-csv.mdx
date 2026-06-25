@@ -16,7 +16,7 @@ Upload a CSV file containing a new EPRA pricing cycle. Records are **upserted** 
 ## Request
 
 ```http
-POST /api/v1/ingest/csv
+POST /v1/ingest/csv
 Content-Type: multipart/form-data
 Authorization: Bearer <token>
 ```
@@ -90,7 +90,7 @@ From,To,Town,Super (PMS),Diesel (AGO),Kerosene (IK)
 ## Example
 
 ```bash
-curl -X POST https://api.fuelkenya.com/api/v1/ingest/csv \
+curl -X POST https://api.fuelkenya.com/v1/ingest/csv \
   -H "Authorization: Bearer YOUR_INGEST_TOKEN" \
   -F "file=@epra_june_2026.csv"
 ```
@@ -103,7 +103,7 @@ import httpx
 def ingest_csv(csv_path: str, token: str) -> dict:
     with open(csv_path, "rb") as f:
         r = httpx.post(
-            "https://api.fuelkenya.com/api/v1/ingest/csv",
+            "https://api.fuelkenya.com/v1/ingest/csv",
             headers={"Authorization": f"Bearer {token}"},
             files={"file": ("prices.csv", f, "text/csv")},
         )
