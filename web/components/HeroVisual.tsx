@@ -1,99 +1,199 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
-const PRICES = [
-  { city: "Nairobi",  petrol: "214.03", diesel: "199.73", kerosene: "196.53" },
-  { city: "Mombasa",  petrol: "208.24", diesel: "194.53", kerosene: "191.20" },
-  { city: "Kisumu",   petrol: "213.69", diesel: "199.20", kerosene: "196.10" },
-  { city: "Nakuru",   petrol: "212.92", diesel: "198.54", kerosene: "195.40" },
-  { city: "Eldoret",  petrol: "212.50", diesel: "198.12", kerosene: "194.85" },
+interface TownPrice {
+  city:     string;
+  petrol:   string;
+  diesel:   string;
+  kerosene: string;
+}
+
+const ROWS = [
+  { key: "petrol"   as const, label: "Super Petrol", accent: "#34d399", bg: "rgba(16,185,129,0.07)",  border: "rgba(16,185,129,0.14)"  },
+  { key: "diesel"   as const, label: "Diesel",        accent: "#60a5fa", bg: "rgba(96,165,250,0.07)",  border: "rgba(96,165,250,0.14)"  },
+  { key: "kerosene" as const, label: "Kerosene",      accent: "#fbbf24", bg: "rgba(251,191,36,0.06)",  border: "rgba(251,191,36,0.12)"  },
 ];
 
-export default function HeroVisual() {
-  const [idx, setIdx] = useState(0);
-  const [visible, setVisible] = useState(true);
+export default function HeroVisual({ towns }: { towns: TownPrice[] }) {
+  const [idx, setIdx]     = useState(0);
+  const [phase, setPhase] = useState<"in" | "out">("in");
 
   useEffect(() => {
+    if (towns.length < 2) return;
     const t = setInterval(() => {
-      setVisible(false);
+      setPhase("out");
       setTimeout(() => {
-        setIdx(i => (i + 1) % PRICES.length);
-        setVisible(true);
-      }, 300);
-    }, 3200);
+        setIdx(i => (i + 1) % towns.length);
+        setPhase("in");
+      }, 200);
+    }, 3600);
     return () => clearInterval(t);
-  }, []);
+  }, [towns.length]);
 
-  const p = PRICES[idx];
+  const p = towns[idx];
+  if (!p) return null;
+
+  const isIn = phase === "in";
 
   return (
-    <div className="relative hidden h-[380px] w-full items-end justify-center overflow-hidden lg:flex">
-      {/* ambient glow behind image */}
+    <div className="relative hidden rounded-2xl p-[1px] lg:block" style={{ overflow: "hidden" }}>
+
+      {/* comet 1 — clockwise, bright head + trailing tail */}
       <div
-        className="pointer-events-none absolute inset-0"
-        style={{ background: "radial-gradient(ellipse at 50% 80%, rgba(0,166,81,0.10) 0%, transparent 65%)" }}
+        className="pointer-events-none absolute"
+        style={{
+          inset:     "-120%",
+          animation: "border-sweep 7s linear infinite",
+          background: `conic-gradient(
+            from 0deg,
+            transparent          0deg,
+            transparent          150deg,
+            rgba(52,211,153,0.03) 158deg,
+            rgba(52,211,153,0.12) 165deg,
+            rgba(52,211,153,0.30) 170deg,
+            rgba(52,211,153,0.52) 174deg,
+            rgba(52,211,153,0.20) 177deg,
+            transparent          181deg,
+            transparent          360deg
+          )`,
+        }}
       />
 
-      {/* floating price overlay — top-left of image area */}
+      {/* comet 2 — counter-clockwise, fainter, different phase */}
       <div
-        className="absolute left-4 top-6 z-10 rounded-xl border border-white/[0.1] px-3.5 py-3"
+        className="pointer-events-none absolute"
         style={{
-          backgroundColor: "rgba(10,10,10,0.88)",
-          backdropFilter: "blur(10px)",
-          opacity: visible ? 1 : 0,
-          transform: visible ? "translateY(0)" : "translateY(-6px)",
-          transition: "opacity 0.3s ease, transform 0.3s ease",
-          minWidth: 148,
+          inset:     "-120%",
+          animation: "border-sweep 11s linear infinite reverse",
+          background: `conic-gradient(
+            from 0deg,
+            transparent          0deg,
+            transparent          60deg,
+            rgba(52,211,153,0.02) 66deg,
+            rgba(52,211,153,0.08) 71deg,
+            rgba(52,211,153,0.18) 74deg,
+            rgba(52,211,153,0.08) 77deg,
+            transparent          81deg,
+            transparent          360deg
+          )`,
         }}
-      >
-        {/* city pill */}
-        <div className="mb-2 flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-          <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">{p.city}</span>
+      />
+
+    {/* ── inner card — fully opaque so comets only show through the 1px gap ── */}
+    <div
+      className="relative overflow-hidden rounded-[15px]"
+      style={{ background: "linear-gradient(145deg, #030f08 0%, #090909 65%)" }}
+    >
+      {/* dot-grid */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize: "20px 20px" }}
+      />
+      {/* top-right ambient glow */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{ background: "radial-gradient(ellipse at 90% 0%, rgba(0,166,81,0.09) 0%, transparent 52%)" }}
+      />
+
+      <div className="relative z-10 p-8">
+
+        {/* header — fades on city change */}
+        <div
+          style={{
+            opacity:    isIn ? 1 : 0,
+            transform:  isIn ? "translateY(0)" : "translateY(-6px)",
+            transition: isIn
+              ? "opacity 0.3s cubic-bezier(0,0,0.2,1), transform 0.3s cubic-bezier(0,0,0.2,1)"
+              : "opacity 0.15s ease-in, transform 0.15s ease-in",
+          }}
+        >
+          <div className="mb-3 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-1.5 w-1.5 shrink-0">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-50" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              </span>
+              <span className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-500">
+                Live prices
+              </span>
+            </div>
+            <span className="rounded-full border border-white/[0.07] bg-white/[0.03] px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-stone-500">
+              EPRA max
+            </span>
+          </div>
+
+          <p className="text-[2rem] font-black leading-tight tracking-tight text-white">{p.city}</p>
+          <p className="mt-1 text-xs text-stone-600">Maximum pump price · current cycle</p>
         </div>
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between gap-6">
-            <span className="text-[10px] font-medium uppercase tracking-wider text-stone-500">Petrol</span>
-            <span className="font-mono text-sm font-bold tabular-nums text-emerald-300">KSh {p.petrol}</span>
-          </div>
-          <div className="flex items-center justify-between gap-6">
-            <span className="text-[10px] font-medium uppercase tracking-wider text-stone-500">Diesel</span>
-            <span className="font-mono text-sm font-bold tabular-nums text-blue-300">KSh {p.diesel}</span>
-          </div>
-          <div className="flex items-center justify-between gap-6">
-            <span className="text-[10px] font-medium uppercase tracking-wider text-stone-500">Kerosene</span>
-            <span className="font-mono text-sm font-bold tabular-nums text-amber-300">KSh {p.kerosene}</span>
-          </div>
-        </div>
-        {/* city indicator dots */}
-        <div className="mt-2.5 flex items-center gap-1.5">
-          {PRICES.map((_, i) => (
-            <span
-              key={i}
+
+        {/* divider */}
+        <div className="my-6 h-px bg-white/[0.06]" />
+
+        {/* price rows — slide in from right on city change */}
+        <div className="flex flex-col gap-2.5">
+          {ROWS.map((row, ri) => (
+            <div
+              key={row.key}
               style={{
-                display: "block",
-                width: i === idx ? 14 : 4,
-                height: 3,
-                borderRadius: 999,
-                backgroundColor: i === idx ? "#00a651" : "rgba(255,255,255,0.12)",
-                transition: "width 0.3s ease",
+                display:         "flex",
+                alignItems:      "center",
+                justifyContent:  "space-between",
+                backgroundColor: row.bg,
+                border:          `1px solid ${row.border}`,
+                borderRadius:    12,
+                padding:         "13px 16px",
+                opacity:         isIn ? 1 : 0,
+                transform:       isIn ? "translateX(0)" : "translateX(10px)",
+                transition:      isIn
+                  ? `opacity 0.32s cubic-bezier(0,0,0.2,1) ${ri * 45}ms, transform 0.32s cubic-bezier(0,0,0.2,1) ${ri * 45}ms`
+                  : "opacity 0.12s ease-in, transform 0.12s ease-in",
+              }}
+            >
+              <div className="flex items-center gap-2.5">
+                <span style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: row.accent, flexShrink: 0, display: "block" }} />
+                <span className="text-xs font-semibold uppercase tracking-wider text-stone-500">
+                  {row.label}
+                </span>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-xs font-medium text-stone-600">KSh</span>
+                <span
+                  style={{ color: row.accent }}
+                  className="font-mono text-2xl font-extrabold tabular-nums tracking-tight"
+                >
+                  {p[row.key]}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* nav dots */}
+        <div className="mt-6 flex items-center gap-2">
+          {towns.map((t, i) => (
+            <button
+              key={t.city}
+              type="button"
+              aria-label={t.city}
+              onClick={() => { setIdx(i); setPhase("in"); }}
+              className="shrink-0 cursor-pointer border-none p-0"
+              style={{
+                display:         "block",
+                width:           i === idx ? 20 : 5,
+                height:          3,
+                borderRadius:    999,
+                backgroundColor: i === idx ? "#00a651" : "rgba(255,255,255,0.09)",
+                transition:      "width 0.28s ease",
               }}
             />
           ))}
+          <span className="ml-auto text-xs tabular-nums text-stone-700">
+            {idx + 1} / {towns.length}
+          </span>
         </div>
       </div>
-
-      {/* the station image */}
-      <Image
-        src="/petrol-station.png"
-        alt="Petrol station illustration"
-        width={480}
-        height={340}
-        className="relative z-0 h-[340px] w-auto object-contain object-bottom drop-shadow-2xl"
-        priority
-      />
+    </div>
     </div>
   );
 }

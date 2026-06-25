@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://fuelkenya.com";
-  const apiBase = "https://api.fuelkenya.com/api/v1";
+  const apiBase = "https://api.fuelkenya.com/v1";
 
   let towns: string[] = [];
   try {
@@ -15,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   const townUrls = towns.map((town: string) => ({
-    url: `${baseUrl}/town/${town.toLowerCase()}`,
+    url: `${baseUrl}/town/${town.toLowerCase().replace(/\s+/g, "-")}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.8

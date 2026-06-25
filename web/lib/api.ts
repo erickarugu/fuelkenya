@@ -9,7 +9,7 @@ export interface PriceRecord {
 }
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_FUELKENYA_API_URL ?? "http://localhost:8000/api/v1";
+  process.env.NEXT_PUBLIC_FUELKENYA_API_URL ?? "http://localhost:8000/v1";
 
 async function safeFetch<T>(url: string): Promise<T> {
   const res = await fetch(url, { cache: "no-store" });

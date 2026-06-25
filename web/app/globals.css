@@ -61,6 +61,11 @@ body {
   background: rgba(255, 255, 255, 0.14);
 }
 
+@keyframes border-sweep {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
 @keyframes live-pulse {
   0%   { box-shadow: 0 0 0 0   rgba(0, 166, 81, 0.55); }
   70%  { box-shadow: 0 0 0 8px rgba(0, 166, 81, 0);    }

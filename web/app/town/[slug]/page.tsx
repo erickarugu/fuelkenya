@@ -59,25 +59,48 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const town = townFromSlug(params.slug);
   const latestPrices = await fetchLatestPrices(town);
   const current = latestPrices[0];
-  const title = `${town} Fuel Prices | EPRA Petrol Price Today`;
+  const title = `${town} Fuel Prices Today | EPRA Petrol & Diesel Price`;
   const description = current
-    ? `Latest EPRA prices in ${town}: Super Petrol ${current.super_petrol.toFixed(2)}, Diesel ${current.diesel.toFixed(2)}, Kerosene ${current.kerosene.toFixed(2)} KSh.`
-    : `Check the latest EPRA fuel prices for ${town}, including Super Petrol, Diesel and Kerosene.`;
+    ? `EPRA fuel prices in ${town}: Super Petrol KSh ${current.super_petrol.toFixed(2)}/L, Diesel KSh ${current.diesel.toFixed(2)}/L, Kerosene KSh ${current.kerosene.toFixed(2)}/L. Updated monthly.`
+    : `Check the latest EPRA fuel prices for ${town}, Kenya — Super Petrol, Diesel, and Kerosene updated every pricing cycle.`;
+  const canonicalUrl = `https://fuelkenya.com/town/${params.slug}`;
+  const ogImageUrl = `https://fuelkenya.com/town/${encodeURIComponent(params.slug)}/opengraph-image`;
 
   return {
     title,
     description,
+    keywords: [
+      `fuel prices ${town} Kenya`,
+      `petrol price ${town}`,
+      `diesel price ${town}`,
+      `EPRA fuel prices ${town}`,
+      `${town} pump prices`,
+      `super petrol price ${town} today`,
+      "EPRA Kenya fuel prices",
+      "Kenya fuel prices today",
+      `${town} fuel cost per litre`
+    ],
+    alternates: { canonical: canonicalUrl },
     openGraph: {
       title,
       description,
+      url: canonicalUrl,
+      type: "website",
+      siteName: "FuelKenya",
       images: [
         {
-          url: `https://fuel.co.ke/town/${encodeURIComponent(params.slug)}/opengraph-image`,
+          url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: `Fuel prices in ${town}`
+          alt: `EPRA fuel prices in ${town}, Kenya`
         }
       ]
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImageUrl]
     }
   };
 }
@@ -126,33 +149,31 @@ export default async function TownPage({ params }: Props) {
     : null;
   const faqItems = buildFAQ(town, latest);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: `Super Petrol - ${town}`,
-        price: latest ? latest.super_petrol.toFixed(2) : "0.00",
-        priceCurrency: "KES"
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: `Diesel - ${town}`,
-        price: latest ? latest.diesel.toFixed(2) : "0.00",
-        priceCurrency: "KES"
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: `Kerosene - ${town}`,
-        price: latest ? latest.kerosene.toFixed(2) : "0.00",
-        priceCurrency: "KES"
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: `${town} Fuel Prices Today`,
+      url: `https://fuelkenya.com/town/${params.slug}`,
+      description: `Official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene in ${town}, Kenya.`,
+      breadcrumb: {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "FuelKenya", item: "https://fuelkenya.com" },
+          { "@type": "ListItem", position: 2, name: `${town} Fuel Prices`, item: `https://fuelkenya.com/town/${params.slug}` }
+        ]
       }
-    ]
-  };
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqItems.map(item => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer }
+      }))
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-base px-6 py-8 text-stone-900 sm:px-10 lg:px-16">
@@ -225,8 +246,8 @@ export default async function TownPage({ params }: Props) {
 
         <RegionVariance
           overview={[
-            { name: "Mombasa", price: 199.99 },
-            { name: "Mandera", price: 221.75 }
+            { name: "Mombasa", super_petrol: 199.99, diesel: 185.50, kerosene: 155.00 },
+            { name: "Mandera", super_petrol: 221.75, diesel: 205.30, kerosene: 170.00 }
           ]}
         />
 
