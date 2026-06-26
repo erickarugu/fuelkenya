@@ -79,7 +79,20 @@ const config: DocsThemeConfig = {
       "FuelKenya REST API — programmatic access to official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across all towns in Kenya.";
     const canonical =
       route === "/" ? "https://docs.fuelkenya.com" : `https://docs.fuelkenya.com${route}`;
-    const ogImage = "https://fuelkenya.com/petrol-station.png";
+    const ogImage = "https://fuelkenya.com/opengraph-image";
+    const jsonLd = route === "/"
+      ? JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebAPI",
+          "name": "FuelKenya API",
+          "description": "REST API providing official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across all towns in Kenya.",
+          "url": "https://docs.fuelkenya.com",
+          "provider": { "@type": "Organization", "name": "FuelKenya", "url": "https://fuelkenya.com" },
+          "documentation": "https://docs.fuelkenya.com",
+          "termsOfService": "https://fuelkenya.com",
+          "license": "https://opensource.org/licenses/MIT"
+        })
+      : null;
     return (
       <>
         <title>{pageTitle}</title>
@@ -106,12 +119,20 @@ const config: DocsThemeConfig = {
         <meta property="og:image" content={ogImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
+        <meta property="og:image:type" content="image/png" />
         <meta property="og:image:alt" content="FuelKenya API — EPRA Fuel Prices Kenya" />
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
+        {/* JSON-LD */}
+        {jsonLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: jsonLd }}
+          />
+        )}
       </>
     );
   },
