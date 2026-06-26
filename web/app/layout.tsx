@@ -66,9 +66,10 @@ export const metadata: Metadata = {
       "Track official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across every town in Kenya.",
     images: [
       {
-        url: "/petrol-station.png",
+        url: "https://fuelkenya.com/opengraph-image",
         width: 1200,
         height: 630,
+        type: "image/png",
         alt: "FuelKenya — EPRA Fuel Price Tracker Kenya"
       }
     ]
@@ -78,7 +79,7 @@ export const metadata: Metadata = {
     title: "FuelKenya — Live EPRA Fuel Prices in Kenya",
     description:
       "Track official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across every town in Kenya.",
-    images: ["/petrol-station.png"]
+    images: ["https://fuelkenya.com/opengraph-image"]
   },
   icons: {
     icon: [
