@@ -9,6 +9,7 @@ import FuelEstimator from "@/components/FuelEstimator";
 import InfoCards from "@/components/InfoCards";
 import AnimatedTownSection from "@/components/AnimatedTownSection";
 import HeroVisual from "@/components/HeroVisual";
+import ThemeToggle from "@/components/ThemeToggle";
 import { fetchHistory, fetchLatestPrices, fetchTowns } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
@@ -62,7 +63,7 @@ const POPULAR_TOWNS = [
 const TrendChart = dynamicImport(() => import("@/components/TrendChart"), {
   ssr: false,
   loading: () => (
-    <div className="flex h-[320px] items-center justify-center rounded-2xl border border-white/[0.07] bg-white/[0.02] text-sm text-stone-500">
+    <div className="flex h-[320px] items-center justify-center rounded-2xl border border-black/[0.08] dark:border-white/[0.07] bg-black/[0.02] dark:bg-white/[0.02] text-sm text-stone-500">
       Loading chart…
     </div>
   )
@@ -111,12 +112,12 @@ function SectionHeader({ label, sub }: { label: string; sub?: string }) {
   return (
     <div className="mb-4">
       <div className="flex items-center gap-3">
-        <span className="text-xs font-semibold uppercase tracking-widest text-stone-400">
+        <span className="text-xs font-semibold uppercase tracking-widest text-stone-600 dark:text-stone-400">
           {label}
         </span>
         {sub && (
           <>
-            <span className="text-stone-700">·</span>
+            <span className="text-stone-300 dark:text-stone-700">·</span>
             <span className="text-xs text-stone-500">{sub}</span>
           </>
         )}
@@ -185,45 +186,46 @@ export default async function Page({ searchParams }: Props) {
   return (
     <div className="min-h-screen page-bg grid-bg">
       {/* ── Nav ────────────────────────────────────────────────────────────── */}
-      <nav className="sticky top-0 z-50 border-b border-white/[0.07] bg-black/70 backdrop-blur-xl">
+      <nav className="sticky top-0 z-50 border-b border-black/[0.08] dark:border-white/[0.07] bg-white/90 dark:bg-black/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5 sm:px-8">
           <div className="flex items-center gap-3">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-base">
               ⛽
             </div>
-            <span className="text-sm font-bold tracking-tight text-stone-100">
+            <span className="text-sm font-bold tracking-tight text-stone-900 dark:text-stone-100">
               FuelKenya
             </span>
             <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/[0.09] px-2.5 py-1">
               <span className="live-dot" />
-              <span className="text-xs font-bold uppercase tracking-widest text-emerald-400">
+              <span className="text-xs font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
                 Live
               </span>
             </div>
           </div>
-          <div className="hidden items-center gap-3 text-xs sm:flex">
-            <span className="font-medium text-stone-500">
+          <div className="flex items-center gap-3 text-xs">
+            <span className="hidden font-medium text-stone-500 dark:text-stone-500 sm:inline">
               EPRA · Max pump prices
             </span>
-            <span className="text-stone-700">·</span>
-            <div className="flex items-center gap-1.5 rounded-lg border border-white/[0.07] bg-white/[0.04] px-2.5 py-1">
+            <span className="hidden text-stone-300 dark:text-stone-700 sm:inline">·</span>
+            <div className="hidden items-center gap-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.07] bg-black/[0.04] dark:bg-white/[0.04] px-2.5 py-1 sm:flex">
               <svg
                 width="10"
                 height="10"
                 viewBox="0 0 24 24"
-                fill="#a8a29e"
+                fill="currentColor"
+                className="text-stone-400 dark:text-stone-500"
                 aria-hidden="true"
               >
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
               </svg>
-              <span className="font-semibold text-stone-300">{town}</span>
+              <span className="font-semibold text-stone-700 dark:text-stone-300">{town}</span>
             </div>
-            <span className="text-stone-700">·</span>
+            <span className="hidden text-stone-300 dark:text-stone-700 sm:inline">·</span>
             <a
               href="https://docs.fuelkenya.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium text-stone-500 transition-colors hover:text-stone-300"
+              className="hidden font-medium text-stone-500 transition-colors hover:text-stone-800 dark:hover:text-stone-300 sm:inline"
             >
               Docs
             </a>
@@ -231,7 +233,7 @@ export default async function Page({ searchParams }: Props) {
               href="https://github.com/erickarugu/fuelkenya"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-stone-600 transition-colors hover:text-stone-400"
+              className="hidden text-stone-400 dark:text-stone-600 transition-colors hover:text-stone-700 dark:hover:text-stone-400 sm:inline-flex"
               aria-label="GitHub"
             >
               <svg
@@ -244,6 +246,7 @@ export default async function Page({ searchParams }: Props) {
                 <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
               </svg>
             </a>
+            <ThemeToggle />
           </div>
         </div>
       </nav>
@@ -259,18 +262,18 @@ export default async function Page({ searchParams }: Props) {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
                 </span>
-                <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-500">
+                <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-500">
                   Updated every cycle · {cycle.display}
                 </span>
               </div>
 
-              <h1 className="mb-5 text-5xl font-extrabold leading-[1.08] tracking-tight text-white sm:text-6xl">
+              <h1 className="mb-5 text-5xl font-extrabold leading-[1.08] tracking-tight text-stone-900 dark:text-white sm:text-6xl">
                 Kenya Fuel
                 <br />
-                <span className="font-light text-stone-400">Price Tracker</span>
+                <span className="font-light text-stone-500 dark:text-stone-400">Price Tracker</span>
               </h1>
 
-              <p className="mb-8 max-w-md text-base leading-relaxed text-stone-400">
+              <p className="mb-8 max-w-md text-base leading-relaxed text-stone-600 dark:text-stone-400">
                 Official EPRA maximum pump prices across all {towns.length}{" "}
                 towns in Kenya - Super Petrol, Diesel, and Kerosene.
               </p>
@@ -286,8 +289,8 @@ export default async function Page({ searchParams }: Props) {
                       href={`?town=${encodeURIComponent(t)}`}
                       className={`rounded-full border px-3 py-1 text-xs font-medium transition-all duration-200 ${
                         t === town
-                          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
-                          : "border-white/[0.07] bg-white/[0.02] text-stone-500 hover:border-white/15 hover:bg-white/[0.04] hover:text-stone-300"
+                          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                          : "border-black/[0.08] dark:border-white/[0.07] bg-black/[0.02] dark:bg-white/[0.02] text-stone-500 hover:border-black/[0.14] dark:hover:border-white/15 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] hover:text-stone-700 dark:hover:text-stone-300"
                       }`}
                     >
                       {t}
@@ -370,7 +373,7 @@ export default async function Page({ searchParams }: Props) {
       </div>
 
       {/* ── Footer ─────────────────────────────────────────────────────────── */}
-      <footer className="border-t border-white/[0.06] px-6 py-6 sm:px-8">
+      <footer className="border-t border-black/[0.07] dark:border-white/[0.06] px-6 py-6 sm:px-8">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="max-w-md text-sm text-stone-500">
             Data sourced from the{" "}
@@ -378,18 +381,18 @@ export default async function Page({ searchParams }: Props) {
               href="https://www.epra.go.ke"
               target="_blank"
               rel="noopener noreferrer"
-              className="underline underline-offset-2 hover:text-stone-400"
+              className="underline underline-offset-2 hover:text-stone-700 dark:hover:text-stone-400"
             >
               Energy & Petroleum Regulatory Authority (EPRA)
             </a>{" "}
             of Kenya. Maximum pump prices are set monthly on the 14th.
           </p>
-          <div className="flex items-center gap-4 text-xs text-stone-600">
+          <div className="flex items-center gap-4 text-xs text-stone-500 dark:text-stone-600">
             <a
               href="https://docs.fuelkenya.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-colors hover:text-stone-400"
+              className="transition-colors hover:text-stone-700 dark:hover:text-stone-400"
             >
               API Docs
             </a>
@@ -397,7 +400,7 @@ export default async function Page({ searchParams }: Props) {
               href="https://github.com/erickarugu/fuelkenya"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 transition-colors hover:text-stone-400"
+              className="flex items-center gap-1.5 transition-colors hover:text-stone-700 dark:hover:text-stone-400"
             >
               <svg
                 width="12"
@@ -410,7 +413,7 @@ export default async function Page({ searchParams }: Props) {
               </svg>
               GitHub
             </a>
-            <span className="text-stone-700">FuelKenya © 2026</span>
+            <span className="text-stone-400 dark:text-stone-700">FuelKenya © 2026</span>
           </div>
         </div>
       </footer>

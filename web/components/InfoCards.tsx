@@ -103,27 +103,27 @@ export default function InfoCards() {
             key={card.num}
             className="group relative overflow-hidden rounded-2xl p-5 transition-all duration-300"
             style={{
-              background:  "rgba(255,255,255,0.015)",
+              background:  "var(--surface-1)",
               border:      `1px solid ${color.cardBorder}`,
               boxShadow:   "none",
             }}
             onMouseEnter={e => {
-              (e.currentTarget as HTMLDivElement).style.border  = `1px solid ${color.hoverBorder}`;
-              (e.currentTarget as HTMLDivElement).style.boxShadow = `0 8px 40px ${color.glow}`;
-              (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.03)";
+              const el = e.currentTarget as HTMLDivElement;
+              el.style.border     = `1px solid ${color.hoverBorder}`;
+              el.style.boxShadow  = `0 8px 40px ${color.glow}`;
+              el.style.background = "var(--surface-2)";
             }}
             onMouseLeave={e => {
-              (e.currentTarget as HTMLDivElement).style.border     = `1px solid ${color.cardBorder}`;
-              (e.currentTarget as HTMLDivElement).style.boxShadow  = "none";
-              (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.015)";
+              const el = e.currentTarget as HTMLDivElement;
+              el.style.border     = `1px solid ${color.cardBorder}`;
+              el.style.boxShadow  = "none";
+              el.style.background = "var(--surface-1)";
             }}
           >
             {/* top accent line */}
             <div className="absolute inset-x-0 top-0 h-[2px] rounded-t-2xl" style={{ background: color.bar }} />
 
-            {/* number + icon row */}
             <div className="mb-5 flex items-start justify-between">
-              {/* icon */}
               <div
                 className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
                 style={{
@@ -134,7 +134,6 @@ export default function InfoCards() {
               >
                 <card.Icon />
               </div>
-              {/* number */}
               <span
                 className="font-mono text-xs font-bold tabular-nums"
                 style={{ color: color.num, opacity: 0.5 }}
@@ -143,12 +142,10 @@ export default function InfoCards() {
               </span>
             </div>
 
-            {/* title */}
-            <p className="mb-2.5 text-sm font-bold leading-snug text-stone-100">
+            <p className="mb-2.5 text-sm font-bold leading-snug text-stone-800 dark:text-stone-100">
               {card.title}
             </p>
 
-            {/* body */}
             <p className="text-sm leading-relaxed text-stone-500">
               {card.body}
             </p>

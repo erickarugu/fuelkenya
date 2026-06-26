@@ -73,45 +73,45 @@ const ACCENT = {
     bar:       "from-emerald-400 via-emerald-500 to-green-600",
     glow:      "from-emerald-500/[0.12]",
     iconBg:    "bg-emerald-500/[0.08] border-emerald-500/20",
-    iconText:  "text-emerald-300",
+    iconText:  "text-emerald-600 dark:text-emerald-300",
     border:    "border-emerald-500/[0.18]",
     hover:     "hover:border-emerald-500/40 hover:shadow-[0_8px_48px_rgba(0,166,81,0.14)]",
     spark:     "#34d399",
-    deltaDown: "text-emerald-300 bg-emerald-500/10 border-emerald-500/25",
-    deltaUp:   "text-red-300 bg-red-500/10 border-red-500/20",
+    deltaDown: "text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 border-emerald-500/25",
+    deltaUp:   "text-red-700 dark:text-red-300 bg-red-500/10 border-red-500/20",
   },
   maasai: {
     bar:       "from-red-400 via-red-500 to-rose-600",
     glow:      "from-red-500/[0.10]",
     iconBg:    "bg-red-500/[0.08] border-red-500/20",
-    iconText:  "text-red-300",
+    iconText:  "text-red-600 dark:text-red-300",
     border:    "border-red-500/[0.18]",
     hover:     "hover:border-red-500/40 hover:shadow-[0_8px_48px_rgba(187,0,39,0.14)]",
     spark:     "#f87171",
-    deltaDown: "text-emerald-300 bg-emerald-500/10 border-emerald-500/25",
-    deltaUp:   "text-red-300 bg-red-500/10 border-red-500/20",
+    deltaDown: "text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 border-emerald-500/25",
+    deltaUp:   "text-red-700 dark:text-red-300 bg-red-500/10 border-red-500/20",
   },
   azure: {
     bar:       "from-blue-400 via-blue-500 to-blue-600",
     glow:      "from-blue-500/[0.10]",
     iconBg:    "bg-blue-500/[0.08] border-blue-500/20",
-    iconText:  "text-blue-300",
+    iconText:  "text-blue-600 dark:text-blue-300",
     border:    "border-blue-500/[0.18]",
     hover:     "hover:border-blue-500/40 hover:shadow-[0_8px_48px_rgba(96,165,250,0.14)]",
     spark:     "#60a5fa",
-    deltaDown: "text-emerald-300 bg-emerald-500/10 border-emerald-500/25",
-    deltaUp:   "text-red-300 bg-red-500/10 border-red-500/20",
+    deltaDown: "text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 border-emerald-500/25",
+    deltaUp:   "text-red-700 dark:text-red-300 bg-red-500/10 border-red-500/20",
   },
   obsidian: {
     bar:       "from-amber-300 via-amber-400 to-amber-600",
     glow:      "from-amber-500/[0.09]",
     iconBg:    "bg-amber-500/[0.08] border-amber-500/20",
-    iconText:  "text-amber-300",
+    iconText:  "text-amber-600 dark:text-amber-300",
     border:    "border-amber-500/[0.18]",
     hover:     "hover:border-amber-500/40 hover:shadow-[0_8px_48px_rgba(245,158,11,0.14)]",
     spark:     "#fbbf24",
-    deltaDown: "text-emerald-300 bg-emerald-500/10 border-emerald-500/25",
-    deltaUp:   "text-red-300 bg-red-500/10 border-red-500/20",
+    deltaDown: "text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 border-emerald-500/25",
+    deltaUp:   "text-red-700 dark:text-red-300 bg-red-500/10 border-red-500/20",
   }
 } as const;
 
@@ -131,7 +131,7 @@ export default function PriceCard({ title, value, delta, accent, sparkline }: Pr
   const badgeClass =
     dir === "down" ? c.deltaDown :
     dir === "up"   ? c.deltaUp   :
-    "text-stone-500 bg-white/[0.03] border-white/[0.08]";
+    "text-stone-500 bg-black/[0.03] dark:bg-white/[0.03] border-black/[0.09] dark:border-white/[0.08]";
 
   const badgeLabel =
     dir === "down" ? `▼ ${Math.abs(delta!).toFixed(2)}` :
@@ -139,7 +139,7 @@ export default function PriceCard({ title, value, delta, accent, sparkline }: Pr
     dir === "flat" ? "No change" : "—";
 
   return (
-    <div className={`group relative overflow-hidden rounded-2xl border ${c.border} bg-white/[0.025] shadow-xl transition-all duration-300 ${c.hover}`}>
+    <div className={`group relative overflow-hidden rounded-2xl border ${c.border} bg-black/[0.02] dark:bg-white/[0.025] shadow-xl transition-all duration-300 ${c.hover}`}>
       {/* accent bar */}
       <div className={`absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r ${c.bar}`} />
       {/* top glow */}
@@ -167,19 +167,19 @@ export default function PriceCard({ title, value, delta, accent, sparkline }: Pr
         </div>
 
         {/* label */}
-        <p className="mb-1.5 text-xs font-semibold uppercase tracking-widest text-stone-400">{title}</p>
+        <p className="mb-1.5 text-xs font-semibold uppercase tracking-widest text-stone-600 dark:text-stone-400">{title}</p>
 
         {/* price */}
         <div className="mb-5 flex items-baseline gap-1.5">
           <span className="text-base font-medium text-stone-500">KSh</span>
-          <span className="text-5xl font-extrabold leading-none tracking-tight text-white tabular-nums">
+          <span className="text-5xl font-extrabold leading-none tracking-tight text-stone-900 dark:text-white tabular-nums">
             {value > 0 ? value.toFixed(2) : "—"}
           </span>
         </div>
 
         {/* sparkline + per litre */}
         <div className="flex items-end justify-between">
-          <span className="text-xs text-stone-600">per litre</span>
+          <span className="text-xs text-stone-400 dark:text-stone-600">per litre</span>
           {sparkline && sparkline.length >= 2 && (
             <Sparkline data={sparkline} color={c.spark} />
           )}

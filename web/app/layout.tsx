@@ -77,7 +77,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Set dark/light class before first paint to avoid flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('fk-theme');document.documentElement.classList.toggle('dark',t?t==='dark':window.matchMedia('(prefers-color-scheme:dark)').matches)}catch(e){document.documentElement.classList.add('dark')}`
+          }}
+        />
+      </head>
       <body className={`${inter.variable} font-sans antialiased`}>{children}</body>
     </html>
   );

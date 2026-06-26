@@ -2,19 +2,98 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Theme tokens ─────────────────────────────────────────────────────────── */
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   --green: #00a651;
   --red: #bb0027;
-  --surface: rgba(255, 255, 255, 0.03);
-  --surface-hover: rgba(255, 255, 255, 0.055);
-  --border: rgba(255, 255, 255, 0.07);
-  --border-hover: rgba(255, 255, 255, 0.13);
+
+  /* surfaces (light bg = very subtle dark tints) */
+  --surface-1: rgba(0, 0, 0, 0.025);
+  --surface-2: rgba(0, 0, 0, 0.04);
+  --surface-3: rgba(0, 0, 0, 0.06);
+  --surface-4: rgba(0, 0, 0, 0.09);
+
+  /* borders */
+  --border-1: rgba(0, 0, 0, 0.06);
+  --border-2: rgba(0, 0, 0, 0.08);
+  --border-3: rgba(0, 0, 0, 0.15);
+
+  /* text */
+  --text-hi:    #111827;
+  --text-md:    #44403c;
+  --text-lo:    #78716c;
+
+  /* nav & backdrop */
+  --nav-bg:     rgba(255, 255, 255, 0.88);
+
+  /* dropdown */
+  --dropdown-bg:     #f5f5f4;
+  --dropdown-border: rgba(0, 0, 0, 0.12);
+  --dropdown-item-hover: rgba(0, 0, 0, 0.04);
+
+  /* result bar in FuelEstimator */
+  --result-bar: rgba(0, 0, 0, 0.05);
+
+  /* Chart.js */
+  --chart-grid:        rgba(0, 0, 0, 0.04);
+  --chart-tip-bg:      #ffffff;
+  --chart-tip-border:  rgba(0, 0, 0, 0.08);
+  --chart-tip-title:   #78716c;
+  --chart-tip-body:    #111827;
+  --chart-hover-border:#ffffff;
+  --chart-pill-bg:     rgba(0, 0, 0, 0.07);
+  --chart-pill-text:   #111827;
+  --chart-pill-off:    #78716c;
+
+  /* Hero visual card */
+  --hero-card:  linear-gradient(145deg, #f0f7f3 0%, #f4f4f2 65%);
+  --hero-dot:   rgba(0, 0, 0, 0.03);
+  --hero-glow:  rgba(0, 166, 81, 0.07);
 }
 
+.dark {
+  color-scheme: dark;
+
+  --surface-1: rgba(255, 255, 255, 0.015);
+  --surface-2: rgba(255, 255, 255, 0.025);
+  --surface-3: rgba(255, 255, 255, 0.04);
+  --surface-4: rgba(255, 255, 255, 0.09);
+
+  --border-1: rgba(255, 255, 255, 0.05);
+  --border-2: rgba(255, 255, 255, 0.07);
+  --border-3: rgba(255, 255, 255, 0.16);
+
+  --text-hi:  #efefef;
+  --text-md:  #a8a29e;
+  --text-lo:  #78716c;
+
+  --nav-bg:   rgba(0, 0, 0, 0.70);
+
+  --dropdown-bg:     #222222;
+  --dropdown-border: rgba(255, 255, 255, 0.16);
+  --dropdown-item-hover: rgba(255, 255, 255, 0.08);
+
+  --result-bar: rgba(0, 0, 0, 0.30);
+
+  --chart-grid:        rgba(255, 255, 255, 0.03);
+  --chart-tip-bg:      #101010;
+  --chart-tip-border:  rgba(255, 255, 255, 0.08);
+  --chart-tip-title:   #78716c;
+  --chart-tip-body:    #e7e5e4;
+  --chart-hover-border:#080808;
+  --chart-pill-bg:     rgba(255, 255, 255, 0.09);
+  --chart-pill-text:   #e7e5e4;
+  --chart-pill-off:    #57534e;
+
+  --hero-card:  linear-gradient(145deg, #030f08 0%, #090909 65%);
+  --hero-dot:   rgba(255, 255, 255, 0.025);
+  --hero-glow:  rgba(0, 166, 81, 0.09);
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────────── */
 html {
   min-height: 100%;
-  background: #080808;
   scroll-behavior: smooth;
 }
 
@@ -30,12 +109,18 @@ body {
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-  background: #080808;
-  color: #efefef;
+  background: #fafafa;
+  color: #111827;
   text-rendering: optimizeLegibility;
   font-feature-settings: "rlig" 1, "calt" 1, "tnum" 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dark body {
+  background: #080808;
+  color: #efefef;
 }
 
 * {
@@ -54,13 +139,20 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.12);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.14);
 }
 
+/* ── Keyframes ────────────────────────────────────────────────────────────── */
 @keyframes border-sweep {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
@@ -77,8 +169,15 @@ body {
   to   { opacity: 1; transform: translateY(0);    }
 }
 
+/* ── Utilities ────────────────────────────────────────────────────────────── */
 @layer utilities {
   .page-bg {
+    background-image:
+      radial-gradient(ellipse 90% 55% at 50% -5%, rgba(0, 166, 81, 0.06) 0%, transparent 65%),
+      radial-gradient(ellipse 55% 40% at 95% 105%, rgba(187, 0, 39, 0.04) 0%, transparent 60%);
+  }
+
+  .dark .page-bg {
     background-image:
       radial-gradient(ellipse 90% 55% at 50% -5%, rgba(0, 166, 81, 0.09) 0%, transparent 65%),
       radial-gradient(ellipse 55% 40% at 95% 105%, rgba(187, 0, 39, 0.06) 0%, transparent 60%);
@@ -86,9 +185,15 @@ body {
 
   .grid-bg {
     background-image:
+      linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .dark .grid-bg {
+    background-image:
       linear-gradient(rgba(255, 255, 255, 0.016) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255, 255, 255, 0.016) 1px, transparent 1px);
-    background-size: 56px 56px;
   }
 
   .live-dot {
@@ -102,8 +207,8 @@ body {
   }
 
   .number-box {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: var(--surface-3);
+    border: 1px solid var(--border-2);
     border-radius: 12px;
     font-feature-settings: "tnum" 1;
   }
@@ -119,8 +224,12 @@ body {
 
   .section-rule {
     height: 1px;
-    background: linear-gradient(to right, rgba(255,255,255,0.1), transparent);
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.08), transparent);
     margin-top: 6px;
     margin-bottom: 20px;
+  }
+
+  .dark .section-rule {
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.10), transparent);
   }
 }

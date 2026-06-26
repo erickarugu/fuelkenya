@@ -20,14 +20,6 @@ function DieselIcon({ size = 18 }: { size?: number }) {
     </svg>
   );
 }
-function KeroIcon({ size = 18 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M9 2h6l3 7H6L9 2z" />
-      <path d="M12 9v13" /><path d="M7.5 16h9" /><path d="M9 22h6" />
-    </svg>
-  );
-}
 
 const FUELS = [
   { key: "super_petrol" as const, label: "Super Petrol", color: "#10b981", rgb: "16,185,129",  Icon: PetrolIcon },
@@ -73,7 +65,7 @@ export default function FuelEstimator({ petrolPrice, dieselPrice, town }: Props)
     <div
       className="overflow-hidden rounded-2xl transition-all duration-500"
       style={{
-        background:  `radial-gradient(ellipse 80% 40% at 50% 0%, rgba(${fuel.rgb},0.06) 0%, transparent 70%), rgba(255,255,255,0.015)`,
+        background:  `radial-gradient(ellipse 80% 40% at 50% 0%, rgba(${fuel.rgb},0.06) 0%, transparent 70%), var(--surface-1)`,
         border:      `1px solid rgba(${fuel.rgb},0.16)`,
       }}
     >
@@ -92,12 +84,11 @@ export default function FuelEstimator({ petrolPrice, dieselPrice, town }: Props)
                 onClick={() => setFuelKey(f.key)}
                 className="relative flex flex-col items-start rounded-xl p-3.5 text-left transition-all duration-200"
                 style={{
-                  background:  active ? `rgba(${f.rgb},0.10)` : "rgba(255,255,255,0.03)",
-                  border:      `1px solid ${active ? `rgba(${f.rgb},0.28)` : "rgba(255,255,255,0.07)"}`,
+                  background:  active ? `rgba(${f.rgb},0.10)` : "var(--surface-2)",
+                  border:      `1px solid ${active ? `rgba(${f.rgb},0.28)` : "var(--border-2)"}`,
                   boxShadow:   active ? `0 0 28px rgba(${f.rgb},0.10)` : "none",
                 }}
               >
-                {/* icon row */}
                 <div className="mb-3 flex w-full items-center justify-between">
                   <div
                     className="flex h-8 w-8 items-center justify-center rounded-lg"
@@ -141,12 +132,11 @@ export default function FuelEstimator({ petrolPrice, dieselPrice, town }: Props)
               value={distance}
               onChange={e => setDistance(e.target.value)}
               placeholder="0"
-              className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3.5 pr-12 text-base font-semibold text-stone-100 placeholder:text-stone-700 outline-none transition-all duration-200"
-              style={{ ["--tw-ring-color" as any]: fuel.color }}
-              onFocus={e  => { e.currentTarget.style.borderColor = `rgba(${fuel.rgb},0.35)`; e.currentTarget.style.background = "rgba(255,255,255,0.06)"; }}
-              onBlur={e   => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; e.currentTarget.style.background = "rgba(255,255,255,0.04)"; }}
+              className="w-full rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.04] dark:bg-white/[0.04] px-4 py-3.5 pr-12 text-base font-semibold text-stone-900 dark:text-stone-100 placeholder:text-stone-300 dark:placeholder:text-stone-700 outline-none transition-all duration-200"
+              onFocus={e  => { e.currentTarget.style.borderColor = `rgba(${fuel.rgb},0.35)`; e.currentTarget.style.background = "var(--surface-3)"; }}
+              onBlur={e   => { e.currentTarget.style.borderColor = ""; e.currentTarget.style.background = ""; }}
             />
-            <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-stone-500">km</span>
+            <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-stone-400 dark:text-stone-500">km</span>
           </div>
         </div>
 
@@ -161,11 +151,11 @@ export default function FuelEstimator({ petrolPrice, dieselPrice, town }: Props)
               value={consumption}
               onChange={e => setConsumption(e.target.value)}
               placeholder="12"
-              className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3.5 pr-16 text-base font-semibold text-stone-100 placeholder:text-stone-700 outline-none transition-all duration-200"
-              onFocus={e => { e.currentTarget.style.borderColor = `rgba(${fuel.rgb},0.35)`; e.currentTarget.style.background = "rgba(255,255,255,0.06)"; }}
-              onBlur={e  => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; e.currentTarget.style.background = "rgba(255,255,255,0.04)"; }}
+              className="w-full rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.04] dark:bg-white/[0.04] px-4 py-3.5 pr-16 text-base font-semibold text-stone-900 dark:text-stone-100 placeholder:text-stone-300 dark:placeholder:text-stone-700 outline-none transition-all duration-200"
+              onFocus={e => { e.currentTarget.style.borderColor = `rgba(${fuel.rgb},0.35)`; e.currentTarget.style.background = "var(--surface-3)"; }}
+              onBlur={e  => { e.currentTarget.style.borderColor = ""; e.currentTarget.style.background = ""; }}
             />
-            <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-stone-500">km/l</span>
+            <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-stone-400 dark:text-stone-500">km/l</span>
           </div>
         </div>
       </div>
@@ -180,7 +170,7 @@ export default function FuelEstimator({ petrolPrice, dieselPrice, town }: Props)
           <div
             className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-all duration-200"
             style={{
-              borderColor: roundTrip ? fuel.color : "rgba(255,255,255,0.18)",
+              borderColor: roundTrip ? fuel.color : "var(--border-3)",
               background:  roundTrip ? fuel.color : "transparent",
             }}
           >
@@ -190,7 +180,7 @@ export default function FuelEstimator({ petrolPrice, dieselPrice, town }: Props)
               </svg>
             )}
           </div>
-          <span className="text-sm font-medium text-stone-400 transition-colors group-hover:text-stone-200">
+          <span className="text-sm font-medium text-stone-500 transition-colors group-hover:text-stone-700 dark:group-hover:text-stone-200">
             Include return journey
           </span>
           {roundTrip && (
@@ -214,18 +204,16 @@ export default function FuelEstimator({ petrolPrice, dieselPrice, town }: Props)
               border:     `1px solid rgba(${fuel.rgb},0.22)`,
             }}
           >
-            {/* top accent line */}
             <div className="h-[2px]" style={{ background: `linear-gradient(90deg, ${fuel.color} 0%, transparent 70%)` }} />
 
             <div className="p-5">
-              {/* main stats */}
               <div className="mb-4 grid grid-cols-2 gap-6">
                 <div>
                   <div className="mb-2 text-xs font-bold uppercase tracking-widest text-stone-500">
                     Estimated cost
                   </div>
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-sm font-medium text-stone-400">KSh</span>
+                    <span className="text-sm font-medium text-stone-500">KSh</span>
                     <span
                       className="text-[2.6rem] font-black leading-none tabular-nums"
                       style={{ color: fuel.color }}
@@ -245,10 +233,10 @@ export default function FuelEstimator({ petrolPrice, dieselPrice, town }: Props)
                     Fuel needed
                   </div>
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-[2.6rem] font-black leading-none tabular-nums text-white">
+                    <span className="text-[2.6rem] font-black leading-none tabular-nums text-stone-900 dark:text-white">
                       {litres.toFixed(1)}
                     </span>
-                    <span className="text-sm font-medium text-stone-400">L</span>
+                    <span className="text-sm font-medium text-stone-500">L</span>
                   </div>
                   {roundTrip && (
                     <div className="mt-1.5 text-xs text-stone-500">
@@ -258,20 +246,18 @@ export default function FuelEstimator({ petrolPrice, dieselPrice, town }: Props)
                 </div>
               </div>
 
-              {/* cost-per-100km stat bar */}
               <div
                 className="flex items-center justify-between rounded-lg px-4 py-2.5"
-                style={{ background: "rgba(0,0,0,0.3)" }}
+                style={{ background: "var(--result-bar)" }}
               >
                 <div className="flex items-center gap-2">
                   <span className="block h-1.5 w-1.5 rounded-full" style={{ background: fuel.color }} />
                   <span className="text-xs text-stone-500">Cost per 100 km</span>
                 </div>
-                <span className="font-mono text-sm font-bold text-stone-300">KSh {per100.toFixed(2)}</span>
+                <span className="font-mono text-sm font-bold text-stone-700 dark:text-stone-300">KSh {per100.toFixed(2)}</span>
               </div>
 
-              {/* footnote */}
-              <div className="mt-3 text-xs leading-relaxed text-stone-600">
+              <div className="mt-3 text-xs leading-relaxed text-stone-500">
                 {fuel.label} · {town} · KSh {price.toFixed(2)} / litre
                 {roundTrip ? " · Round trip" : ""}
               </div>
@@ -288,8 +274,8 @@ export default function FuelEstimator({ petrolPrice, dieselPrice, town }: Props)
             >
               <fuel.Icon size={24} />
             </div>
-            <p className="text-sm font-medium text-stone-400">Enter a distance to get started</p>
-            <p className="mt-1 text-xs text-stone-600">We&apos;ll calculate cost and litres needed</p>
+            <p className="text-sm font-medium text-stone-500">Enter a distance to get started</p>
+            <p className="mt-1 text-xs text-stone-400 dark:text-stone-600">We&apos;ll calculate cost and litres needed</p>
           </div>
         )}
       </div>
