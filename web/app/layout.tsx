@@ -72,12 +72,31 @@ export const metadata: Metadata = {
     description:
       "Track official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across every town in Kenya.",
     images: ["/petrol-station.png"]
-  }
+  },
+  icons: {
+    icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+    shortcut: "/favicon.ico",
+  },
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Set dark/light class before first paint to avoid flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('fk-theme');if(!t||t==='dark'){document.documentElement.classList.add('dark')}else if(t==='light'){document.documentElement.classList.remove('dark')}else{document.documentElement.classList.toggle('dark',window.matchMedia('(prefers-color-scheme:dark)').matches)}}catch(e){document.documentElement.classList.add('dark')}`
+          }}
+        />
+      </head>
       <body className={`${inter.variable} font-sans antialiased`}>{children}</body>
     </html>
   );

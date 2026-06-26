@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -45,9 +45,22 @@ function makeGradient(ctx: CanvasRenderingContext2D, r: number, g: number, b: nu
   return grad;
 }
 
+function useIsDark() {
+  const [isDark, setIsDark] = useState(true);
+  useEffect(() => {
+    const el = document.documentElement;
+    setIsDark(el.classList.contains("dark"));
+    const obs = new MutationObserver(() => setIsDark(el.classList.contains("dark")));
+    obs.observe(el, { attributes: true, attributeFilter: ["class"] });
+    return () => obs.disconnect();
+  }, []);
+  return isDark;
+}
+
 export default function TrendChart({ history }: TrendChartProps) {
   const [hidden,   setHidden]   = useState<Set<string>>(new Set());
   const [duration, setDuration] = useState<DurLabel>("All");
+  const isDark = useIsDark();
 
   const toggle = (key: string) =>
     setHidden(prev => {
@@ -82,15 +95,13 @@ export default function TrendChart({ history }: TrendChartProps) {
     pointRadius:               0,
     pointHoverRadius:          hidden.has(s.key) ? 0 : 5,
     pointHoverBackgroundColor: s.color,
-    pointHoverBorderColor:     "#080808",
+    pointHoverBorderColor:     isDark ? "#080808" : "#ffffff",
     pointHoverBorderWidth:     2,
     spanGaps:                  true,
   }));
 
   const latest = filtered[filtered.length - 1];
   const first  = filtered[0];
-  const dur    = DURATIONS.find(d => d.label === duration)!;
-
   const stats = SERIES.map(s => {
     const current = latest?.[s.key] ?? 0;
     const initial = first?.[s.key]  ?? 0;
@@ -111,18 +122,18 @@ export default function TrendChart({ history }: TrendChartProps) {
   const fmtDate = (iso: string) =>
     new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 
-  const options = {
+  const options = useMemo(() => ({
     responsive:          true,
     maintainAspectRatio: false,
     interaction:         { mode: "index" as const, intersect: false },
     plugins: {
       legend: { display: false },
       tooltip: {
-        backgroundColor: "#101010",
-        borderColor:     "rgba(255,255,255,0.08)",
+        backgroundColor: isDark ? "#101010" : "#ffffff",
+        borderColor:     isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)",
         borderWidth:     1,
         titleColor:      "#78716c",
-        bodyColor:       "#e7e5e4",
+        bodyColor:       isDark ? "#e7e5e4" : "#111827",
         padding:         { top: 12, bottom: 12, left: 16, right: 16 },
         boxPadding:      6,
         cornerRadius:    12,
@@ -147,21 +158,25 @@ export default function TrendChart({ history }: TrendChartProps) {
       x: {
         grid:   { display: false },
         border: { display: false },
-        ticks:  { color: "#4b5563", font: { size: 11 }, maxRotation: 0, maxTicksLimit: 8 },
+        ticks:  { color: "#78716c", font: { size: 11 }, maxRotation: 0, maxTicksLimit: 8 },
       },
       y: {
-        grid:   { color: "rgba(255,255,255,0.03)", drawTicks: false },
+        grid:   { color: isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.04)", drawTicks: false },
         border: { display: false },
-        ticks:  { color: "#4b5563", font: { size: 11 }, padding: 10, callback: (v: any) => `${v}` },
+        ticks:  { color: "#78716c", font: { size: 11 }, padding: 10, callback: (v: any) => `${v}` },
       },
     },
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [isDark]);
 
+  const pillBg    = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.07)";
+  const pillText  = isDark ? "#e7e5e4" : "#111827";
+  const pillOff   = isDark ? "#57534e" : "#78716c";
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.02]">
+    <div className="overflow-hidden rounded-2xl border border-black/[0.08] dark:border-white/[0.07] bg-black/[0.02] dark:bg-white/[0.02]">
 
       {/* ── header ── */}
-      <div className="border-b border-white/[0.05] px-4 pb-5 pt-5 sm:px-6">
+      <div className="border-b border-black/[0.05] dark:border-white/[0.05] px-4 pb-5 pt-5 sm:px-6">
 
         {/* row 1: legend + duration filter */}
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
@@ -175,13 +190,13 @@ export default function TrendChart({ history }: TrendChartProps) {
                   onClick={() => toggle(s.key)}
                   className="flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium transition-all duration-200"
                   style={{
-                    borderColor:     off ? "rgba(255,255,255,0.05)"  : `${s.color}28`,
-                    backgroundColor: off ? "rgba(255,255,255,0.02)"  : `${s.color}12`,
-                    color:           off ? "#57534e"                 : s.color,
+                    borderColor:     off ? "rgba(0,0,0,0.06)"   : `${s.color}28`,
+                    backgroundColor: off ? "rgba(0,0,0,0.02)"   : `${s.color}12`,
+                    color:           off ? "#a8a29e"             : s.color,
                     opacity:         off ? 0.5 : 1,
                   }}
                 >
-                  <span className="block h-2 w-2 rounded-full" style={{ backgroundColor: off ? "#57534e" : s.color }} />
+                  <span className="block h-2 w-2 rounded-full" style={{ backgroundColor: off ? "#a8a29e" : s.color }} />
                   {s.label}
                 </button>
               );
@@ -189,7 +204,7 @@ export default function TrendChart({ history }: TrendChartProps) {
           </div>
 
           {/* duration pill group */}
-          <div className="flex items-center gap-0.5 rounded-xl border border-white/[0.06] bg-white/[0.03] p-1">
+          <div className="flex items-center gap-0.5 rounded-xl border border-black/[0.06] dark:border-white/[0.06] bg-black/[0.03] dark:bg-white/[0.03] p-1">
             {DURATIONS.map(d => (
               <button
                 key={d.label}
@@ -197,9 +212,9 @@ export default function TrendChart({ history }: TrendChartProps) {
                 onClick={() => setDuration(d.label)}
                 className="rounded-lg px-2.5 py-1 text-xs font-semibold tabular-nums transition-all duration-200"
                 style={{
-                  background: duration === d.label ? "rgba(255,255,255,0.09)" : "transparent",
-                  color:      duration === d.label ? "#e7e5e4" : "#57534e",
-                  boxShadow:  duration === d.label ? "0 1px 4px rgba(0,0,0,0.4)" : "none",
+                  background: duration === d.label ? pillBg : "transparent",
+                  color:      duration === d.label ? pillText : pillOff,
+                  boxShadow:  duration === d.label ? (isDark ? "0 1px 4px rgba(0,0,0,0.4)" : "0 1px 3px rgba(0,0,0,0.08)") : "none",
                 }}
               >
                 {d.label}
@@ -226,7 +241,6 @@ export default function TrendChart({ history }: TrendChartProps) {
                     opacity:         hidden.has(s.key) ? 0.3 : 1,
                   }}
                 >
-                  {/* fuel label */}
                   <div className="mb-3 flex items-center gap-1.5">
                     <span className="block h-1.5 w-1.5 rounded-full" style={{ backgroundColor: s.color }} />
                     <span className="text-xs font-bold uppercase tracking-widest" style={{ color: s.color, opacity: 0.65 }}>
@@ -234,27 +248,24 @@ export default function TrendChart({ history }: TrendChartProps) {
                     </span>
                   </div>
 
-                  {/* current price */}
                   <div className="mb-4 flex items-baseline gap-1.5">
-                    <span className="font-mono text-[1.7rem] font-black leading-none tabular-nums text-stone-100">
+                    <span className="font-mono text-[1.7rem] font-black leading-none tabular-nums text-stone-900 dark:text-stone-100">
                       {s.current.toFixed(2)}
                     </span>
                     <span className="text-xs font-medium text-stone-500">KSh / litre</span>
                   </div>
 
-                  {/* divider */}
                   <div className="mb-3 h-px" style={{ background: `${s.color}12` }} />
 
-                  {/* bottom row: low/high left, change right */}
                   <div className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-3">
                       <div className="flex items-center gap-1">
-                        <span className="text-stone-600">Low</span>
-                        <span className="font-semibold text-stone-400">{s.seriesLo.toFixed(2)}</span>
+                        <span className="text-stone-500">Low</span>
+                        <span className="font-semibold text-stone-600 dark:text-stone-400">{s.seriesLo.toFixed(2)}</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <span className="text-stone-600">High</span>
-                        <span className="font-semibold text-stone-400">{s.seriesHi.toFixed(2)}</span>
+                        <span className="text-stone-500">High</span>
+                        <span className="font-semibold text-stone-600 dark:text-stone-400">{s.seriesHi.toFixed(2)}</span>
                       </div>
                     </div>
                     <span className="font-bold tabular-nums" style={{ color: s.color }}>
@@ -272,28 +283,28 @@ export default function TrendChart({ history }: TrendChartProps) {
           <div className="mt-3.5 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs">
             {first && latest && (
               <div className="flex items-center gap-1.5">
-                <span className="text-stone-600">Period</span>
-                <span className="text-stone-400">{fmtDate(first.valid_from)} — {fmtDate(latest.valid_from)}</span>
+                <span className="text-stone-500">Period</span>
+                <span className="text-stone-600 dark:text-stone-400">{fmtDate(first.valid_from)} — {fmtDate(latest.valid_from)}</span>
               </div>
             )}
-            <div className="hidden h-3 w-px bg-white/[0.06] sm:block" />
+            <div className="hidden h-3 w-px bg-black/[0.07] dark:bg-white/[0.06] sm:block" />
             <div className="flex items-center gap-1.5">
-              <span className="text-stone-600">Low</span>
-              <span className="font-semibold text-stone-400">KSh {lo}</span>
+              <span className="text-stone-500">Low</span>
+              <span className="font-semibold text-stone-600 dark:text-stone-400">KSh {lo}</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="text-stone-600">High</span>
-              <span className="font-semibold text-stone-400">KSh {hi}</span>
+              <span className="text-stone-500">High</span>
+              <span className="font-semibold text-stone-600 dark:text-stone-400">KSh {hi}</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="text-stone-600">Data points</span>
-              <span className="font-semibold text-stone-400">{filtered.length}</span>
+              <span className="text-stone-500">Data points</span>
+              <span className="font-semibold text-stone-600 dark:text-stone-400">{filtered.length}</span>
             </div>
           </div>
         )}
       </div>
 
-      {/* ── chart — responsive height ── */}
+      {/* ── chart ── */}
       <div className="h-[260px] px-3 py-4 sm:h-[360px] sm:px-4 lg:h-[440px]">
         <Line data={{ labels, datasets }} options={options} />
       </div>

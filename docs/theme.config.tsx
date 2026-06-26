@@ -4,10 +4,9 @@ import { useConfig } from "nextra-theme-docs";
 
 const config: DocsThemeConfig = {
   logo: (
-    <span
-      style={{ display: "flex", alignItems: "center", gap: 8, fontWeight: 700 }}
-    >
-      <span style={{ fontSize: 20 }}>⛽</span>
+    <span style={{ display: "flex", alignItems: "center", gap: 8, fontWeight: 700 }}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/kenya-fuel-logo.png" alt="FuelKenya" style={{ height: 28, width: "auto" }} />
       <span>FuelKenya</span>
       <span
         style={{
@@ -91,6 +90,10 @@ const config: DocsThemeConfig = {
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
         <link rel="canonical" href={canonical} />
         <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
         {/* Open Graph */}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={description} />

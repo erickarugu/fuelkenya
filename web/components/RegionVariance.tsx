@@ -25,15 +25,15 @@ export default function RegionVariance({ overview, activeTown }: RegionVarianceP
 
   if (overview.length < 2) {
     return (
-      <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-6">
-        <p className="text-sm text-stone-600">Town comparison data unavailable.</p>
+      <div className="rounded-2xl border border-black/[0.08] dark:border-white/[0.07] bg-black/[0.02] dark:bg-white/[0.02] p-6">
+        <p className="text-sm text-stone-500">Town comparison data unavailable.</p>
       </div>
     );
   }
 
   const fuel    = FUELS.find(f => f.key === fuelKey)!;
   const sorted  = [...overview].sort((a, b) => a[fuelKey] - b[fuelKey]);
-  const base    = sorted[0][fuelKey];           // cheapest = baseline
+  const base    = sorted[0][fuelKey];
   const ceiling = sorted[sorted.length - 1][fuelKey];
   const spread  = (ceiling - base).toFixed(2);
   const pct     = ((ceiling - base) / base * 100).toFixed(1);
@@ -47,12 +47,12 @@ export default function RegionVariance({ overview, activeTown }: RegionVarianceP
       className="overflow-hidden rounded-2xl transition-all duration-300"
       style={{
         border:     `1px solid rgba(${fuel.rgb},0.12)`,
-        background: "rgba(255,255,255,0.015)",
+        background: "var(--surface-1)",
       }}
     >
 
       {/* ── tabs ── */}
-      <div className="flex items-center justify-between border-b border-white/[0.05] px-5 py-3.5">
+      <div className="flex items-center justify-between border-b border-black/[0.05] dark:border-white/[0.05] px-5 py-3.5">
         <div className="flex items-center gap-1.5">
           {FUELS.map(f => {
             const on = fuelKey === f.key;
@@ -74,7 +74,6 @@ export default function RegionVariance({ overview, activeTown }: RegionVarianceP
           })}
         </div>
 
-        {/* savings callout for active town */}
         {activeDelta != null && activeDelta > 0 && (
           <div
             className="hidden items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs sm:flex"
@@ -90,7 +89,7 @@ export default function RegionVariance({ overview, activeTown }: RegionVarianceP
             className="hidden items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs sm:flex"
             style={{ background: "rgba(16,185,129,0.07)", border: "1px solid rgba(16,185,129,0.14)" }}
           >
-            <span className="font-bold text-emerald-400">{activeTown} has the best price</span>
+            <span className="font-bold text-emerald-600 dark:text-emerald-400">{activeTown} has the best price</span>
           </div>
         )}
       </div>
@@ -98,29 +97,24 @@ export default function RegionVariance({ overview, activeTown }: RegionVarianceP
       {/* ── rows ── */}
       {sorted.map((town, rank) => {
         const price    = town[fuelKey];
-        const delta    = price - base;           // how much more than cheapest
+        const delta    = price - base;
         const isActive = town.name === activeTown;
         const isBest   = rank === 0;
-        const isWorst  = rank === sorted.length - 1;
-
-        // Bar: absolute price as fraction of ceiling — shows all cities are actually close
-        const barFill = (price / ceiling) * 100;
+        const barFill  = (price / ceiling) * 100;
 
         return (
           <div
             key={town.name}
-            className="group flex items-center gap-4 border-b border-white/[0.04] px-5 py-3.5 last:border-0 transition-colors duration-150"
+            className="group flex items-center gap-4 border-b border-black/[0.04] dark:border-white/[0.04] px-5 py-3.5 last:border-0 transition-colors duration-150"
             style={{ background: isActive ? `rgba(${fuel.rgb},0.04)` : undefined }}
           >
-            {/* rank */}
-            <span className="w-4 shrink-0 text-center text-xs font-black tabular-nums text-stone-600">
+            <span className="w-4 shrink-0 text-center text-xs font-black tabular-nums text-stone-400 dark:text-stone-600">
               {rank + 1}
             </span>
 
-            {/* town name */}
             <div className="w-24 shrink-0">
               <div className="flex items-center gap-1.5">
-                <span className={`text-sm font-semibold ${isActive ? "text-white" : "text-stone-300"}`}>
+                <span className={`text-sm font-semibold ${isActive ? "text-stone-900 dark:text-white" : "text-stone-700 dark:text-stone-300"}`}>
                   {town.name}
                 </span>
                 {isActive && (
@@ -133,32 +127,27 @@ export default function RegionVariance({ overview, activeTown }: RegionVarianceP
                 )}
               </div>
               {isBest && (
-                <span className="text-xs font-semibold text-stone-500">Cheapest</span>
+                <span className="text-xs font-semibold text-stone-400 dark:text-stone-500">Cheapest</span>
               )}
             </div>
 
-            {/* bar — absolute price width, single accent color */}
             <div className="flex-1">
-              <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.04]">
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-black/[0.05] dark:bg-white/[0.04]">
                 <div
                   className="h-full rounded-full transition-all duration-700"
                   style={{
                     width:      `${barFill}%`,
-                    background: isBest
-                      ? fuel.color
-                      : `rgba(${fuel.rgb},0.55)`,
+                    background: isBest ? fuel.color : `rgba(${fuel.rgb},0.55)`,
                   }}
                 />
               </div>
             </div>
 
-            {/* price */}
             <div className="w-24 shrink-0 text-right">
               <span className="text-xs font-medium text-stone-500">KSh </span>
-              <span className="text-sm font-bold tabular-nums text-stone-200">{price.toFixed(2)}</span>
+              <span className="text-sm font-bold tabular-nums text-stone-800 dark:text-stone-200">{price.toFixed(2)}</span>
             </div>
 
-            {/* delta from cheapest */}
             <div className="w-20 shrink-0 text-right">
               {isBest ? (
                 <span
@@ -168,7 +157,7 @@ export default function RegionVariance({ overview, activeTown }: RegionVarianceP
                   best
                 </span>
               ) : (
-                <span className="text-xs font-semibold tabular-nums text-stone-500">
+                <span className="text-xs font-semibold tabular-nums text-stone-400 dark:text-stone-500">
                   +KSh {delta.toFixed(2)}
                 </span>
               )}
@@ -182,19 +171,19 @@ export default function RegionVariance({ overview, activeTown }: RegionVarianceP
         className="flex flex-wrap items-center justify-between gap-y-1 px-5 py-3.5 text-xs"
         style={{ borderTop: `1px solid rgba(${fuel.rgb},0.07)` }}
       >
-        <div className="flex items-center gap-1.5 text-stone-600">
+        <div className="flex items-center gap-1.5 text-stone-500">
           <span>{sorted.length} cities · {fuel.label}</span>
-          <span className="text-stone-700">·</span>
+          <span className="text-stone-300 dark:text-stone-700">·</span>
           <span>current cycle</span>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1.5">
-            <span className="text-stone-600">Spread</span>
-            <span className="font-semibold text-stone-400">KSh {spread}</span>
+            <span className="text-stone-500">Spread</span>
+            <span className="font-semibold text-stone-700 dark:text-stone-400">KSh {spread}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="text-stone-600">Variance</span>
-            <span className="font-semibold text-stone-400">{pct}%</span>
+            <span className="text-stone-500">Variance</span>
+            <span className="font-semibold text-stone-700 dark:text-stone-400">{pct}%</span>
           </div>
         </div>
       </div>

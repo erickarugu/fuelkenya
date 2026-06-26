@@ -39,7 +39,7 @@ export default function HeroVisual({ towns }: { towns: TownPrice[] }) {
   return (
     <div className="relative hidden rounded-2xl p-[1px] lg:block" style={{ overflow: "hidden" }}>
 
-      {/* comet 1 — clockwise, bright head + trailing tail */}
+      {/* comet 1 */}
       <div
         className="pointer-events-none absolute"
         style={{
@@ -60,7 +60,7 @@ export default function HeroVisual({ towns }: { towns: TownPrice[] }) {
         }}
       />
 
-      {/* comet 2 — counter-clockwise, fainter, different phase */}
+      {/* comet 2 */}
       <div
         className="pointer-events-none absolute"
         style={{
@@ -80,120 +80,120 @@ export default function HeroVisual({ towns }: { towns: TownPrice[] }) {
         }}
       />
 
-    {/* ── inner card — fully opaque so comets only show through the 1px gap ── */}
-    <div
-      className="relative overflow-hidden rounded-[15px]"
-      style={{ background: "linear-gradient(145deg, #030f08 0%, #090909 65%)" }}
-    >
-      {/* dot-grid */}
+      {/* ── inner card ── */}
       <div
-        className="pointer-events-none absolute inset-0"
-        style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize: "20px 20px" }}
-      />
-      {/* top-right ambient glow */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{ background: "radial-gradient(ellipse at 90% 0%, rgba(0,166,81,0.09) 0%, transparent 52%)" }}
-      />
-
-      <div className="relative z-10 p-8">
-
-        {/* header — fades on city change */}
+        className="relative overflow-hidden rounded-[15px]"
+        style={{ background: "var(--hero-card)" }}
+      >
+        {/* dot-grid */}
         <div
-          style={{
-            opacity:    isIn ? 1 : 0,
-            transform:  isIn ? "translateY(0)" : "translateY(-6px)",
-            transition: isIn
-              ? "opacity 0.3s cubic-bezier(0,0,0.2,1), transform 0.3s cubic-bezier(0,0,0.2,1)"
-              : "opacity 0.15s ease-in, transform 0.15s ease-in",
-          }}
-        >
-          <div className="mb-3 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="relative flex h-1.5 w-1.5 shrink-0">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-50" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              </span>
-              <span className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-500">
-                Live prices
+          className="pointer-events-none absolute inset-0"
+          style={{ backgroundImage: `radial-gradient(circle, var(--hero-dot) 1px, transparent 1px)`, backgroundSize: "20px 20px" }}
+        />
+        {/* top-right ambient glow */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{ background: `radial-gradient(ellipse at 90% 0%, var(--hero-glow) 0%, transparent 52%)` }}
+        />
+
+        <div className="relative z-10 p-8">
+
+          {/* header */}
+          <div
+            style={{
+              opacity:    isIn ? 1 : 0,
+              transform:  isIn ? "translateY(0)" : "translateY(-6px)",
+              transition: isIn
+                ? "opacity 0.3s cubic-bezier(0,0,0.2,1), transform 0.3s cubic-bezier(0,0,0.2,1)"
+                : "opacity 0.15s ease-in, transform 0.15s ease-in",
+            }}
+          >
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-1.5 w-1.5 shrink-0">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-50" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                </span>
+                <span className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-500">
+                  Live prices
+                </span>
+              </div>
+              <span className="rounded-full border border-black/[0.08] dark:border-white/[0.07] bg-black/[0.03] dark:bg-white/[0.03] px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-stone-500">
+                EPRA max
               </span>
             </div>
-            <span className="rounded-full border border-white/[0.07] bg-white/[0.03] px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-stone-500">
-              EPRA max
-            </span>
+
+            <p className="text-[2rem] font-black leading-tight tracking-tight text-stone-900 dark:text-white">{p.city}</p>
+            <p className="mt-1 text-xs text-stone-400 dark:text-stone-600">Maximum pump price · current cycle</p>
           </div>
 
-          <p className="text-[2rem] font-black leading-tight tracking-tight text-white">{p.city}</p>
-          <p className="mt-1 text-xs text-stone-600">Maximum pump price · current cycle</p>
-        </div>
+          {/* divider */}
+          <div className="my-6 h-px bg-black/[0.06] dark:bg-white/[0.06]" />
 
-        {/* divider */}
-        <div className="my-6 h-px bg-white/[0.06]" />
-
-        {/* price rows — slide in from right on city change */}
-        <div className="flex flex-col gap-2.5">
-          {ROWS.map((row, ri) => (
-            <div
-              key={row.key}
-              style={{
-                display:         "flex",
-                alignItems:      "center",
-                justifyContent:  "space-between",
-                backgroundColor: row.bg,
-                border:          `1px solid ${row.border}`,
-                borderRadius:    12,
-                padding:         "13px 16px",
-                opacity:         isIn ? 1 : 0,
-                transform:       isIn ? "translateX(0)" : "translateX(10px)",
-                transition:      isIn
-                  ? `opacity 0.32s cubic-bezier(0,0,0.2,1) ${ri * 45}ms, transform 0.32s cubic-bezier(0,0,0.2,1) ${ri * 45}ms`
-                  : "opacity 0.12s ease-in, transform 0.12s ease-in",
-              }}
-            >
-              <div className="flex items-center gap-2.5">
-                <span style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: row.accent, flexShrink: 0, display: "block" }} />
-                <span className="text-xs font-semibold uppercase tracking-wider text-stone-500">
-                  {row.label}
-                </span>
+          {/* price rows */}
+          <div className="flex flex-col gap-2.5">
+            {ROWS.map((row, ri) => (
+              <div
+                key={row.key}
+                style={{
+                  display:         "flex",
+                  alignItems:      "center",
+                  justifyContent:  "space-between",
+                  backgroundColor: row.bg,
+                  border:          `1px solid ${row.border}`,
+                  borderRadius:    12,
+                  padding:         "13px 16px",
+                  opacity:         isIn ? 1 : 0,
+                  transform:       isIn ? "translateX(0)" : "translateX(10px)",
+                  transition:      isIn
+                    ? `opacity 0.32s cubic-bezier(0,0,0.2,1) ${ri * 45}ms, transform 0.32s cubic-bezier(0,0,0.2,1) ${ri * 45}ms`
+                    : "opacity 0.12s ease-in, transform 0.12s ease-in",
+                }}
+              >
+                <div className="flex items-center gap-2.5">
+                  <span style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: row.accent, flexShrink: 0, display: "block" }} />
+                  <span className="text-xs font-semibold uppercase tracking-wider text-stone-500">
+                    {row.label}
+                  </span>
+                </div>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-xs font-medium text-stone-400 dark:text-stone-600">KSh</span>
+                  <span
+                    style={{ color: row.accent }}
+                    className="font-mono text-2xl font-extrabold tabular-nums tracking-tight"
+                  >
+                    {p[row.key]}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-baseline gap-1">
-                <span className="text-xs font-medium text-stone-600">KSh</span>
-                <span
-                  style={{ color: row.accent }}
-                  className="font-mono text-2xl font-extrabold tabular-nums tracking-tight"
-                >
-                  {p[row.key]}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        {/* nav dots */}
-        <div className="mt-6 flex items-center gap-2">
-          {towns.map((t, i) => (
-            <button
-              key={t.city}
-              type="button"
-              aria-label={t.city}
-              onClick={() => { setIdx(i); setPhase("in"); }}
-              className="shrink-0 cursor-pointer border-none p-0"
-              style={{
-                display:         "block",
-                width:           i === idx ? 20 : 5,
-                height:          3,
-                borderRadius:    999,
-                backgroundColor: i === idx ? "#00a651" : "rgba(255,255,255,0.09)",
-                transition:      "width 0.28s ease",
-              }}
-            />
-          ))}
-          <span className="ml-auto text-xs tabular-nums text-stone-700">
-            {idx + 1} / {towns.length}
-          </span>
+          {/* nav dots */}
+          <div className="mt-6 flex items-center gap-2">
+            {towns.map((t, i) => (
+              <button
+                key={t.city}
+                type="button"
+                aria-label={t.city}
+                onClick={() => { setIdx(i); setPhase("in"); }}
+                className="shrink-0 cursor-pointer border-none p-0"
+                style={{
+                  display:         "block",
+                  width:           i === idx ? 20 : 5,
+                  height:          3,
+                  borderRadius:    999,
+                  backgroundColor: i === idx ? "#00a651" : "var(--border-2)",
+                  transition:      "width 0.28s ease",
+                }}
+              />
+            ))}
+            <span className="ml-auto text-xs tabular-nums text-stone-400 dark:text-stone-700">
+              {idx + 1} / {towns.length}
+            </span>
+          </div>
         </div>
       </div>
-    </div>
     </div>
   );
 }

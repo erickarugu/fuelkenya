@@ -8,7 +8,7 @@ import { fetchHistory, fetchLatestPrices, fetchTowns } from "@/lib/api";
 const TrendChart = dynamic(() => import("@/components/TrendChart"), {
   ssr: false,
   loading: () => (
-    <div className="rounded-xl border border-zinc-200 bg-white p-6 text-stone-500">
+    <div className="rounded-xl border border-black/[0.08] dark:border-white/[0.07] bg-white dark:bg-white/[0.025] p-6 text-stone-500">
       Loading chart…
     </div>
   )
@@ -176,45 +176,45 @@ export default async function TownPage({ params }: Props) {
   ];
 
   return (
-    <div className="min-h-screen bg-base px-6 py-8 text-stone-900 sm:px-10 lg:px-16">
+    <div className="min-h-screen bg-[#fafafa] dark:bg-[#080808] px-6 py-8 text-stone-900 dark:text-stone-100 sm:px-10 lg:px-16">
       <div className="mx-auto flex max-w-7xl flex-col gap-6">
-        <div className="rounded-xl border border-zinc-200 bg-white px-6 py-5">
+        <div className="rounded-xl border border-black/[0.08] dark:border-white/[0.07] bg-white dark:bg-white/[0.025] px-6 py-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs uppercase tracking-[0.4em] text-stone-500">
                 Town fuel status
               </p>
-              <h1 className="text-3xl font-black tracking-tight text-stone-900">
+              <h1 className="text-3xl font-black tracking-tight text-stone-900 dark:text-white">
                 {town} Fuel Prices
               </h1>
             </div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-[#FAFAF9] px-4 py-2 text-sm text-stone-700">
+            <span className="inline-flex items-center gap-2 rounded-full border border-black/[0.08] dark:border-white/[0.07] bg-stone-50 dark:bg-white/[0.03] px-4 py-2 text-sm text-stone-600 dark:text-stone-400">
               Latest EPRA cycle data
             </span>
           </div>
         </div>
 
         <div className="grid gap-6 xl:grid-cols-[1.5fr_1fr]">
-          <div className="rounded-xl border border-zinc-200 bg-white p-6">
+          <div className="rounded-xl border border-black/[0.08] dark:border-white/[0.07] bg-white dark:bg-white/[0.025] p-6">
             <SearchBar activeTown={town} towns={towns} />
           </div>
-          <div className="rounded-xl border border-zinc-200 bg-white p-6">
+          <div className="rounded-xl border border-black/[0.08] dark:border-white/[0.07] bg-white dark:bg-white/[0.025] p-6">
             <div className="text-sm uppercase tracking-[0.3em] text-stone-500">
               Town snapshot
             </div>
-            <div className="mt-6 space-y-4 text-sm text-stone-700">
+            <div className="mt-6 space-y-4 text-sm text-stone-600 dark:text-stone-400">
               <div>
-                <div className="font-semibold text-stone-900">
+                <div className="font-semibold text-stone-900 dark:text-stone-100">
                   Current cycle
                 </div>
                 <div className="mt-1">15 Jun – 14 Jul 2026</div>
               </div>
               <div>
-                <div className="font-semibold text-stone-900">Active town</div>
+                <div className="font-semibold text-stone-900 dark:text-stone-100">Active town</div>
                 <div className="mt-1">{town}</div>
               </div>
               <div>
-                <div className="font-semibold text-stone-900">Last update</div>
+                <div className="font-semibold text-stone-900 dark:text-stone-100">Last update</div>
                 <div className="mt-1">{latest?.valid_from ?? "—"}</div>
               </div>
             </div>
@@ -251,14 +251,14 @@ export default async function TownPage({ params }: Props) {
           ]}
         />
 
-        <div className="rounded-xl border border-zinc-200 bg-white p-6">
+        <div className="rounded-xl border border-black/[0.08] dark:border-white/[0.07] bg-white dark:bg-white/[0.025] p-6">
           <div className="text-sm uppercase tracking-[0.3em] text-stone-500">
             Frequently asked questions
           </div>
-          <div className="mt-6 space-y-5 text-sm text-stone-700">
+          <div className="mt-6 space-y-5 text-sm text-stone-600 dark:text-stone-400">
             {faqItems.map((item) => (
               <div key={item.question}>
-                <div className="font-semibold text-stone-900">
+                <div className="font-semibold text-stone-900 dark:text-stone-100">
                   {item.question}
                 </div>
                 <p className="mt-2 leading-7">{item.answer}</p>
