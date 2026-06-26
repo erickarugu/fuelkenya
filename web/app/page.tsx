@@ -184,14 +184,26 @@ export default async function Page({ searchParams }: Props) {
     }));
 
   return (
-    <div className="min-h-screen page-bg grid-bg">
+    <div className="relative min-h-screen page-bg grid-bg">
+      {/* ── Fixed shield watermark ─────────────────────────────────────────── */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0 flex items-center justify-center overflow-hidden"
+        aria-hidden="true"
+      >
+        <img
+          src="/kenya-shield.png"
+          alt=""
+          className="h-[70vh] max-h-[700px] w-auto select-none object-contain opacity-[0.025] dark:opacity-[0.018]"
+          style={{ filter: "grayscale(1)" }}
+        />
+      </div>
       {/* ── Nav ────────────────────────────────────────────────────────────── */}
       <nav className="sticky top-0 z-50 border-b border-black/[0.08] dark:border-white/[0.07] bg-white/90 dark:bg-black/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5 sm:px-8">
           <div className="flex items-center gap-3">
             <img src="/kenya-fuel-logo.png" alt="FuelKenya" className="h-8 w-8 shrink-0 rounded-lg" />
-            <span className="text-sm font-bold tracking-tight text-stone-900 dark:text-stone-100">
-              FuelKenya
+            <span className="font-[family-name:var(--font-space-grotesk)] text-[1.05rem] font-bold tracking-tight">
+              <span className="bg-gradient-to-r from-emerald-500 via-emerald-400 to-green-300 bg-clip-text text-transparent">Fuel</span><span className="text-stone-900 dark:text-white">Kenya</span>
             </span>
             <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/[0.09] px-2.5 py-1">
               <span className="live-dot" />
@@ -248,7 +260,7 @@ export default async function Page({ searchParams }: Props) {
         </div>
       </nav>
 
-      <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
+      <div className="relative z-10 mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
         {/* ── Hero ─────────────────────────────────────────────────────────── */}
         <div className="fade-up py-20 sm:py-24">
           <div className="grid items-center gap-12 lg:grid-cols-[1fr_440px] lg:gap-16">

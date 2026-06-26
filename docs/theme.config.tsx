@@ -4,10 +4,12 @@ import { useConfig } from "nextra-theme-docs";
 
 const config: DocsThemeConfig = {
   logo: (
-    <span style={{ display: "flex", alignItems: "center", gap: 8, fontWeight: 700 }}>
+    <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/kenya-fuel-logo.png" alt="FuelKenya" style={{ height: 28, width: "auto" }} />
-      <span>FuelKenya</span>
+      <span style={{ fontFamily: "var(--font-space-grotesk, sans-serif)", fontWeight: 700, fontSize: "1.05rem", letterSpacing: "-0.01em" }}>
+        <span style={{ background: "linear-gradient(90deg, #10b981, #6ee7b7)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Fuel</span>Kenya
+      </span>
       <span
         style={{
           fontSize: 11,
