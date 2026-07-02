@@ -1,10 +1,11 @@
 lockfileVersion: '9.0'
 
+onlyBuiltDependencies:
+  - sharp
+
 settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
-  onlyBuiltDependencies:
-    - sharp
 
 importers:
 
