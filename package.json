@@ -2,9 +2,6 @@
   "name": "fuelkenya",
   "private": true,
   "packageManager": "pnpm@11.5.3",
-  "pnpm": {
-    "onlyBuiltDependencies": ["sharp"]
-  },
   "scripts": {
     "dev:web": "pnpm --filter fuelkenya-web dev",
     "dev:docs": "pnpm --filter fuelkenya-docs dev",

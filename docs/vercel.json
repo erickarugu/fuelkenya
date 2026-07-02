@@ -1,6 +1,6 @@
 {
   "framework": "nextjs",
-  "installCommand": "cd .. && pnpm install --frozen-lockfile",
+  "installCommand": "cd .. && pnpm install",
   "buildCommand": "cd .. && pnpm --filter fuelkenya-docs build",
   "outputDirectory": ".next"
 }
