@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://fuelkenya.com";
-  const apiBase = "https://api.fuelkenya.com/v1";
+  const apiBase = process.env.NEXT_PUBLIC_FUELKENYA_API_URL ?? "https://api.fuelkenya.com/v1";
 
   let towns: string[] = [];
   try {
