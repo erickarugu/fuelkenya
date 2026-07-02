@@ -1,5 +1,5 @@
 packages:
   - 'web'
   - 'docs'
-onlyBuiltDependencies:
-  - sharp
+allowBuilds:
+  sharp: true
