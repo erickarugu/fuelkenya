@@ -51,8 +51,12 @@ async function fetchTownData(town: string) {
 }
 
 export async function generateStaticParams() {
-  const towns = await fetchTowns();
-  return towns.map((town) => ({ slug: slugifyTown(town) }));
+  try {
+    const towns = await fetchTowns();
+    return towns.map((town) => ({ slug: slugifyTown(town) }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

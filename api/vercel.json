@@ -1,0 +1,15 @@
+{
+  "functions": {
+    "app/main.py": {
+      "runtime": "python3.12",
+      "memory": 1024,
+      "maxDuration": 30
+    }
+  },
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "app/main.py"
+    }
+  ]
+}
