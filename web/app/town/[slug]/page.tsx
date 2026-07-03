@@ -37,6 +37,16 @@ const FAQ_ITEMS = [
     question: "How often do fuel prices change in Kenya?",
     answer:
       "The Energy and Petroleum Regulatory Authority (EPRA) of Kenya updates maximum retail pump limits on the 14th of every month, taking effect at midnight on the 15th."
+  },
+  {
+    question: "When will the next EPRA fuel prices be announced for [TownName]?",
+    answer:
+      "EPRA announces new maximum pump prices on the 14th of every month. The updated prices for [TownName] and all other towns take effect from the 15th. FuelKenya updates automatically as soon as new prices are published."
+  },
+  {
+    question: "Do Shell, Total, and Rubis stations in [TownName] charge EPRA prices?",
+    answer:
+      "Yes. All fuel stations in [TownName] — including Shell, TotalEnergies, Rubis, Vivo Energy, and independent dealers — must charge at or below the EPRA maximum pump prices shown here. These are the official government-set price ceilings."
   }
 ];
 
@@ -63,10 +73,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const town = townFromSlug(params.slug);
   const latestPrices = await fetchLatestPrices(town);
   const current = latestPrices[0];
-  const title = `${town} Fuel Prices Today | EPRA Petrol & Diesel Price`;
+  const year = new Date().getFullYear();
+  const title = `${town} Fuel Prices Today ${year} | EPRA Petrol & Diesel Price`;
   const description = current
-    ? `EPRA fuel prices in ${town}: Super Petrol KSh ${current.super_petrol.toFixed(2)}/L, Diesel KSh ${current.diesel.toFixed(2)}/L, Kerosene KSh ${current.kerosene.toFixed(2)}/L. Updated monthly.`
-    : `Check the latest EPRA fuel prices for ${town}, Kenya — Super Petrol, Diesel, and Kerosene updated every pricing cycle.`;
+    ? `EPRA fuel prices in ${town} ${year}: Super Petrol KSh ${current.super_petrol.toFixed(2)}/L, Diesel KSh ${current.diesel.toFixed(2)}/L, Kerosene KSh ${current.kerosene.toFixed(2)}/L. Updated monthly.`
+    : `Check the latest EPRA fuel prices for ${town}, Kenya ${year} — Super Petrol, Diesel, and Kerosene updated every pricing cycle.`;
   const canonicalUrl = `https://fuelkenya.com/town/${params.slug}`;
   const ogImageUrl = `https://fuelkenya.com/town/${encodeURIComponent(params.slug)}/opengraph-image`;
 
@@ -82,7 +93,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       `super petrol price ${town} today`,
       "EPRA Kenya fuel prices",
       "Kenya fuel prices today",
-      `${town} fuel cost per litre`
+      `${town} fuel cost per litre`,
+      `fuel prices ${town} Kenya ${year}`,
+      `Shell fuel prices ${town}`,
+      `Total fuel prices ${town}`,
+      `next fuel prices ${town}`,
+      `${town} EPRA prices ${year}`
     ],
     alternates: { canonical: canonicalUrl },
     openGraph: {

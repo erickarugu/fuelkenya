@@ -14,17 +14,21 @@ import { fetchHistory, fetchLatestPrices, fetchTowns } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
 
+const currentYear = new Date().getFullYear();
+
 export const metadata: Metadata = {
-  title: "Kenya Fuel Prices Today | EPRA Petrol, Diesel & Kerosene Tracker",
+  title: `Kenya Fuel Prices Today ${currentYear} | EPRA Petrol, Diesel & Kerosene Tracker`,
   description:
-    "Live EPRA fuel prices across all towns in Kenya — Super Petrol, Diesel, and Kerosene. Official maximum pump prices updated every cycle on the 14th of each month.",
+    `Live EPRA fuel prices across all towns in Kenya ${currentYear} — Super Petrol, Diesel, and Kerosene. Official maximum pump prices updated every cycle on the 14th of each month.`,
   keywords: [
     "EPRA fuel prices Kenya today",
     "petrol price today Kenya",
     "diesel price Kenya today",
     "kerosene price Kenya",
     "fuel prices Kenya",
-    "EPRA maximum pump prices 2026",
+    `EPRA maximum pump prices ${currentYear}`,
+    `fuel prices Kenya ${currentYear}`,
+    `new fuel prices Kenya ${currentYear}`,
     "super petrol price Kenya",
     "fuel tracker Kenya",
     "Kenya petrol cost per litre",
@@ -32,22 +36,30 @@ export const metadata: Metadata = {
     "Mombasa fuel prices",
     "Kisumu fuel prices",
     "EPRA price update Kenya",
-    "cheapest petrol Kenya"
+    "cheapest petrol Kenya",
+    "fuel prices Kenya tomorrow",
+    "next EPRA fuel prices Kenya",
+    "Shell fuel prices Kenya today",
+    "Total fuel prices Kenya",
+    "Rubis fuel prices Kenya",
+    "Vivo Energy fuel prices Kenya",
+    "EPRA petrol price today Kenya",
+    "latest fuel prices Kenya"
   ],
   alternates: {
     canonical: "https://fuelkenya.com"
   },
   openGraph: {
-    title: "Kenya Fuel Prices Today | EPRA Petrol, Diesel & Kerosene Tracker",
+    title: `Kenya Fuel Prices Today ${currentYear} | EPRA Petrol, Diesel & Kerosene Tracker`,
     description:
-      "Live EPRA fuel prices across all towns in Kenya. Super Petrol, Diesel, and Kerosene — updated every pricing cycle on the 14th.",
+      `Live EPRA fuel prices across all towns in Kenya ${currentYear}. Super Petrol, Diesel, and Kerosene — updated every pricing cycle on the 14th.`,
     url: "https://fuelkenya.com",
     type: "website"
   },
   twitter: {
-    title: "Kenya Fuel Prices Today | EPRA Petrol, Diesel & Kerosene Tracker",
+    title: `Kenya Fuel Prices Today ${currentYear} | EPRA Petrol, Diesel & Kerosene Tracker`,
     description:
-      "Live EPRA fuel prices across all towns in Kenya. Super Petrol, Diesel, and Kerosene — updated every pricing cycle on the 14th."
+      `Live EPRA fuel prices across all towns in Kenya ${currentYear}. Super Petrol, Diesel, and Kerosene — updated every pricing cycle on the 14th.`
   }
 };
 
@@ -483,6 +495,22 @@ export default async function Page({ searchParams }: Props) {
                   acceptedAnswer: {
                     "@type": "Answer",
                     text: "Mombasa consistently has the lowest fuel prices in Kenya because it is the entry point for petroleum products imported through the port. Prices rise with distance from Mombasa along the pipeline and road network."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  name: "When will EPRA announce the next fuel prices in Kenya?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "EPRA announces the next month's maximum pump prices on the 14th of every month, with the new prices taking effect from the 15th. FuelKenya shows a live countdown to the next price update so you always know when new prices are coming."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  name: "Do Shell, Total, and Rubis stations follow EPRA fuel prices?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Yes. All fuel stations in Kenya — including Shell, TotalEnergies, Rubis (formerly KenolKobil), Vivo Energy, and independent dealers — are required by law to sell at or below the EPRA maximum pump prices. FuelKenya tracks these official EPRA ceiling prices that apply at every station nationwide."
                   }
                 }
               ]

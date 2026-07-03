@@ -20,7 +20,7 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   metadataBase: new URL("https://fuelkenya.com"),
   title: {
-    default: "FuelKenya — Live EPRA Fuel Prices in Kenya",
+    default: `FuelKenya — Live EPRA Fuel Prices in Kenya ${new Date().getFullYear()}`,
     template: "%s | FuelKenya"
   },
   description:
@@ -30,7 +30,8 @@ export const metadata: Metadata = {
     "petrol prices Kenya today",
     "diesel prices Kenya",
     "kerosene prices Kenya",
-    "fuel prices Kenya 2026",
+    `fuel prices Kenya ${new Date().getFullYear()}`,
+    `new EPRA fuel prices Kenya ${new Date().getFullYear()}`,
     "EPRA maximum pump prices",
     "Kenya fuel tracker",
     "super petrol price Kenya",
@@ -40,7 +41,14 @@ export const metadata: Metadata = {
     "Kenya pump prices",
     "fuel cost Kenya",
     "petrol price Nairobi",
-    "diesel price Nairobi"
+    "diesel price Nairobi",
+    "fuel prices Kenya tomorrow",
+    "next fuel prices Kenya",
+    "Shell fuel prices Kenya",
+    "Total fuel prices Kenya",
+    "Rubis fuel prices Kenya",
+    "Vivo fuel prices Kenya",
+    "EPRA fuel prices today Kenya"
   ],
   authors: [{ name: "FuelKenya", url: "https://fuelkenya.com" }],
   creator: "FuelKenya",
