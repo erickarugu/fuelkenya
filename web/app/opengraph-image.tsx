@@ -5,7 +5,11 @@ export const alt = "FuelKenya — Live EPRA Fuel Prices in Kenya";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OpenGraphImage() {
+export default async function OpenGraphImage() {
+  const fontData = await fetch(
+    new URL("./fonts/Inter-Bold.otf", import.meta.url)
+  ).then((r) => r.arrayBuffer());
+
   return new ImageResponse(
     <div
       style={{
@@ -16,7 +20,7 @@ export default function OpenGraphImage() {
         justifyContent: "space-between",
         padding: "72px 80px",
         background: "#080808",
-        fontFamily: "Inter, sans-serif",
+        fontFamily: "Inter",
       }}
     >
       {/* Top: brand + live badge */}
@@ -24,8 +28,7 @@ export default function OpenGraphImage() {
         <div
           style={{
             fontSize: "28px",
-            fontWeight: 900,
-            letterSpacing: "-0.02em",
+            fontWeight: 700,
             color: "#ffffff",
           }}
         >
@@ -54,12 +57,10 @@ export default function OpenGraphImage() {
             style={{
               fontSize: "12px",
               fontWeight: 700,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
               color: "#34d399",
             }}
           >
-            Live
+            LIVE
           </span>
         </div>
       </div>
@@ -69,7 +70,7 @@ export default function OpenGraphImage() {
         <div
           style={{
             fontSize: "64px",
-            fontWeight: 900,
+            fontWeight: 700,
             lineHeight: 1.05,
             color: "#ffffff",
           }}
@@ -79,12 +80,12 @@ export default function OpenGraphImage() {
         <div
           style={{
             fontSize: "26px",
-            fontWeight: 400,
+            fontWeight: 700,
             color: "#a8a29e",
             lineHeight: 1.4,
           }}
         >
-          Official EPRA maximum pump prices for Super Petrol, Diesel &amp; Kerosene — updated every cycle on the 14th.
+          Official EPRA maximum pump prices for Super Petrol, Diesel and Kerosene
         </div>
       </div>
 
@@ -115,7 +116,7 @@ export default function OpenGraphImage() {
                 background: f.color,
               }}
             />
-            <span style={{ fontSize: "16px", fontWeight: 600, color: f.color }}>
+            <span style={{ fontSize: "16px", fontWeight: 700, color: f.color }}>
               {f.label}
             </span>
           </div>
@@ -133,6 +134,17 @@ export default function OpenGraphImage() {
         </div>
       </div>
     </div>,
-    { width: 1200, height: 630 }
+    {
+      width: 1200,
+      height: 630,
+      fonts: [
+        {
+          name: "Inter",
+          data: fontData,
+          weight: 700,
+          style: "normal",
+        },
+      ],
+    }
   );
 }
