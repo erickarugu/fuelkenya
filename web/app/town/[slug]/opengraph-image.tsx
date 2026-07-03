@@ -73,8 +73,8 @@ export default async function OpenGraphImage({
       </div>
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr",
+          display: "flex",
+          flexDirection: "row",
           gap: "20px",
           marginTop: "40px"
         }}

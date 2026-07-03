@@ -70,8 +70,7 @@ export default function OpenGraphImage() {
           style={{
             fontSize: "64px",
             fontWeight: 900,
-            lineHeight: "1.05",
-            letterSpacing: "-0.03em",
+            lineHeight: 1.05,
             color: "#ffffff",
           }}
         >
@@ -82,12 +81,10 @@ export default function OpenGraphImage() {
             fontSize: "26px",
             fontWeight: 400,
             color: "#a8a29e",
-            lineHeight: "1.4",
+            lineHeight: 1.4,
           }}
         >
-          Official EPRA maximum pump prices for Super Petrol,
-          <br />
-          Diesel & Kerosene — updated every cycle on the 14th.
+          Official EPRA maximum pump prices for Super Petrol, Diesel &amp; Kerosene — updated every cycle on the 14th.
         </div>
       </div>
 
