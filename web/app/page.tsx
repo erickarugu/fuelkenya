@@ -522,10 +522,17 @@ export default async function Page({ searchParams }: Props) {
               description:
                 "Official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across all towns in Kenya, updated every pricing cycle.",
               url: "https://fuelkenya.com",
+              license: "https://creativecommons.org/licenses/by/4.0/",
+              isAccessibleForFree: true,
               creator: {
                 "@type": "Organization",
                 name: "FuelKenya",
                 url: "https://fuelkenya.com"
+              },
+              provider: {
+                "@type": "Organization",
+                name: "Energy and Petroleum Regulatory Authority (EPRA)",
+                url: "https://www.epra.go.ke"
               },
               distribution: [
                 {
