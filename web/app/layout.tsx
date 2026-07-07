@@ -20,7 +20,7 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   metadataBase: new URL("https://fuelkenya.com"),
   title: {
-    default: `FuelKenya — Live EPRA Fuel Prices in Kenya ${new Date().getFullYear()}`,
+    default: `Petrol Price in Kenya Today ${new Date().getFullYear()} | EPRA Fuel Prices Per Litre`,
     template: "%s | FuelKenya"
   },
   description:

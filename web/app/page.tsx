@@ -17,9 +17,9 @@ export const dynamic = "force-dynamic";
 const currentYear = new Date().getFullYear();
 
 export const metadata: Metadata = {
-  title: `Kenya Fuel Prices Today ${currentYear} | EPRA Petrol, Diesel & Kerosene Tracker`,
+  title: `Petrol Price in Kenya Today ${currentYear} | EPRA Fuel Prices Per Litre`,
   description:
-    `Live EPRA fuel prices across all towns in Kenya ${currentYear} — Super Petrol, Diesel, and Kerosene. Official maximum pump prices updated every cycle on the 14th of each month.`,
+    `Kenya petrol price today per litre — official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across all towns in Kenya. Updated every cycle on the 14th.`,
   keywords: [
     "EPRA fuel prices Kenya today",
     "petrol price today Kenya",
@@ -50,16 +50,16 @@ export const metadata: Metadata = {
     canonical: "https://fuelkenya.com"
   },
   openGraph: {
-    title: `Kenya Fuel Prices Today ${currentYear} | EPRA Petrol, Diesel & Kerosene Tracker`,
+    title: `Petrol Price in Kenya Today ${currentYear} | EPRA Fuel Prices Per Litre`,
     description:
-      `Live EPRA fuel prices across all towns in Kenya ${currentYear}. Super Petrol, Diesel, and Kerosene — updated every pricing cycle on the 14th.`,
+      `Kenya petrol price today per litre — EPRA fuel prices for Super Petrol, Diesel, and Kerosene across all towns. Updated every pricing cycle on the 14th.`,
     url: "https://fuelkenya.com",
     type: "website"
   },
   twitter: {
-    title: `Kenya Fuel Prices Today ${currentYear} | EPRA Petrol, Diesel & Kerosene Tracker`,
+    title: `Petrol Price in Kenya Today ${currentYear} | EPRA Fuel Prices Per Litre`,
     description:
-      `Live EPRA fuel prices across all towns in Kenya ${currentYear}. Super Petrol, Diesel, and Kerosene — updated every pricing cycle on the 14th.`
+      `Kenya petrol price today per litre — EPRA fuel prices for Super Petrol, Diesel, and Kerosene across all towns. Updated every pricing cycle on the 14th.`
   }
 };
 
@@ -288,15 +288,27 @@ export default async function Page({ searchParams }: Props) {
                 </span>
               </div>
 
-              <h1 className="mb-5 text-5xl font-extrabold leading-[1.08] tracking-tight text-stone-900 dark:text-white sm:text-6xl">
-                Kenya Fuel
+              <h1 className="mb-4 text-5xl font-extrabold leading-[1.08] tracking-tight text-stone-900 dark:text-white sm:text-6xl">
+                Kenya Petrol Price
                 <br />
-                <span className="font-light text-stone-500 dark:text-stone-400">Price Tracker</span>
+                <span className="font-light text-stone-500 dark:text-stone-400">Today Per Litre</span>
               </h1>
 
+              {latest && (
+                <p className="mb-4 text-sm font-semibold text-stone-700 dark:text-stone-300">
+                  <span className="text-emerald-600 dark:text-emerald-400">Super Petrol</span> KSh {latest.super_petrol.toFixed(2)}
+                  <span className="mx-2 text-stone-300 dark:text-stone-700">·</span>
+                  <span className="text-blue-600 dark:text-blue-400">Diesel</span> KSh {latest.diesel.toFixed(2)}
+                  <span className="mx-2 text-stone-300 dark:text-stone-700">·</span>
+                  <span className="text-amber-600 dark:text-amber-400">Kerosene</span> KSh {latest.kerosene.toFixed(2)}
+                  <span className="mx-2 text-stone-300 dark:text-stone-700">·</span>
+                  <span className="text-stone-500">{town}</span>
+                </p>
+              )}
+
               <p className="mb-8 max-w-md text-base leading-relaxed text-stone-600 dark:text-stone-400">
-                Official EPRA maximum pump prices across all {towns.length}{" "}
-                towns in Kenya - Super Petrol, Diesel, and Kerosene.
+                Official EPRA maximum pump prices per litre across all {towns.length}{" "}
+                towns in Kenya — Super Petrol, Diesel, and Kerosene.
               </p>
 
               <div className="relative z-[100]">
