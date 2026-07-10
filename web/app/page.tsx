@@ -294,18 +294,6 @@ export default async function Page({ searchParams }: Props) {
                 <span className="font-light text-stone-500 dark:text-stone-400">Today Per Litre</span>
               </h1>
 
-              {latest && (
-                <p className="mb-4 text-sm font-semibold text-stone-700 dark:text-stone-300">
-                  <span className="text-emerald-600 dark:text-emerald-400">Super Petrol</span> KSh {latest.super_petrol.toFixed(2)}
-                  <span className="mx-2 text-stone-300 dark:text-stone-700">·</span>
-                  <span className="text-blue-600 dark:text-blue-400">Diesel</span> KSh {latest.diesel.toFixed(2)}
-                  <span className="mx-2 text-stone-300 dark:text-stone-700">·</span>
-                  <span className="text-amber-600 dark:text-amber-400">Kerosene</span> KSh {latest.kerosene.toFixed(2)}
-                  <span className="mx-2 text-stone-300 dark:text-stone-700">·</span>
-                  <span className="text-stone-500">{town}</span>
-                </p>
-              )}
-
               <p className="mb-8 max-w-md text-base leading-relaxed text-stone-600 dark:text-stone-400">
                 Official EPRA maximum pump prices per litre across all {towns.length}{" "}
                 towns in Kenya — Super Petrol, Diesel, and Kerosene.
