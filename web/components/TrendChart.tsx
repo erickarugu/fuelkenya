@@ -284,7 +284,7 @@ export default function TrendChart({ history }: TrendChartProps) {
             {first && latest && (
               <div className="flex items-center gap-1.5">
                 <span className="text-stone-500">Period</span>
-                <span className="text-stone-600 dark:text-stone-400">{fmtDate(first.valid_from)} — {fmtDate(latest.valid_from)}</span>
+                <span className="text-stone-600 dark:text-stone-400">{fmtDate(first.valid_from)} - {fmtDate(latest.valid_from)}</span>
               </div>
             )}
             <div className="hidden h-3 w-px bg-black/[0.07] dark:bg-white/[0.06] sm:block" />

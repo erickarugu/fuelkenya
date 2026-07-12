@@ -19,9 +19,9 @@ GET /v1/prices
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `town` | `string` | — | Filter to a single town. Case-insensitive. Omit to get all towns. |
-| `start_date` | `date` | — | Return records with `valid_from` on or after this date. Format: `YYYY-MM-DD`. |
-| `end_date` | `date` | — | Return records with `valid_to` on or before this date. Format: `YYYY-MM-DD`. |
+| `town` | `string` | - | Filter to a single town. Case-insensitive. Omit to get all towns. |
+| `start_date` | `date` | - | Return records with `valid_from` on or after this date. Format: `YYYY-MM-DD`. |
+| `end_date` | `date` | - | Return records with `valid_to` on or before this date. Format: `YYYY-MM-DD`. |
 | `limit` | `integer` | `100` | Maximum number of records to return. Min: `1`, max: `1000`. |
 | `offset` | `integer` | `0` | Number of records to skip. Use with `limit` for pagination. |
 
@@ -77,10 +77,10 @@ curl "https://api.fuelkenya.com/v1/prices?start_date=2026-06-15&end_date=2026-07
 ### Paginate through all records
 
 ```bash
-# Page 1 — first 100 records
+# Page 1 - first 100 records
 curl "https://api.fuelkenya.com/v1/prices?limit=100&offset=0"
 
-# Page 2 — next 100 records
+# Page 2 - next 100 records
 curl "https://api.fuelkenya.com/v1/prices?limit=100&offset=100"
 ```
 

@@ -24,6 +24,11 @@ const townFromSlug = (slug: string) =>
 
 const FAQ_ITEMS = [
   {
+    question: "What is the current price of petrol in [TownName] today?",
+    answer:
+      "The current EPRA maximum price for Super Petrol in [TownName] is KSh [SuperPrice] per litre. This is the official government-set ceiling price for the current pricing cycle, and no station in [TownName] may legally charge above it."
+  },
+  {
     question: "What are the current EPRA fuel prices in [TownName]?",
     answer:
       "As of the latest EPRA pricing cycle, the retail price for Super Petrol in [TownName] is KSh [SuperPrice], Diesel is KSh [DieselPrice], and Kerosene is KSh [KerosenePrice]."
@@ -46,7 +51,7 @@ const FAQ_ITEMS = [
   {
     question: "Do Shell, Total, and Rubis stations in [TownName] charge EPRA prices?",
     answer:
-      "Yes. All fuel stations in [TownName] — including Shell, TotalEnergies, Rubis, Vivo Energy, and independent dealers — must charge at or below the EPRA maximum pump prices shown here. These are the official government-set price ceilings."
+      "Yes. All fuel stations in [TownName], including Shell, TotalEnergies, Rubis, Vivo Energy, and independent dealers, must charge at or below the EPRA maximum pump prices shown here. These are the official government-set price ceilings."
   }
 ];
 
@@ -77,7 +82,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = `${town} Fuel Prices Today ${year} | EPRA Petrol & Diesel Price`;
   const description = current
     ? `EPRA fuel prices in ${town} ${year}: Super Petrol KSh ${current.super_petrol.toFixed(2)}/L, Diesel KSh ${current.diesel.toFixed(2)}/L, Kerosene KSh ${current.kerosene.toFixed(2)}/L. Updated monthly.`
-    : `Check the latest EPRA fuel prices for ${town}, Kenya ${year} — Super Petrol, Diesel, and Kerosene updated every pricing cycle.`;
+    : `Check the latest EPRA fuel prices for ${town}, Kenya ${year}: Super Petrol, Diesel, and Kerosene updated every pricing cycle.`;
   const canonicalUrl = `https://fuelkenya.com/town/${params.slug}`;
   const ogImageUrl = `https://fuelkenya.com/town/${encodeURIComponent(params.slug)}/opengraph-image`;
 

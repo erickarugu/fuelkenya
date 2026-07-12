@@ -7,7 +7,7 @@ import { Callout } from "nextra/components";
 
 # POST /ingest/csv
 
-Upload a CSV file containing a new EPRA pricing cycle. Records are **upserted** — if a `(town, valid_from)` combination already exists, its values are updated rather than duplicated.
+Upload a CSV file containing a new EPRA pricing cycle. Records are **upserted** - if a `(town, valid_from)` combination already exists, its values are updated rather than duplicated.
 
 <Callout type="warning">
   This endpoint requires a **Bearer token**. See [Authentication](/authentication) for details. It is intended for the FuelKenya data pipeline and is not a public endpoint.
@@ -29,7 +29,7 @@ Authorization: Bearer <token>
 
 ## CSV format
 
-The CSV must include the following columns (in any order). The header row is required. Column names are parsed leniently — spaces, punctuation, and case are normalised.
+The CSV must include the following columns (in any order). The header row is required. Column names are parsed leniently - spaces, punctuation, and case are normalised.
 
 | EPRA column header | Canonical name | Example value |
 |---|---|---|

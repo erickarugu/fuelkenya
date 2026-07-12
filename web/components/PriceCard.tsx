@@ -134,8 +134,8 @@ export default function PriceCard({ title, value, delta, accent, sparkline }: Pr
     "text-stone-500 bg-black/[0.03] dark:bg-white/[0.03] border-black/[0.09] dark:border-white/[0.08]";
 
   const badgeLabel =
-    dir === "down" ? `▼ ${Math.abs(delta!).toFixed(2)}` :
-    dir === "up"   ? `▲ ${Math.abs(delta!).toFixed(2)}` :
+    dir === "down" ? `▼ KSh ${Math.abs(delta!).toFixed(2)}` :
+    dir === "up"   ? `▲ KSh ${Math.abs(delta!).toFixed(2)}` :
     dir === "flat" ? "No change" : "—";
 
   return (
@@ -172,7 +172,7 @@ export default function PriceCard({ title, value, delta, accent, sparkline }: Pr
         {/* price */}
         <div className="mb-5 flex items-baseline gap-1.5">
           <span className="text-base font-medium text-stone-500">KSh</span>
-          <span className="text-5xl font-extrabold leading-none tracking-tight text-stone-900 dark:text-white tabular-nums">
+          <span className="font-display text-5xl font-bold leading-none tracking-tight text-stone-900 dark:text-white tabular-nums">
             {value > 0 ? value.toFixed(2) : "—"}
           </span>
         </div>

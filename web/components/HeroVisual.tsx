@@ -123,7 +123,7 @@ export default function HeroVisual({ towns }: { towns: TownPrice[] }) {
               </span>
             </div>
 
-            <p className="text-[2rem] font-black leading-tight tracking-tight text-stone-900 dark:text-white">{p.city}</p>
+            <p className="font-display text-[2rem] font-bold leading-tight tracking-tight text-stone-900 dark:text-white">{p.city}</p>
             <p className="mt-1 text-xs text-stone-400 dark:text-stone-600">Maximum pump price · current cycle</p>
           </div>
 

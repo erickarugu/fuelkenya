@@ -7,7 +7,7 @@ import { Callout } from "nextra/components";
 
 # GET /prices/latest
 
-Return prices for the **most recently published EPRA pricing cycle**. This is the primary endpoint for displaying current pump prices — you do not need to know the exact cycle dates.
+Return prices for the **most recently published EPRA pricing cycle**. This is the primary endpoint for displaying current pump prices - you do not need to know the exact cycle dates.
 
 <Callout type="info">
   Results are **in-memory cached** after the first request following a new ingestion. Subsequent calls for the same cycle are served from cache with no database round-trip, making this endpoint fast and suitable for high-traffic use.
@@ -23,11 +23,11 @@ GET /v1/prices/latest
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `town` | `string` | — | Filter to a single town. Case-insensitive. Omit to return all towns. |
+| `town` | `string` | - | Filter to a single town. Case-insensitive. Omit to return all towns. |
 
 ## Response
 
-### 200 OK — with town filter
+### 200 OK - with town filter
 
 A single-element array containing the price record for the requested town:
 
@@ -45,7 +45,7 @@ A single-element array containing the price record for the requested town:
 ]
 ```
 
-### 200 OK — without town filter
+### 200 OK - without town filter
 
 An array of records for every town in the latest cycle (224+ records):
 
@@ -72,7 +72,7 @@ An array of records for every town in the latest cycle (224+ records):
 ]
 ```
 
-### 200 OK — town not found
+### 200 OK - town not found
 
 Returns an **empty array** if the town name does not match any record:
 
@@ -80,9 +80,9 @@ Returns an **empty array** if the town name does not match any record:
 []
 ```
 
-This is not an error — unknown towns simply produce no results. Check the canonical town name via [`GET /towns`](/endpoints/towns).
+This is not an error - unknown towns simply produce no results. Check the canonical town name via [`GET /towns`](/endpoints/towns).
 
-### 200 OK — no data in database
+### 200 OK - no data in database
 
 Returns an empty array if the database has never been seeded:
 
@@ -104,7 +104,7 @@ curl "https://api.fuelkenya.com/v1/prices/latest?town=Mombasa"
 curl https://api.fuelkenya.com/v1/prices/latest
 ```
 
-### JavaScript — build a price comparison
+### JavaScript - build a price comparison
 
 ```js
 const BASE = "https://api.fuelkenya.com/v1";

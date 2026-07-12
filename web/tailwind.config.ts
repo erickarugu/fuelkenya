@@ -8,6 +8,9 @@ const config: Config = {
       fontSize: {
         xs: ["0.8125rem", { lineHeight: "1.25rem" }],
       },
+      fontFamily: {
+        display: ["var(--font-space-grotesk)", "ui-sans-serif", "system-ui", "sans-serif"]
+      },
       colors: {
         base: "#FAFAF9",
         obsidian: "#121212",

@@ -50,13 +50,13 @@ Cache-Control: public, max-age=86400, s-maxage=604800
 
 This means edge/CDN caches may store responses for up to 7 days. Your own application cache can follow the same policy.
 
-**Batch over pagination.** If you need prices for multiple towns, use a single `/prices/latest` call without a `town` filter — it returns all towns at once — rather than making one request per town.
+**Batch over pagination.** If you need prices for multiple towns, use a single `/prices/latest` call without a `town` filter - it returns all towns at once - rather than making one request per town.
 
 ```bash
-# Efficient — one request for all towns
+# Efficient - one request for all towns
 curl https://api.fuelkenya.com/v1/prices/latest
 
-# Inefficient — 224 requests for 224 towns
+# Inefficient - 224 requests for 224 towns
 for town in "${TOWNS[@]}"; do
   curl "https://api.fuelkenya.com/v1/prices/latest?town=$town"
 done

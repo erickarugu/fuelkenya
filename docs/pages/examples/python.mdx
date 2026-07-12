@@ -1,6 +1,6 @@
 ---
 title: Python
-description: Python code examples for fetching EPRA fuel prices in Kenya using the FuelKenya REST API — requests, httpx, and pandas integration patterns.
+description: Python code examples for fetching EPRA fuel prices in Kenya using the FuelKenya REST API - requests, httpx, and pandas integration patterns.
 ---
 
 # Python
@@ -115,7 +115,7 @@ with FuelKenyaClient() as client:
     prices = client.latest_prices("Nairobi")
     if prices:
         p = prices[0]
-        print(f"Nairobi  —  valid {p.valid_from} to {p.valid_to}")
+        print(f"Nairobi  -  valid {p.valid_from} to {p.valid_to}")
         print(f"  Super Petrol : KSh {p.super_petrol:.2f}")
         print(f"  Diesel       : KSh {p.diesel:.2f}")
         print(f"  Kerosene     : KSh {p.kerosene:.2f}")

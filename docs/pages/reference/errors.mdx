@@ -117,6 +117,6 @@ All other 500 errors represent unexpected server-side failures. If you encounter
 
 ## Retrying safely
 
-- **400, 401, 415, 422** — do not retry; the request itself is the problem. Fix the request.
-- **429** — wait and retry after the rate limit window resets.
-- **500** — safe to retry with exponential backoff (start at 1 second, cap at 30 seconds). If the error persists after 3 attempts, surface it to the user.
+- **400, 401, 415, 422** - do not retry; the request itself is the problem. Fix the request.
+- **429** - wait and retry after the rate limit window resets.
+- **500** - safe to retry with exponential backoff (start at 1 second, cap at 30 seconds). If the error persists after 3 attempts, surface it to the user.

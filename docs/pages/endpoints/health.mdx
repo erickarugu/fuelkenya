@@ -23,7 +23,7 @@ No parameters, headers, or body required.
 
 ## Response
 
-### 200 OK — healthy
+### 200 OK - healthy
 
 ```json
 {
@@ -31,7 +31,7 @@ No parameters, headers, or body required.
 }
 ```
 
-### 500 Internal Server Error — database unreachable
+### 500 Internal Server Error - database unreachable
 
 ```json
 {
@@ -51,4 +51,4 @@ curl https://api.fuelkenya.com/v1/health
 
 - Suitable as a **liveness probe** in Kubernetes or a Docker health check
 - Suitable as an **uptime monitor** in tools like UptimeRobot or Better Uptime
-- Not suitable as a deep application health check — it only verifies database connectivity, not data integrity or ingestion pipeline health
+- Not suitable as a deep application health check - it only verifies database connectivity, not data integrity or ingestion pipeline health

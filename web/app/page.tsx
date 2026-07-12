@@ -5,6 +5,7 @@ import PriceCard from "@/components/PriceCard";
 import RegionVariance from "@/components/RegionVariance";
 import SearchBar from "@/components/SearchBar";
 import UpdateCountdown from "@/components/UpdateCountdown";
+import ReviewDayBanner from "@/components/ReviewDayBanner";
 import FuelEstimator from "@/components/FuelEstimator";
 import InfoCards from "@/components/InfoCards";
 import AnimatedTownSection from "@/components/AnimatedTownSection";
@@ -16,52 +17,58 @@ export const dynamic = "force-dynamic";
 
 const currentYear = new Date().getFullYear();
 
-export const metadata: Metadata = {
-  title: `Petrol Price in Kenya Today ${currentYear} | EPRA Fuel Prices Per Litre`,
-  description:
-    `Kenya petrol price today per litre — official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across all towns in Kenya. Updated every cycle on the 14th.`,
-  keywords: [
-    "EPRA fuel prices Kenya today",
-    "petrol price today Kenya",
-    "diesel price Kenya today",
-    "kerosene price Kenya",
-    "fuel prices Kenya",
-    `EPRA maximum pump prices ${currentYear}`,
-    `fuel prices Kenya ${currentYear}`,
-    `new fuel prices Kenya ${currentYear}`,
-    "super petrol price Kenya",
-    "fuel tracker Kenya",
-    "Kenya petrol cost per litre",
-    "Nairobi fuel prices",
-    "Mombasa fuel prices",
-    "Kisumu fuel prices",
-    "EPRA price update Kenya",
-    "cheapest petrol Kenya",
-    "fuel prices Kenya tomorrow",
-    "next EPRA fuel prices Kenya",
-    "Shell fuel prices Kenya today",
-    "Total fuel prices Kenya",
-    "Rubis fuel prices Kenya",
-    "Vivo Energy fuel prices Kenya",
-    "EPRA petrol price today Kenya",
-    "latest fuel prices Kenya"
-  ],
-  alternates: {
-    canonical: "https://fuelkenya.com"
+const FAQ_ITEMS = [
+  {
+    question: "What is the current price of petrol in [TownName] today?",
+    answer:
+      "The current EPRA maximum price for Super Petrol in [TownName] is KSh [SuperPrice] per litre, Diesel is KSh [DieselPrice], and Kerosene is KSh [KerosenePrice]. These are the official fuel prices in Kenya set by EPRA for the current pricing cycle."
   },
-  openGraph: {
-    title: `Petrol Price in Kenya Today ${currentYear} | EPRA Fuel Prices Per Litre`,
-    description:
-      `Kenya petrol price today per litre — EPRA fuel prices for Super Petrol, Diesel, and Kerosene across all towns. Updated every pricing cycle on the 14th.`,
-    url: "https://fuelkenya.com",
-    type: "website"
+  {
+    question: "What are the current EPRA fuel prices in Kenya?",
+    answer:
+      "EPRA (Energy and Petroleum Regulatory Authority) publishes maximum pump prices on the 14th of every month. FuelKenya displays the latest official prices for Super Petrol, Diesel, and Kerosene across all towns in Kenya."
   },
-  twitter: {
-    title: `Petrol Price in Kenya Today ${currentYear} | EPRA Fuel Prices Per Litre`,
-    description:
-      `Kenya petrol price today per litre — EPRA fuel prices for Super Petrol, Diesel, and Kerosene across all towns. Updated every pricing cycle on the 14th.`
+  {
+    question: "How often do EPRA fuel prices change in Kenya?",
+    answer:
+      "EPRA updates maximum retail fuel prices on the 14th of every month. The new prices take effect at midnight on the 15th and remain in force until the 14th of the following month."
+  },
+  {
+    question: "Why are fuel prices different across Kenyan towns?",
+    answer:
+      "EPRA sets town-specific pump prices based on pipeline and road transport costs from Mombasa port. Coastal towns like Mombasa pay the lowest prices, while inland and remote towns like Mandera pay the highest due to longer distribution distances."
+  },
+  {
+    question: "What is the cheapest town for fuel in Kenya?",
+    answer:
+      "Mombasa consistently has the lowest fuel prices in Kenya because it is the entry point for petroleum products imported through the port. Prices rise with distance from Mombasa along the pipeline and road network."
+  },
+  {
+    question: "When will EPRA announce the next fuel prices in Kenya?",
+    answer:
+      "EPRA announces the next month's maximum pump prices on the 14th of every month, with the new prices taking effect from the 15th. FuelKenya shows a live countdown to the next price update so you always know when new prices are coming."
+  },
+  {
+    question: "Do Shell, Total, and Rubis stations follow EPRA fuel prices?",
+    answer:
+      "Yes. All fuel stations in Kenya, including Shell, TotalEnergies, Rubis (formerly KenolKobil), Vivo Energy, and independent dealers, are required by law to sell at or below the EPRA maximum pump prices. FuelKenya tracks these official EPRA ceiling prices that apply at every station nationwide."
   }
-};
+];
+
+function buildFAQ(
+  town: string,
+  current: { super_petrol: number; diesel: number; kerosene: number } | null
+) {
+  return FAQ_ITEMS.map((item) => {
+    const question = item.question.replace(/\[TownName\]/g, town);
+    const answer = item.answer
+      .replace(/\[TownName\]/g, town)
+      .replace(/\[SuperPrice\]/g, current ? current.super_petrol.toFixed(2) : "—")
+      .replace(/\[DieselPrice\]/g, current ? current.diesel.toFixed(2) : "—")
+      .replace(/\[KerosenePrice\]/g, current ? current.kerosene.toFixed(2) : "—");
+    return { question, answer };
+  });
+}
 
 const POPULAR_TOWNS = [
   "Nairobi",
@@ -83,6 +90,63 @@ const TrendChart = dynamicImport(() => import("@/components/TrendChart"), {
 
 interface Props {
   searchParams?: { town?: string };
+}
+
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const town = searchParams?.town ? String(searchParams.town) : "Nairobi";
+  const latestPrices = await fetchLatestPrices(town);
+  const current = latestPrices[0];
+  const priceLine = current ? `KSh ${current.super_petrol.toFixed(2)}/Litre` : `${currentYear} Rates`;
+
+  const title = `Petrol Price in Kenya Today: ${priceLine} | EPRA ${currentYear}`;
+  const description = current
+    ? `Kenya petrol price today is KSh ${current.super_petrol.toFixed(2)} per litre in ${town} (Diesel KSh ${current.diesel.toFixed(2)}, Kerosene KSh ${current.kerosene.toFixed(2)}). Official EPRA maximum pump prices across all 224 towns in Kenya, updated every pricing cycle.`
+    : `Kenya petrol price today per litre: official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across all towns in Kenya. Updated every cycle on the 14th.`;
+
+  return {
+    title,
+    description,
+    keywords: [
+      "EPRA fuel prices Kenya today",
+      "petrol price today Kenya",
+      "diesel price Kenya today",
+      "kerosene price Kenya",
+      "fuel prices in Kenya",
+      "current price of petrol in Nairobi",
+      `EPRA maximum pump prices ${currentYear}`,
+      `fuel prices Kenya ${currentYear}`,
+      `new fuel prices Kenya ${currentYear}`,
+      "super petrol price Kenya",
+      "fuel tracker Kenya",
+      "Kenya petrol cost per litre",
+      "Nairobi fuel prices",
+      "Mombasa fuel prices",
+      "Kisumu fuel prices",
+      "EPRA price update Kenya",
+      "cheapest petrol Kenya",
+      "fuel prices Kenya tomorrow",
+      "next EPRA fuel prices Kenya",
+      "Shell fuel prices Kenya today",
+      "Total fuel prices Kenya",
+      "Rubis fuel prices Kenya",
+      "Vivo Energy fuel prices Kenya",
+      "EPRA petrol price today Kenya",
+      "latest fuel prices Kenya"
+    ],
+    alternates: {
+      canonical: "https://fuelkenya.com"
+    },
+    openGraph: {
+      title,
+      description,
+      url: "https://fuelkenya.com",
+      type: "website"
+    },
+    twitter: {
+      title,
+      description
+    }
+  };
 }
 
 function calculateDelta(current: number, previous: number | null) {
@@ -195,6 +259,8 @@ export default async function Page({ searchParams }: Props) {
       kerosene: r.kerosene.toFixed(2)
     }));
 
+  const faqItems = buildFAQ(town, latest);
+
   return (
     <div className="relative min-h-screen page-bg grid-bg">
       {/* ── Fixed shield watermark ─────────────────────────────────────────── */}
@@ -210,7 +276,9 @@ export default async function Page({ searchParams }: Props) {
         />
       </div>
       {/* ── Nav ────────────────────────────────────────────────────────────── */}
-      <nav className="sticky top-0 z-50 border-b border-black/[0.08] dark:border-white/[0.07] bg-white/90 dark:bg-black/70 backdrop-blur-xl">
+      <div className="sticky top-0 z-50">
+        <ReviewDayBanner />
+        <nav className="border-b border-black/[0.08] dark:border-white/[0.07] bg-white/90 dark:bg-black/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5 sm:px-8">
           <div className="flex items-center gap-3">
             <img src="/kenya-fuel-logo.png" alt="FuelKenya" className="h-8 w-8 shrink-0 rounded-lg" />
@@ -247,9 +315,23 @@ export default async function Page({ searchParams }: Props) {
               href="https://docs.fuelkenya.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden font-medium text-stone-500 transition-colors hover:text-stone-800 dark:hover:text-stone-300 sm:inline"
+              className="hidden items-center gap-1 font-medium text-stone-500 transition-colors hover:text-stone-800 dark:hover:text-stone-300 sm:inline-flex"
             >
-              Docs
+              <svg
+                width="11"
+                height="11"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <polyline points="16 18 22 12 16 6" />
+                <polyline points="8 6 2 12 8 18" />
+              </svg>
+              API Docs
             </a>
             <a
               href="https://github.com/erickarugu/fuelkenya"
@@ -270,7 +352,8 @@ export default async function Page({ searchParams }: Props) {
             </a>
           </div>
         </div>
-      </nav>
+        </nav>
+      </div>
 
       <div className="relative z-10 mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
         {/* ── Hero ─────────────────────────────────────────────────────────── */}
@@ -288,7 +371,7 @@ export default async function Page({ searchParams }: Props) {
                 </span>
               </div>
 
-              <h1 className="mb-4 text-5xl font-extrabold leading-[1.08] tracking-tight text-stone-900 dark:text-white sm:text-6xl">
+              <h1 className="mb-4 font-display text-5xl font-bold leading-[1.08] tracking-tight text-stone-900 dark:text-white sm:text-6xl">
                 Kenya Petrol Price
                 <br />
                 <span className="font-light text-stone-500 dark:text-stone-400">Today Per Litre</span>
@@ -296,7 +379,7 @@ export default async function Page({ searchParams }: Props) {
 
               <p className="mb-8 max-w-md text-base leading-relaxed text-stone-600 dark:text-stone-400">
                 Official EPRA maximum pump prices per litre across all {towns.length}{" "}
-                towns in Kenya — Super Petrol, Diesel, and Kerosene.
+                towns in Kenya: Super Petrol, Diesel, and Kerosene.
               </p>
 
               <div className="relative z-[100]">
@@ -391,6 +474,23 @@ export default async function Page({ searchParams }: Props) {
           <SectionHeader label="About fuel pricing in Kenya" />
           <InfoCards />
         </div>
+
+        {/* ── FAQ ────────────────────────────────────────────────────────────── */}
+        <div className="mb-14 fade-up delay-5">
+          <SectionHeader label="Frequently asked questions" sub={town} />
+          <div className="rounded-2xl border border-black/[0.08] dark:border-white/[0.07] bg-black/[0.02] dark:bg-white/[0.025] p-6">
+            <div className="space-y-5 text-sm text-stone-600 dark:text-stone-400">
+              {faqItems.map((item) => (
+                <div key={item.question}>
+                  <div className="font-semibold text-stone-900 dark:text-stone-100">
+                    {item.question}
+                  </div>
+                  <p className="mt-2 leading-7">{item.answer}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* ── Footer ─────────────────────────────────────────────────────────── */}
@@ -464,56 +564,11 @@ export default async function Page({ searchParams }: Props) {
             {
               "@context": "https://schema.org",
               "@type": "FAQPage",
-              mainEntity: [
-                {
-                  "@type": "Question",
-                  name: "What are the current EPRA fuel prices in Kenya?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "EPRA (Energy and Petroleum Regulatory Authority) publishes maximum pump prices on the 14th of every month. FuelKenya displays the latest official prices for Super Petrol, Diesel, and Kerosene across all towns in Kenya."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  name: "How often do EPRA fuel prices change in Kenya?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "EPRA updates maximum retail fuel prices on the 14th of every month. The new prices take effect at midnight on the 15th and remain in force until the 14th of the following month."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  name: "Why are fuel prices different across Kenyan towns?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "EPRA sets town-specific pump prices based on pipeline and road transport costs from Mombasa port. Coastal towns like Mombasa pay the lowest prices, while inland and remote towns like Mandera pay the highest due to longer distribution distances."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  name: "What is the cheapest town for fuel in Kenya?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Mombasa consistently has the lowest fuel prices in Kenya because it is the entry point for petroleum products imported through the port. Prices rise with distance from Mombasa along the pipeline and road network."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  name: "When will EPRA announce the next fuel prices in Kenya?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "EPRA announces the next month's maximum pump prices on the 14th of every month, with the new prices taking effect from the 15th. FuelKenya shows a live countdown to the next price update so you always know when new prices are coming."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  name: "Do Shell, Total, and Rubis stations follow EPRA fuel prices?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Yes. All fuel stations in Kenya — including Shell, TotalEnergies, Rubis (formerly KenolKobil), Vivo Energy, and independent dealers — are required by law to sell at or below the EPRA maximum pump prices. FuelKenya tracks these official EPRA ceiling prices that apply at every station nationwide."
-                  }
-                }
-              ]
+              mainEntity: faqItems.map((item) => ({
+                "@type": "Question",
+                name: item.question,
+                acceptedAnswer: { "@type": "Answer", text: item.answer }
+              }))
             },
             {
               "@context": "https://schema.org",

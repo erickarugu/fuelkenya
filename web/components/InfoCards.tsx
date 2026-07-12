@@ -49,7 +49,7 @@ const CARDS = [
   {
     num: "03",
     title: "Which fuel for what?",
-    body: "Super Petrol powers passenger cars, motorcycles, and tuk-tuks. Diesel runs trucks, buses, matatus, and generators. Kerosene (IK) is used in cooking stoves and lamps — primarily in rural off-grid households.",
+    body: "Super Petrol powers passenger cars, motorcycles, and tuk-tuks. Diesel runs trucks, buses, matatus, and generators. Kerosene (IK) is used in cooking stoves and lamps, primarily in rural off-grid households.",
     color: {
       bar:         "linear-gradient(90deg, #d97706, #fbbf24 50%, transparent)",
       iconBg:      "rgba(251,191,36,0.07)",
@@ -72,7 +72,7 @@ const CARDS = [
   {
     num: "04",
     title: "Tips to spend less",
-    body: "Fill up in the first week of a new cycle when prices are freshest. Keep tyres at the correct pressure and replace your air filter — these alone improve fuel economy by 5–10%. Use the estimator on this page to budget before you travel.",
+    body: "Fill up in the first week of a new cycle when prices are freshest. Keep tyres at the correct pressure and replace your air filter; these alone improve fuel economy by 5–10%. Use the estimator on this page to budget before you travel.",
     color: {
       bar:         "linear-gradient(90deg, #7c3aed, #a78bfa 50%, transparent)",
       iconBg:      "rgba(167,139,250,0.08)",
