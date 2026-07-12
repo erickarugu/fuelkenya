@@ -9,7 +9,7 @@ import { Callout } from "nextra/components";
 
 ## Public endpoints
 
-All **read endpoints** — `/prices`, `/prices/latest`, `/towns`, and `/health` — are **publicly accessible** with no authentication required. There is no API key or account needed to query fuel prices.
+All **read endpoints** - `/prices`, `/prices/latest`, `/towns`, and `/health` - are **publicly accessible** with no authentication required. There is no API key or account needed to query fuel prices.
 
 ## Ingest endpoint
 
@@ -33,7 +33,7 @@ curl -X POST https://api.fuelkenya.com/v1/ingest/csv \
 | Wrong token value | `401` | `"Invalid authorization token for ingestion endpoint."` |
 
 <Callout type="warning">
-  The ingest token is set via the `INGEST_TOKEN` environment variable on the API server. If `INGEST_TOKEN` is not set, the ingest endpoint accepts all requests without checking the header. This is intended for local development only — always set a token in production.
+  The ingest token is set via the `INGEST_TOKEN` environment variable on the API server. If `INGEST_TOKEN` is not set, the ingest endpoint accepts all requests without checking the header. This is intended for local development only - always set a token in production.
 </Callout>
 
 ## CORS

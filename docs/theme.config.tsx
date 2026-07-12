@@ -76,7 +76,7 @@ const config: DocsThemeConfig = {
         : "FuelKenya API Docs | EPRA Fuel Prices for Kenya";
     const description =
       (frontMatter.description as string | undefined) ||
-      "FuelKenya REST API — programmatic access to official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across all towns in Kenya.";
+      "FuelKenya REST API - programmatic access to official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across all towns in Kenya.";
     const canonical =
       route === "/" ? "https://docs.fuelkenya.com" : `https://docs.fuelkenya.com${route}`;
     const ogImage = "https://fuelkenya.com/opengraph-image";
@@ -107,6 +107,7 @@ const config: DocsThemeConfig = {
         <link rel="icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
         {/* Open Graph */}
@@ -120,7 +121,7 @@ const config: DocsThemeConfig = {
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:alt" content="FuelKenya API — EPRA Fuel Prices Kenya" />
+        <meta property="og:image:alt" content="FuelKenya API - EPRA Fuel Prices Kenya" />
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />

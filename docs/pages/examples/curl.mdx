@@ -1,6 +1,6 @@
 ---
 title: curl
-description: curl examples for querying EPRA fuel prices in Kenya via the FuelKenya REST API — copy-paste ready commands for Super Petrol, Diesel, and Kerosene data.
+description: curl examples for querying EPRA fuel prices in Kenya via the FuelKenya REST API - copy-paste ready commands for Super Petrol, Diesel, and Kerosene data.
 ---
 
 # curl
@@ -39,7 +39,7 @@ curl -s https://api.fuelkenya.com/v1/prices/latest | jq
 curl -s "https://api.fuelkenya.com/v1/prices/latest?town=Mombasa" | jq
 ```
 
-### Price history — last 12 cycles for Nairobi
+### Price history - last 12 cycles for Nairobi
 
 ```bash
 curl -s "https://api.fuelkenya.com/v1/prices?town=Nairobi&limit=12" | jq
@@ -122,7 +122,7 @@ Expected response:
 
 ---
 
-## Shell script — export prices to CSV file
+## Shell script - export prices to CSV file
 
 ```bash
 #!/usr/bin/env bash
@@ -140,7 +140,7 @@ curl -s "${API}/prices/latest" | jq -r \
 echo "Exported to $OUTPUT ($(wc -l < "$OUTPUT") rows)"
 ```
 
-## Shell script — check if prices have changed since last run
+## Shell script - check if prices have changed since last run
 
 ```bash
 #!/usr/bin/env bash

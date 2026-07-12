@@ -1,66 +1,18 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-
-function getNairobiParts(date: Date) {
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone: "Africa/Nairobi",
-    year: "numeric", month: "numeric", day: "numeric",
-    hour: "numeric", minute: "numeric", second: "numeric",
-    hour12: false
-  }).formatToParts(date);
-  const v = Object.fromEntries(parts.map(p => [p.type, p.value]));
-  return {
-    year: Number(v.year), month: Number(v.month) - 1,
-    day: Number(v.day),   hour: Number(v.hour),
-    minute: Number(v.minute), second: Number(v.second)
-  };
-}
-
-function getNextUpdateTime(now: Date): Date {
-  const p = getNairobiParts(now);
-  const year  = p.month === 11 && p.day > 14 ? p.year + 1 : p.year;
-  const month = p.day > 14 ? (p.month === 11 ? 0 : p.month + 1) : p.month;
-  return new Date(Date.UTC(year, month, 14, 10, 0, 0));
-}
-
-function getCycleStart(target: Date): Date {
-  const p    = getNairobiParts(target);
-  const year  = p.month === 0 ? p.year - 1 : p.year;
-  const month = p.month === 0 ? 11 : p.month - 1;
-  return new Date(Date.UTC(year, month, 15, 0, 0, 0));
-}
-
-function getCountdown(target: Date, now: Date) {
-  const ms      = Math.max(target.getTime() - now.getTime(), 0);
-  const days    = Math.floor(ms / 86_400_000);
-  const hours   = Math.floor((ms % 86_400_000) / 3_600_000);
-  const minutes = Math.floor((ms % 3_600_000)  / 60_000);
-  const seconds = Math.floor((ms % 60_000)     / 1_000);
-  return { days, hours, minutes, seconds };
-}
+import { useEpraCycle } from "@/lib/useEpraCycle";
 
 function urgency(days: number) {
   if (days <= 3)  return { color: "#f87171", rgb: "248,113,113", tip: "Last chance at current rates" };
   if (days <= 7)  return { color: "#fb923c", rgb: "251,146,60",  tip: "Fill up this week if possible"  };
   if (days <= 14) return { color: "#fbbf24", rgb: "251,191,36",  tip: "Worth topping up soon"          };
-  return           { color: "#60a5fa", rgb: "96,165,250",  tip: "Prices stable — no rush yet"   };
+  return           { color: "#60a5fa", rgb: "96,165,250",  tip: "Prices stable, no rush yet"   };
 }
 
 function pad(n: number) { return String(n).padStart(2, "0"); }
 
 export default function UpdateCountdown() {
-  const [now, setNow] = useState(() => new Date());
-
-  useEffect(() => {
-    const t = window.setInterval(() => setNow(new Date()), 1000);
-    return () => window.clearInterval(t);
-  }, []);
-
-  const target     = useMemo(() => getNextUpdateTime(now), [now]);
-  const cycleStart = useMemo(() => getCycleStart(target),  [target]);
-  const countdown  = useMemo(() => getCountdown(target, now), [target, now]);
-  const isLive     = now.getTime() >= target.getTime();
+  const { now, target, cycleStart, countdown, isLive, isReviewDay } = useEpraCycle();
 
   const totalMs    = target.getTime() - cycleStart.getTime();
   const elapsedMs  = Math.min(Math.max(now.getTime() - cycleStart.getTime(), 0), totalMs);
@@ -79,6 +31,45 @@ export default function UpdateCountdown() {
         <div>
           <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">New EPRA prices are live</p>
           <p className="mt-0.5 text-xs text-stone-500">Refresh to see the latest rates</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isReviewDay) {
+    return (
+      <div className="relative overflow-hidden rounded-2xl border border-amber-500/25 bg-[var(--surface-1)]">
+        <div
+          className="h-[2px]"
+          style={{ background: "linear-gradient(90deg, rgba(251,191,36,0.8) 0%, rgba(251,191,36,0.15) 40%, transparent 70%)" }}
+        />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.07]"
+          style={{ background: "radial-gradient(ellipse 70% 80% at 0% 50%, rgba(251,191,36,0.5) 0%, transparent 65%)" }}
+        />
+        <div className="relative flex flex-col gap-4 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div className="mb-1.5 flex items-center gap-2">
+              <span className="relative flex h-2 w-2 shrink-0">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-70" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-400" />
+              </span>
+              <span className="text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400">
+                EPRA review day
+              </span>
+            </div>
+            <p className="text-lg font-black text-stone-900 dark:text-stone-100">New pump prices expected today</p>
+            <p className="mt-0.5 text-xs text-stone-500">Official rates typically publish around 1:00 PM</p>
+          </div>
+
+          <div className="flex shrink-0 items-center gap-2.5 rounded-xl border border-amber-500/20 bg-amber-500/[0.08] px-4 py-2.5">
+            <span className="flex items-center gap-1">
+              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-amber-400" style={{ animationDelay: "0ms" }} />
+              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-amber-400" style={{ animationDelay: "150ms" }} />
+              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-amber-400" style={{ animationDelay: "300ms" }} />
+            </span>
+            <span className="text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400">Today</span>
+          </div>
         </div>
       </div>
     );
@@ -168,9 +159,9 @@ export default function UpdateCountdown() {
           </div>
 
           <div className="mt-1.5 flex items-center justify-between text-xs text-stone-500">
-            <span>{fmtShort(cycleStart)} — cycle start</span>
+            <span>{fmtShort(cycleStart)} · cycle start</span>
             <span>{Math.round(progress)}% complete</span>
-            <span>cycle end — {fmtShort(target)}</span>
+            <span>cycle end · {fmtShort(target)}</span>
           </div>
         </div>
       </div>

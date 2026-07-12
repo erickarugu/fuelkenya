@@ -14,7 +14,7 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
   display: "swap",
-  weight: ["700"]
+  weight: ["500", "600", "700"]
 });
 
 export const metadata: Metadata = {
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     locale: "en_KE",
     url: "https://fuelkenya.com",
     siteName: "FuelKenya",
-    title: "FuelKenya — Live EPRA Fuel Prices in Kenya",
+    title: "FuelKenya | Live EPRA Fuel Prices in Kenya",
     description:
       "Track official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across every town in Kenya.",
     images: [
@@ -78,13 +78,13 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         type: "image/png",
-        alt: "FuelKenya — EPRA Fuel Price Tracker Kenya"
+        alt: "FuelKenya | EPRA Fuel Price Tracker Kenya"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "FuelKenya — Live EPRA Fuel Prices in Kenya",
+    title: "FuelKenya | Live EPRA Fuel Prices in Kenya",
     description:
       "Track official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across every town in Kenya.",
     images: ["https://fuelkenya.com/opengraph-image"]

@@ -1,6 +1,6 @@
 ---
 title: JavaScript / TypeScript
-description: JavaScript and TypeScript code examples for fetching EPRA fuel prices in Kenya using the FuelKenya REST API — browser, Node.js, and React patterns.
+description: JavaScript and TypeScript code examples for fetching EPRA fuel prices in Kenya using the FuelKenya REST API - browser, Node.js, and React patterns.
 ---
 
 import { Tabs, Tab } from "nextra/components";
@@ -38,11 +38,11 @@ export const fuelKenya = {
   /** All towns with price data */
   towns: () => get<string[]>("/towns"),
 
-  /** Latest cycle prices — optionally filtered to one town */
+  /** Latest cycle prices - optionally filtered to one town */
   latestPrices: (town?: string) =>
     get<FuelPrice[]>("/prices/latest", town ? { town } : undefined),
 
-  /** Price history — newest first */
+  /** Price history - newest first */
   priceHistory: (town: string, limit = 12, offset = 0) =>
     get<FuelPrice[]>("/prices", {
       town,
@@ -139,7 +139,7 @@ console.log(price?.super_petrol); // e.g. 217.36
 The FuelKenya web app uses `fetch` with `{ cache: "no-store" }` on the server side to always load fresh cycle prices:
 
 ```ts
-// lib/api.ts — server-side fetching in Next.js App Router
+// lib/api.ts - server-side fetching in Next.js App Router
 
 const BASE = process.env.NEXT_PUBLIC_FUELKENYA_API_URL ?? "http://localhost:8000/v1";
 

@@ -1,6 +1,6 @@
 ---
 title: Quickstart
-description: Start fetching live EPRA fuel prices for Kenya — Super Petrol, Diesel, and Kerosene — in under a minute. No authentication required for public endpoints.
+description: Start fetching live EPRA fuel prices for Kenya - Super Petrol, Diesel, and Kerosene - in under a minute. No authentication required for public endpoints.
 ---
 
 import { Steps, Callout, Tabs, Tab } from "nextra/components";
@@ -68,13 +68,13 @@ Results are returned newest-first. Use `offset` for pagination.
 <Tabs items={['curl', 'JavaScript', 'Python']}>
   <Tab>
 ```bash
-# Latest prices — all towns
+# Latest prices - all towns
 curl https://api.fuelkenya.com/v1/prices/latest
 
-# Latest prices — specific town
+# Latest prices - specific town
 curl "https://api.fuelkenya.com/v1/prices/latest?town=Mombasa"
 
-# Price history — last 6 cycles
+# Price history - last 6 cycles
 curl "https://api.fuelkenya.com/v1/prices?town=Kisumu&limit=6"
 ```
   </Tab>
@@ -118,11 +118,11 @@ print(f"Nairobi petrol: KSh {prices[0]['super_petrol']}")
 ---
 
 <Callout type="warning">
-  **Rate limit** — public endpoints allow **60 requests per minute** per IP. Cache responses locally rather than polling; prices only change on the 14th of each month.
+  **Rate limit** - public endpoints allow **60 requests per minute** per IP. Cache responses locally rather than polling; prices only change on the 14th of each month.
 </Callout>
 
 ## Next steps
 
-- [API Reference](/api) — full endpoint documentation with all parameters
-- [Code Examples](/examples) — more complete client implementations
-- [Data Types](/reference/data-types) — field definitions and formats
+- [API Reference](/api) - full endpoint documentation with all parameters
+- [Code Examples](/examples) - more complete client implementations
+- [Data Types](/reference/data-types) - field definitions and formats

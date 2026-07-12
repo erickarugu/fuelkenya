@@ -233,3 +233,14 @@ body {
     background: linear-gradient(to right, rgba(255, 255, 255, 0.10), transparent);
   }
 }
+
+/* Muted/secondary text (captions, labels, small print) reads too dim against
+   black in dark mode; brighten the stone-400/500/600 shades there only. */
+.dark .text-stone-400,
+.dark .dark\:text-stone-400 { color: #eeebe9; }
+.dark .text-stone-500,
+.dark .dark\:text-stone-500 { color: #d6d2ce; }
+.dark .text-stone-600,
+.dark .dark\:text-stone-600 { color: #bab5b0; }
+.dark .text-stone-700,
+.dark .dark\:text-stone-700 { color: #d6d2ce; }
