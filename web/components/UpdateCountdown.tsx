@@ -11,8 +11,8 @@ function urgency(days: number) {
 
 function pad(n: number) { return String(n).padStart(2, "0"); }
 
-export default function UpdateCountdown() {
-  const { now, target, cycleStart, countdown, isLive, isReviewDay } = useEpraCycle();
+export default function UpdateCountdown({ latestValidFrom }: { latestValidFrom?: string | null }) {
+  const { now, target, cycleStart, countdown, isLive, isReviewDay } = useEpraCycle(latestValidFrom);
 
   const totalMs    = target.getTime() - cycleStart.getTime();
   const elapsedMs  = Math.min(Math.max(now.getTime() - cycleStart.getTime(), 0), totalMs);

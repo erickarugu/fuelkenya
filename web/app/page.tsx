@@ -277,7 +277,7 @@ export default async function Page({ searchParams }: Props) {
       </div>
       {/* ── Nav ────────────────────────────────────────────────────────────── */}
       <div className="sticky top-0 z-50">
-        <ReviewDayBanner />
+        <ReviewDayBanner latestValidFrom={latest?.valid_from} />
         <nav className="border-b border-black/[0.08] dark:border-white/[0.07] bg-white/90 dark:bg-black/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5 sm:px-8">
           <div className="flex items-center gap-3">
@@ -441,7 +441,7 @@ export default async function Page({ searchParams }: Props) {
 
         {/* ── Countdown ──────────────────────────────────────────────────────── */}
         <div className="mb-14 fade-up delay-3">
-          <UpdateCountdown />
+          <UpdateCountdown latestValidFrom={latest?.valid_from} />
         </div>
 
         {/* ── Chart ──────────────────────────────────────────────────────────── */}
