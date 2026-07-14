@@ -2,8 +2,8 @@
 
 import { useEpraCycle } from "@/lib/useEpraCycle";
 
-export default function ReviewDayBanner() {
-  const { isLive, isReviewDay } = useEpraCycle();
+export default function ReviewDayBanner({ latestValidFrom }: { latestValidFrom?: string | null }) {
+  const { isLive, isReviewDay } = useEpraCycle(latestValidFrom);
 
   if (isLive || !isReviewDay) return null;
 

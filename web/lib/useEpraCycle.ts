@@ -40,7 +40,7 @@ function getCountdown(target: Date, now: Date) {
   return { days, hours, minutes, seconds };
 }
 
-export function useEpraCycle() {
+export function useEpraCycle(latestValidFrom?: string | null) {
   const [now, setNow] = useState(() => new Date());
 
   useEffect(() => {
@@ -51,7 +51,16 @@ export function useEpraCycle() {
   const target     = useMemo(() => getNextUpdateTime(now), [now]);
   const cycleStart = useMemo(() => getCycleStart(target),  [target]);
   const countdown  = useMemo(() => getCountdown(target, now), [target, now]);
-  const isLive     = now.getTime() >= target.getTime();
+
+  // The clock reaching the target time only means EPRA has *announced* new
+  // prices — it doesn't mean they've been uploaded to FuelKenya yet. Only
+  // trust "live" once the displayed price record itself is from the new
+  // cycle, so the site never claims new rates before they're actually in.
+  const clockPastTarget = now.getTime() >= target.getTime();
+  const dataIsFromNewCycle = latestValidFrom
+    ? new Date(latestValidFrom).getTime() >= target.getTime()
+    : false;
+  const isLive = clockPastTarget && dataIsFromNewCycle;
   const isReviewDay = getNairobiParts(now).day === 14 && !isLive;
 
   return { now, target, cycleStart, countdown, isLive, isReviewDay };
