@@ -59,7 +59,7 @@ export default function UpdateCountdown({ latestValidFrom }: { latestValidFrom?:
               </span>
             </div>
             <p className="text-lg font-black text-stone-900 dark:text-stone-100">New pump prices expected today</p>
-            <p className="mt-0.5 text-xs text-stone-500">Official rates typically publish around 1:00 PM</p>
+            <p className="mt-0.5 text-xs text-stone-500">Official rates typically publish around 5:00 PM</p>
           </div>
 
           <div className="flex shrink-0 items-center gap-2.5 rounded-xl border border-amber-500/20 bg-amber-500/[0.08] px-4 py-2.5">

@@ -15,7 +15,7 @@ export default function ReviewDayBanner({ latestValidFrom }: { latestValidFrom?:
           <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500" />
         </span>
         <p className="text-center text-sm font-bold text-amber-900 dark:text-amber-50">
-          EPRA review day: new pump prices expected today, typically published around 1:00 PM
+          EPRA review day: new pump prices expected today, typically published around 5:00 PM
         </p>
       </div>
     </div>
