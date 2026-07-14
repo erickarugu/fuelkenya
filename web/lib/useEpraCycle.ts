@@ -21,7 +21,7 @@ function getNextUpdateTime(now: Date): Date {
   const p = getNairobiParts(now);
   const year  = p.month === 11 && p.day > 14 ? p.year + 1 : p.year;
   const month = p.day > 14 ? (p.month === 11 ? 0 : p.month + 1) : p.month;
-  return new Date(Date.UTC(year, month, 14, 10, 0, 0));
+  return new Date(Date.UTC(year, month, 14, 14, 0, 0));
 }
 
 function getCycleStart(target: Date): Date {
