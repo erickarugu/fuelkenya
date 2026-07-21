@@ -44,12 +44,14 @@ const FAQ_ITEMS = [
       "The Energy and Petroleum Regulatory Authority (EPRA) of Kenya updates maximum retail pump limits on the 14th of every month, taking effect at midnight on the 15th."
   },
   {
-    question: "When will the next EPRA fuel prices be announced for [TownName]?",
+    question:
+      "When will the next EPRA fuel prices be announced for [TownName]?",
     answer:
       "EPRA announces new maximum pump prices on the 14th of every month. The updated prices for [TownName] and all other towns take effect from the 15th. FuelKenya updates automatically as soon as new prices are published."
   },
   {
-    question: "Do Shell, Total, and Rubis stations in [TownName] charge EPRA prices?",
+    question:
+      "Do Shell, Total, and Rubis stations in [TownName] charge EPRA prices?",
     answer:
       "Yes. All fuel stations in [TownName], including Shell, TotalEnergies, Rubis, Vivo Energy, and independent dealers, must charge at or below the EPRA maximum pump prices shown here. These are the official government-set price ceilings."
   }
@@ -184,15 +186,25 @@ export default async function TownPage({ params }: Props) {
       breadcrumb: {
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "FuelKenya", item: "https://fuelkenya.com" },
-          { "@type": "ListItem", position: 2, name: `${town} Fuel Prices`, item: `https://fuelkenya.com/town/${params.slug}` }
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "FuelKenya",
+            item: "https://fuelkenya.com"
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: `${town} Fuel Prices`,
+            item: `https://fuelkenya.com/town/${params.slug}`
+          }
         ]
       }
     },
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      mainEntity: faqItems.map(item => ({
+      mainEntity: faqItems.map((item) => ({
         "@type": "Question",
         name: item.question,
         acceptedAnswer: { "@type": "Answer", text: item.answer }
@@ -232,14 +244,20 @@ export default async function TownPage({ params }: Props) {
                 <div className="font-semibold text-stone-900 dark:text-stone-100">
                   Current cycle
                 </div>
-                <div className="mt-1">15 Jun – 14 Jul 2026</div>
+                <div className="mt-1">
+                  {latest?.valid_from} – {latest?.valid_to}
+                </div>
               </div>
               <div>
-                <div className="font-semibold text-stone-900 dark:text-stone-100">Active town</div>
+                <div className="font-semibold text-stone-900 dark:text-stone-100">
+                  Active town
+                </div>
                 <div className="mt-1">{town}</div>
               </div>
               <div>
-                <div className="font-semibold text-stone-900 dark:text-stone-100">Last update</div>
+                <div className="font-semibold text-stone-900 dark:text-stone-100">
+                  Last update
+                </div>
                 <div className="mt-1">{latest?.valid_from ?? "—"}</div>
               </div>
             </div>
@@ -271,8 +289,18 @@ export default async function TownPage({ params }: Props) {
 
         <RegionVariance
           overview={[
-            { name: "Mombasa", super_petrol: 199.99, diesel: 185.50, kerosene: 155.00 },
-            { name: "Mandera", super_petrol: 221.75, diesel: 205.30, kerosene: 170.00 }
+            {
+              name: "Mombasa",
+              super_petrol: 199.99,
+              diesel: 185.5,
+              kerosene: 155.0
+            },
+            {
+              name: "Mandera",
+              super_petrol: 221.75,
+              diesel: 205.3,
+              kerosene: 170.0
+            }
           ]}
         />
 
