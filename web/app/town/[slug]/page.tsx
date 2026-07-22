@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import type { Metadata } from "next";
+import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
 import PriceCard from "@/components/PriceCard";
 import RegionVariance from "@/components/RegionVariance";
@@ -77,9 +78,10 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const town = townFromSlug(params.slug);
-  const latestPrices = await fetchLatestPrices(town);
+  const slugTown = townFromSlug(params.slug);
+  const latestPrices = await fetchLatestPrices(slugTown);
   const current = latestPrices[0];
+  const town = current?.town ?? slugTown;
   const year = new Date().getFullYear();
   const title = `${town} Fuel Prices Today ${year} | EPRA Petrol & Diesel Price`;
   const description = current
@@ -154,10 +156,11 @@ function buildFAQ(
 }
 
 export default async function TownPage({ params }: Props) {
-  const town = decodeURIComponent(params.slug).replace(/-/g, " ");
+  const slugTown = decodeURIComponent(params.slug).replace(/-/g, " ");
   const towns = await fetchTowns();
-  const { history, latestPrices } = await fetchTownData(town);
+  const { history, latestPrices } = await fetchTownData(slugTown);
   const latest = latestPrices[0] ?? null;
+  const town = latest?.town ?? towns.find((t) => t.toLowerCase() === slugTown.toLowerCase()) ?? slugTown;
   const previous = history.length > 1 ? history[1] : null;
   const petrolDelta = latest
     ? Number(
@@ -225,9 +228,17 @@ export default async function TownPage({ params }: Props) {
                 {town} Fuel Prices
               </h1>
             </div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-black/[0.08] dark:border-white/[0.07] bg-stone-50 dark:bg-white/[0.03] px-4 py-2 text-sm text-stone-600 dark:text-stone-400">
-              Latest EPRA cycle data
-            </span>
+            <div className="flex items-center gap-2">
+              <Link
+                href="/towns"
+                className="inline-flex items-center gap-2 rounded-full border border-black/[0.08] dark:border-white/[0.07] bg-stone-50 dark:bg-white/[0.03] px-4 py-2 text-sm text-stone-600 dark:text-stone-400 transition-colors hover:text-stone-900 dark:hover:text-stone-100"
+              >
+                All towns
+              </Link>
+              <span className="inline-flex items-center gap-2 rounded-full border border-black/[0.08] dark:border-white/[0.07] bg-stone-50 dark:bg-white/[0.03] px-4 py-2 text-sm text-stone-600 dark:text-stone-400">
+                Latest EPRA cycle data
+              </span>
+            </div>
           </div>
         </div>
 
