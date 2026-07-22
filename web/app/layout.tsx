@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -93,13 +94,21 @@ export const metadata: Metadata = {
     icon: [
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
-      { url: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" },
+      {
+        url: "/android-chrome-192x192.png",
+        sizes: "192x192",
+        type: "image/png"
+      },
+      {
+        url: "/android-chrome-512x512.png",
+        sizes: "512x512",
+        type: "image/png"
+      }
     ],
     apple: "/apple-touch-icon.png",
-    shortcut: "/favicon.ico",
+    shortcut: "/favicon.ico"
   },
-  manifest: "/site.webmanifest",
+  manifest: "/site.webmanifest"
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -113,7 +122,17 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           }}
         />
       </head>
-      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased`}>{children}</body>
+      <body
+        className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased`}
+      >
+        {children}
+        <Script
+          defer
+          data-site-id="31d533da77de"
+          src="https://silo.wordweav.com/monitor.js"
+          strategy="afterInteractive"
+        />
+      </body>
     </html>
   );
 }
