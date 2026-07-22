@@ -509,6 +509,12 @@ export default async function Page({ searchParams }: Props) {
             of Kenya. Maximum pump prices are set monthly on the 14th.
           </p>
           <div className="flex items-center gap-4 text-xs text-stone-500 dark:text-stone-600">
+            <Link
+              href="/towns"
+              className="transition-colors hover:text-stone-700 dark:hover:text-stone-400"
+            >
+              All Towns
+            </Link>
             <a
               href="https://docs.fuelkenya.com"
               target="_blank"
