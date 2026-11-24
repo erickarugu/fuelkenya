@@ -47,7 +47,7 @@ A single-element array containing the price record for the requested town:
 
 ### 200 OK - without town filter
 
-An array of records for every town in the latest cycle (224+ records):
+An array with one record for every town in the latest cycle (about 230 records):
 
 ```json
 [
@@ -131,7 +131,7 @@ console.log("Cheapest petrol:", ranking[0]);
 Responses carry:
 
 ```
-Cache-Control: public, max-age=86400, s-maxage=604800
+Cache-Control: public, max-age=300, s-maxage=600, stale-while-revalidate=3600
 ```
 
-The server-side in-memory cache is invalidated automatically when a new CSV is ingested. Edge caches (CDN, reverse proxy) may serve stale data for up to 7 days; this is acceptable given that prices only change monthly.
+The server-side in-memory cache is invalidated automatically when a new CSV is ingested. Edge caches keep a response for up to 10 minutes, then refresh it in the background, so new prices published on the 14th reach clients within about 10 minutes of ingestion.

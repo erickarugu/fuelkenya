@@ -99,7 +99,7 @@ curl "https://api.fuelkenya.com/v1/prices?town=Mombasa&start_date=2025-01-01&end
 ## Cache behaviour
 
 ```
-Cache-Control: public, max-age=86400, s-maxage=604800
+Cache-Control: public, max-age=300, s-maxage=600, stale-while-revalidate=3600
 ```
 
-Historical prices never change once published by EPRA. Responses are safe to cache for the full 7-day `s-maxage` period.
+Historical prices never change once published by EPRA, so your own application can cache older cycles indefinitely. The short edge cache exists so that queries which include the current cycle pick up a new cycle within about 10 minutes of it being published.

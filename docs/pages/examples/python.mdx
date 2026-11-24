@@ -125,7 +125,7 @@ with FuelKenyaClient() as client:
 
 ```python
 with FuelKenyaClient() as client:
-    all_prices = client.latest_prices()   # all 224+ towns
+    all_prices = client.latest_prices()   # every town
 
 all_prices.sort(key=lambda p: p.super_petrol)
 cheapest = all_prices[0]

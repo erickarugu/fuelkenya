@@ -7,7 +7,7 @@ export const contentType = "image/png";
 
 export default async function OpenGraphImage() {
   const fontData = await fetch(
-    new URL("./fonts/Inter-Bold.otf", import.meta.url)
+    new URL("./fonts/Inter-Bold.woff", import.meta.url)
   ).then((r) => r.arrayBuffer());
 
   return new ImageResponse(
@@ -25,14 +25,17 @@ export default async function OpenGraphImage() {
     >
       {/* Top: brand + live badge */}
       <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+        {/* Satori requires display: flex on any div with more than one child. */}
         <div
           style={{
+            display: "flex",
             fontSize: "28px",
             fontWeight: 700,
             color: "#ffffff",
           }}
         >
-          <span style={{ color: "#34d399" }}>Fuel</span>Kenya
+          <span style={{ color: "#34d399" }}>Fuel</span>
+          <span>Kenya</span>
         </div>
         <div
           style={{

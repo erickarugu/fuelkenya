@@ -1,22 +1,36 @@
 import { MetadataRoute } from "next";
+import { slugifyTown } from "@/lib/api";
+
+const baseUrl = "https://fuelkenya.com";
+const apiBase =
+  process.env.NEXT_PUBLIC_FUELKENYA_API_URL ?? "https://api.fuelkenya.com/v1";
+
+async function getJson<T>(path: string): Promise<T | null> {
+  try {
+    const res = await fetch(`${apiBase}${path}`, { next: { revalidate: 3600 } });
+    if (!res.ok) return null;
+    return (await res.json()) as T;
+  } catch (error) {
+    console.error(`Failed to fetch ${path} for sitemap`, error);
+    return null;
+  }
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://fuelkenya.com";
-  const apiBase = process.env.NEXT_PUBLIC_FUELKENYA_API_URL ?? "https://api.fuelkenya.com/v1";
+  const [towns, newest] = await Promise.all([
+    getJson<string[]>("/towns"),
+    getJson<{ valid_from: string }[]>("/prices?limit=1")
+  ]);
 
-  let towns: string[] = [];
-  try {
-    const res = await fetch(`${apiBase}/towns`, {
-      next: { revalidate: 86400 }
-    });
-    towns = await res.json();
-  } catch (error) {
-    console.error("Failed to fetch towns for sitemap", error);
-  }
+  // Pages only change when EPRA publishes a new cycle. Using the cycle start
+  // date (instead of "now" on every build) keeps lastmod a signal Google trusts.
+  const lastModified = newest?.[0]?.valid_from
+    ? new Date(`${newest[0].valid_from}T00:00:00+03:00`)
+    : undefined;
 
-  const townUrls = towns.map((town: string) => ({
-    url: `${baseUrl}/town/${town.toLowerCase().replace(/\s+/g, "-")}`,
-    lastModified: new Date(),
+  const townUrls = (towns ?? []).map((town) => ({
+    url: `${baseUrl}/town/${slugifyTown(town)}`,
+    lastModified,
     changeFrequency: "monthly" as const,
     priority: 0.8
   }));
@@ -24,13 +38,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     {
       url: baseUrl,
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: "monthly" as const,
       priority: 1.0
     },
     {
       url: `${baseUrl}/towns`,
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.9
     },

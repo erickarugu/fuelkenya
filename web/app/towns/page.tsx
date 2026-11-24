@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { fetchTowns } from "@/lib/api";
+import { fetchTowns, slugifyTown } from "@/lib/api";
 
 export const revalidate = 86400;
 
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   }
 };
 
-const slugifyTown = (town: string) => town.toLowerCase().replace(/\s+/g, "-");
+
 
 export default async function TownsIndexPage() {
   const towns = await fetchTowns();

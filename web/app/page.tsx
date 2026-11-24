@@ -11,9 +11,13 @@ import InfoCards from "@/components/InfoCards";
 import AnimatedTownSection from "@/components/AnimatedTownSection";
 import HeroVisual from "@/components/HeroVisual";
 import ThemeToggle from "@/components/ThemeToggle";
+import TownLinks from "@/components/TownLinks";
 import { fetchHistory, fetchLatestPrices, fetchTowns } from "@/lib/api";
+import { describeChange, formatDayMonth, formatMonthYear } from "@/lib/cycle";
 
-export const dynamic = "force-dynamic";
+// No `dynamic = "force-dynamic"`: reading searchParams already renders this
+// page per request, and force-dynamic would also bypass the data cache that
+// lib/api relies on, sending ~5 uncached API calls per page view.
 
 const currentYear = new Date().getFullYear();
 
@@ -41,7 +45,7 @@ const FAQ_ITEMS = [
   {
     question: "What is the cheapest town for fuel in Kenya?",
     answer:
-      "Mombasa consistently has the lowest fuel prices in Kenya because it is the entry point for petroleum products imported through the port. Prices rise with distance from Mombasa along the pipeline and road network."
+      "[CheapestAnswer] Coastal towns near Mombasa port pay the least because petroleum products are imported through the port, and prices rise with distance along the pipeline and road network."
   },
   {
     question: "When will EPRA announce the next fuel prices in Kenya?",
@@ -57,11 +61,18 @@ const FAQ_ITEMS = [
 
 function buildFAQ(
   town: string,
-  current: { super_petrol: number; diesel: number; kerosene: number } | null
+  current: { super_petrol: number; diesel: number; kerosene: number } | null,
+  cheapest: { town: string; super_petrol: number } | null
 ) {
+  // The cheapest town changes between cycles (Kaloleni, not Mombasa, in
+  // Nov 2026), so state this cycle's answer from live data.
+  const cheapestAnswer = cheapest
+    ? `This cycle the cheapest town for petrol is ${cheapest.town}, at KSh ${cheapest.super_petrol.toFixed(2)} per litre.`
+    : "";
   return FAQ_ITEMS.map((item) => {
     const question = item.question.replace(/\[TownName\]/g, town);
     const answer = item.answer
+      .replace(/\[CheapestAnswer\] ?/g, cheapestAnswer ? `${cheapestAnswer} ` : "")
       .replace(/\[TownName\]/g, town)
       .replace(/\[SuperPrice\]/g, current ? current.super_petrol.toFixed(2) : "—")
       .replace(/\[DieselPrice\]/g, current ? current.diesel.toFixed(2) : "—")
@@ -94,14 +105,25 @@ interface Props {
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const town = searchParams?.town ? String(searchParams.town) : "Nairobi";
-  const latestPrices = await fetchLatestPrices(town);
-  const current = latestPrices[0];
-  const priceLine = current ? `KSh ${current.super_petrol.toFixed(2)}/Litre` : `${currentYear} Rates`;
+  const [allLatest, history] = await Promise.all([
+    fetchLatestPrices(),
+    fetchHistory(town)
+  ]);
+  const current =
+    allLatest.find((r) => r.town.toLowerCase() === town.toLowerCase()) ?? null;
+  const previous = current && history.length > 1 ? history[1] : null;
+  const townCount = allLatest.length;
+  const cycleMonth = current ? formatMonthYear(current.valid_from) : String(currentYear);
 
-  const title = `Petrol Price in Kenya Today: ${priceLine} | EPRA ${currentYear}`;
+  // Keep the price out of the title and lead the description with what
+  // changed and what the page adds. When the snippet listed every price,
+  // searchers got their answer on Google and CTR sat at 0.2%.
+  const title = `Petrol Price in Kenya Today: ${townCount || "All"} Towns Compared | EPRA ${cycleMonth}`;
   const description = current
-    ? `Kenya petrol price today is KSh ${current.super_petrol.toFixed(2)} per litre in ${town} (Diesel KSh ${current.diesel.toFixed(2)}, Kerosene KSh ${current.kerosene.toFixed(2)}). Official EPRA maximum pump prices across all 224 towns in Kenya, updated every pricing cycle.`
-    : `Kenya petrol price today per litre: official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across all towns in Kenya. Updated every cycle on the 14th.`;
+    ? `${current.town} petrol is ${describeChange(current.super_petrol, previous?.super_petrol ?? null)} ` +
+      `until ${formatDayMonth(current.valid_to)}. Compare all ${townCount} towns, find the cheapest, ` +
+      `see price history and work out what your trip will cost.`
+    : `Official EPRA maximum pump prices for Super Petrol, Diesel and Kerosene in every town in Kenya. Compare towns, see price history and work out your trip cost.`;
 
   return {
     title,
@@ -188,9 +210,9 @@ function SectionHeader({ label, sub }: { label: string; sub?: string }) {
   return (
     <div className="mb-4">
       <div className="flex items-center gap-3">
-        <span className="text-xs font-semibold uppercase tracking-widest text-stone-600 dark:text-stone-400">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-stone-600 dark:text-stone-400">
           {label}
-        </span>
+        </h2>
         {sub && (
           <>
             <span className="text-stone-300 dark:text-stone-700">·</span>
@@ -259,7 +281,12 @@ export default async function Page({ searchParams }: Props) {
       kerosene: r.kerosene.toFixed(2)
     }));
 
-  const faqItems = buildFAQ(town, latest);
+  const cheapest =
+    allLatestPrices.reduce<(typeof allLatestPrices)[number] | null>(
+      (best, r) => (best === null || r.super_petrol < best.super_petrol ? r : best),
+      null
+    );
+  const faqItems = buildFAQ(town, latest, cheapest);
 
   return (
     <div className="relative min-h-screen page-bg grid-bg">
@@ -372,7 +399,7 @@ export default async function Page({ searchParams }: Props) {
               </div>
 
               <h1 className="mb-4 font-display text-5xl font-bold leading-[1.08] tracking-tight text-stone-900 dark:text-white sm:text-6xl">
-                Kenya Petrol Price
+                Kenya Petrol Price{" "}
                 <br />
                 <span className="font-light text-stone-500 dark:text-stone-400">Today Per Litre</span>
               </h1>
@@ -473,6 +500,12 @@ export default async function Page({ searchParams }: Props) {
         <div className="mb-14 fade-up delay-5">
           <SectionHeader label="About fuel pricing in Kenya" />
           <InfoCards />
+        </div>
+
+        {/* ── Town pages ─────────────────────────────────────────────────────── */}
+        <div className="mb-14 fade-up delay-5">
+          <SectionHeader label="Fuel prices by town" />
+          <TownLinks towns={towns} />
         </div>
 
         {/* ── FAQ ────────────────────────────────────────────────────────────── */}

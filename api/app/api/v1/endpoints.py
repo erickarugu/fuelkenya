@@ -25,7 +25,12 @@ from app.db import build_upsert_statement, fuel_prices, get_db
 from app.schemas import FuelPriceOut, IngestResponse
 
 router = APIRouter()
-CACHE_CONTROL = "public, max-age=86400, s-maxage=604800"
+# Prices change once a month, but on review day (the 14th) new prices must
+# reach users within minutes. Vercel's edge honours s-maxage and strips it from
+# the response; the old 7-day s-maxage could serve last month's prices for a
+# week after an ingest. stale-while-revalidate keeps the edge absorbing traffic
+# while it refreshes in the background.
+CACHE_CONTROL = "public, max-age=300, s-maxage=600, stale-while-revalidate=3600"
 
 EXPECTED_COLUMNS = {
     "valid_from",
