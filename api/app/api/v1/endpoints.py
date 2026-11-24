@@ -114,8 +114,13 @@ async def verify_ingest_token(
     authorization: Optional[str] = Header(None),
     settings: Settings = Depends(get_settings),
 ) -> None:
+    # Fail closed: with no token configured the endpoint used to accept
+    # uploads from anyone, letting the public overwrite official prices.
     if not settings.ingest_token:
-        return
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Ingestion is disabled until INGEST_TOKEN is configured.",
+        )
 
     expected = f"Bearer {settings.ingest_token}"
     if authorization != expected:
