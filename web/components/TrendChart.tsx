@@ -19,6 +19,30 @@ ChartJS.register(LinearScale, PointElement, LineElement, Filler, Tooltip, Legend
 const GAP_DAYS = 45;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
+/** Tick positions on calendar boundaries: 1 Jan for multi-year spans, else the 1st of every Nth month. */
+function calendarTicks(min: number, max: number, spanMs: number): number[] {
+  const ticks: number[] = [];
+  const start = new Date(min);
+  if (spanMs > 2 * 365 * DAY_MS) {
+    const years = Math.ceil(spanMs / (365 * DAY_MS));
+    const step = Math.max(1, Math.ceil(years / 8));
+    for (let y = start.getUTCFullYear() + 1; ; y += step) {
+      const t = Date.UTC(y, 0, 1);
+      if (t > max) break;
+      ticks.push(t);
+    }
+  } else {
+    const months = Math.max(1, Math.round(spanMs / (30 * DAY_MS)));
+    const step = Math.max(1, Math.ceil(months / 8));
+    for (let m = start.getUTCMonth() + 1, y = start.getUTCFullYear(); ; m += step) {
+      const t = Date.UTC(y, m, 1);
+      if (t > max) break;
+      if (t >= min) ticks.push(t);
+    }
+  }
+  return ticks;
+}
+
 const fmtTick = (ms: number, spanMs: number) =>
   new Date(ms).toLocaleDateString("en-GB",
     spanMs > 2 * 365 * DAY_MS ? { year: "numeric" } : { month: "short", year: "2-digit" });
@@ -108,6 +132,9 @@ export default function TrendChart({ history }: TrendChartProps) {
     return out;
   }, [filtered]);
 
+  // A cycle with a gap on both sides has no line segment to draw, so give it a dot.
+  const isolated = points.map((p, i) => !!p.rec && !points[i - 1]?.rec && !points[i + 1]?.rec);
+
   const xMin = points[0]?.x ?? 0;
   const xMax = points[points.length - 1]?.x ?? 0;
   const spanMs = xMax - xMin;
@@ -122,7 +149,9 @@ export default function TrendChart({ history }: TrendChartProps) {
     borderWidth:               hidden.has(s.key) ? 0 : 2,
     fill:                      true,
     tension:                   0.38,
-    pointRadius:               0,
+    pointRadius:               points.map((_, i) => (isolated[i] && !hidden.has(s.key) ? 2.5 : 0)),
+    pointBackgroundColor:      s.color,
+    pointBorderWidth:          0,
     pointHoverRadius:          hidden.has(s.key) ? 0 : 5,
     pointHoverBackgroundColor: s.color,
     pointHoverBorderColor:     isDark ? "#080808" : "#ffffff",
@@ -195,8 +224,11 @@ export default function TrendChart({ history }: TrendChartProps) {
         grid:   { display: false },
         border: { display: false },
         ticks:  {
-          color: "#78716c", font: { size: 11 }, maxRotation: 0, maxTicksLimit: 8,
+          color: "#78716c", font: { size: 11 }, maxRotation: 0,
           callback: (v: any) => fmtTick(Number(v), spanMs),
+        },
+        afterBuildTicks: (axis: any) => {
+          axis.ticks = calendarTicks(xMin, xMax, spanMs).map(value => ({ value }));
         },
       },
       y: {
