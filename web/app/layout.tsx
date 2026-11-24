@@ -129,7 +129,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Script
           defer
           data-site-id="31d533da77de"
-          src="https://silo.wordweav.com/monitor.js"
+          src="https://silo.hubpane.com/monitor.js"
           strategy="afterInteractive"
         />
       </body>
