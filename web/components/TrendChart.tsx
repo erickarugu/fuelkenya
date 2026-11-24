@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   Chart as ChartJS,
-  CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
@@ -14,7 +13,15 @@ import {
 import { Line } from "react-chartjs-2";
 import type { PriceRecord } from "@/lib/api";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
+ChartJS.register(LinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
+
+/** Cycles are monthly; anything wider than this between two cycles is missing data. */
+const GAP_DAYS = 45;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+const fmtTick = (ms: number, spanMs: number) =>
+  new Date(ms).toLocaleDateString("en-GB",
+    spanMs > 2 * 365 * DAY_MS ? { year: "numeric" } : { month: "short", year: "2-digit" });
 
 interface TrendChartProps {
   history: PriceRecord[];
@@ -69,22 +76,45 @@ export default function TrendChart({ history }: TrendChartProps) {
       return next;
     });
 
+  // Callers pass history in either order; the chart always runs oldest -> newest.
+  const sorted = useMemo(
+    () => [...history].sort((a, b) => a.valid_from.localeCompare(b.valid_from)),
+    [history],
+  );
+
   const filtered = useMemo(() => {
     const dur = DURATIONS.find(d => d.label === duration);
-    if (!dur?.months) return history;
+    if (!dur?.months) return sorted;
     const cutoff = new Date();
     cutoff.setMonth(cutoff.getMonth() - dur.months);
-    const f = history.filter(h => new Date(h.valid_from) >= cutoff);
-    return f.length > 0 ? f : history;
-  }, [history, duration]);
+    const f = sorted.filter(h => new Date(h.valid_from) >= cutoff);
+    return f.length > 0 ? f : sorted;
+  }, [sorted, duration]);
 
-  const labels = filtered.map(item =>
-    new Date(item.valid_from).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "2-digit" })
-  );
+  // Plot on a real time axis (ms since epoch) so missing cycles show as a
+  // break in the line instead of distant years sitting side by side. A null
+  // point is inserted inside every gap; spanGaps:false then breaks the line.
+  const points = useMemo(() => {
+    const out: { x: number; rec: PriceRecord | null }[] = [];
+    filtered.forEach((rec, i) => {
+      const x = Date.parse(rec.valid_from);
+      const prev = filtered[i - 1];
+      if (prev) {
+        const px = Date.parse(prev.valid_from);
+        if (x - px > GAP_DAYS * DAY_MS) out.push({ x: (px + x) / 2, rec: null });
+      }
+      out.push({ x, rec });
+    });
+    return out;
+  }, [filtered]);
+
+  const xMin = points[0]?.x ?? 0;
+  const xMax = points[points.length - 1]?.x ?? 0;
+  const spanMs = xMax - xMin;
 
   const datasets = SERIES.map(s => ({
     label:                     s.label,
-    data:                      hidden.has(s.key) ? filtered.map(() => null) : filtered.map(h => h[s.key]),
+    data:                      points.map(p => ({ x: p.x, y: hidden.has(s.key) || !p.rec ? null : p.rec[s.key] })),
     borderColor:               hidden.has(s.key) ? "transparent" : s.color,
     backgroundColor:           hidden.has(s.key)
                                  ? () => "transparent"
@@ -97,7 +127,7 @@ export default function TrendChart({ history }: TrendChartProps) {
     pointHoverBackgroundColor: s.color,
     pointHoverBorderColor:     isDark ? "#080808" : "#ffffff",
     pointHoverBorderWidth:     2,
-    spanGaps:                  true,
+    spanGaps:                  false,
   }));
 
   const latest = filtered[filtered.length - 1];
@@ -141,7 +171,10 @@ export default function TrendChart({ history }: TrendChartProps) {
         bodyFont:        { size: 12, family: "Inter, sans-serif", weight: "bold" as const },
         itemSort:        (a: any, b: any) => b.parsed.y - a.parsed.y,
         callbacks: {
-          title:      (items: any[]) => items[0]?.label ?? "",
+          title:      (items: any[]) => {
+            const ms = items[0]?.parsed?.x;
+            return ms ? new Date(ms).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "";
+          },
           label:      (ctx: any) => {
             if (ctx.parsed.y === null) return undefined;
             return `  ${ctx.dataset.label}  ·  KSh ${ctx.parsed.y.toFixed(2)}`;
@@ -156,9 +189,15 @@ export default function TrendChart({ history }: TrendChartProps) {
     },
     scales: {
       x: {
+        type:   "linear" as const,
+        min:    xMin,
+        max:    xMax,
         grid:   { display: false },
         border: { display: false },
-        ticks:  { color: "#78716c", font: { size: 11 }, maxRotation: 0, maxTicksLimit: 8 },
+        ticks:  {
+          color: "#78716c", font: { size: 11 }, maxRotation: 0, maxTicksLimit: 8,
+          callback: (v: any) => fmtTick(Number(v), spanMs),
+        },
       },
       y: {
         grid:   { color: isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.04)", drawTicks: false },
@@ -167,7 +206,7 @@ export default function TrendChart({ history }: TrendChartProps) {
       },
     },
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [isDark]);
+  }), [isDark, xMin, xMax, spanMs]);
 
   const pillBg    = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.07)";
   const pillText  = isDark ? "#e7e5e4" : "#111827";
@@ -306,7 +345,7 @@ export default function TrendChart({ history }: TrendChartProps) {
 
       {/* ── chart ── */}
       <div className="h-[260px] px-3 py-4 sm:h-[360px] sm:px-4 lg:h-[440px]">
-        <Line data={{ labels, datasets }} options={options} />
+        <Line data={{ datasets }} options={options} />
       </div>
     </div>
   );

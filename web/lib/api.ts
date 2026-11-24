@@ -55,9 +55,10 @@ export async function fetchLatestPrices(town?: string) {
   return all.filter((row) => row.town.toLowerCase() === key);
 }
 
+/** Every cycle on record for a town, newest first (callers rely on that order). */
 export async function fetchHistory(town: string) {
   return apiFetch<PriceRecord[]>(
-    `/prices?town=${encodeURIComponent(town)}&limit=12&offset=0`
+    `/prices?town=${encodeURIComponent(town)}&limit=1000&offset=0`
   );
 }
 
