@@ -29,6 +29,11 @@ engine = create_async_engine(
     settings.database_url,
     future=True,
     echo=False,
+    # Neon closes idle connections; without a pre-ping the first request after
+    # a quiet spell reused a dead pooled connection and failed with
+    # "connection is closed" (HTTP 500). Recycle well before Neon's idle cutoff.
+    pool_pre_ping=True,
+    pool_recycle=300,
 )
 async_session = async_sessionmaker(engine, expire_on_commit=False)
 metadata = MetaData()
