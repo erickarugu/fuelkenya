@@ -8,7 +8,7 @@ Live EPRA maximum pump fuel prices across all towns in Kenya — updated every p
 
 ## What this is
 
-FuelKenya is an open-source tracker for official fuel prices published by Kenya's [Energy & Petroleum Regulatory Authority (EPRA)](https://www.epra.go.ke). Prices are set monthly (cycles run from the 15th of each month to the 14th of the next) and cover Super Petrol, Diesel, and Kerosene across 224+ towns.
+FuelKenya is an open-source tracker for official fuel prices published by Kenya's [Energy & Petroleum Regulatory Authority (EPRA)](https://www.epra.go.ke). Prices are set monthly (cycles run from the 15th of each month to the 14th of the next) and cover Super Petrol, Diesel, and Kerosene across 230 towns.
 
 The project has three parts:
 
@@ -104,7 +104,8 @@ Docs at `http://localhost:3001`.
 | Variable | Required | Default | Description |
 |---|---|---|---|
 | `DATABASE_URL` | Yes | — | PostgreSQL connection string (`postgresql+asyncpg://user:pass@host:5432/db`) |
-| `INGEST_TOKEN` | Yes | — | Bearer token for `POST /v1/ingest/csv` |
+| `INGEST_TOKEN` | Yes | — | Bearer token for `POST /v1/ingest/csv`. Ingestion is refused while it is unset |
+| `TRUSTED_CLIENT_TOKEN` | Recommended | — | Shared secret that lets the web app's server renders skip the per-IP rate limit. Set the same value as `FUELKENYA_API_TOKEN` on the web app |
 | `LOG_LEVEL` | No | `INFO` | Logging level |
 | `SQL_ECHO` | No | `true` | Log SQL queries (set `false` in production) |
 
@@ -113,6 +114,7 @@ Docs at `http://localhost:3001`.
 | Variable | Required | Default | Description |
 |---|---|---|---|
 | `NEXT_PUBLIC_FUELKENYA_API_URL` | No | `http://localhost:8000/v1` | API base URL |
+| `FUELKENYA_API_TOKEN` | Recommended | — | Server-only. Sent as `X-FuelKenya-Client-Token` so page renders aren't rate limited. Must match the API's `TRUSTED_CLIENT_TOKEN` |
 
 ---
 

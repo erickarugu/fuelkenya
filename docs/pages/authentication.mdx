@@ -31,9 +31,10 @@ curl -X POST https://api.fuelkenya.com/v1/ingest/csv \
 |---|---|---|
 | Missing `Authorization` header | `401` | `"Invalid authorization token for ingestion endpoint."` |
 | Wrong token value | `401` | `"Invalid authorization token for ingestion endpoint."` |
+| `INGEST_TOKEN` not configured on the server | `503` | `"Ingestion is disabled until INGEST_TOKEN is configured."` |
 
 <Callout type="warning">
-  The ingest token is set via the `INGEST_TOKEN` environment variable on the API server. If `INGEST_TOKEN` is not set, the ingest endpoint accepts all requests without checking the header. This is intended for local development only - always set a token in production.
+  The ingest token is set via the `INGEST_TOKEN` environment variable on the API server. If `INGEST_TOKEN` is not set, the ingest endpoint refuses every upload with `503`, so a missing setting can never open the endpoint to the public. Set a token locally too if you want to test ingestion.
 </Callout>
 
 ## CORS

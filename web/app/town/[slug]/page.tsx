@@ -1,10 +1,24 @@
 import dynamic from "next/dynamic";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import SearchBar from "@/components/SearchBar";
 import PriceCard from "@/components/PriceCard";
 import RegionVariance from "@/components/RegionVariance";
-import { fetchHistory, fetchLatestPrices, fetchTowns } from "@/lib/api";
+import TownLinks from "@/components/TownLinks";
+import {
+  fetchHistory,
+  fetchLatestPrices,
+  fetchTowns,
+  slugifyTown,
+  type PriceRecord
+} from "@/lib/api";
+import {
+  describeChange,
+  formatCycle,
+  formatDayMonth,
+  formatMonthYear
+} from "@/lib/cycle";
 
 const TrendChart = dynamic(() => import("@/components/TrendChart"), {
   ssr: false,
@@ -19,9 +33,56 @@ interface Props {
   params: { slug: string };
 }
 
-const slugifyTown = (town: string) => town.toLowerCase().replace(/\s+/g, "-");
 const townFromSlug = (slug: string) =>
   decodeURIComponent(slug).replace(/-/g, " ");
+
+// Towns prerendered at build time. The rest render on first visit and are then
+// cached (ISR). Prerendering all 230 would fire ~460 API calls during the
+// build and trip the API's per-IP rate limit.
+const PRERENDERED_TOWNS = [
+  "Nairobi",
+  "Mombasa",
+  "Kisumu",
+  "Nakuru",
+  "Eldoret",
+  "Thika",
+  "Machakos",
+  "Nyeri",
+  "Meru",
+  "Kakamega"
+];
+
+/** Resolve a URL slug to the canonical town name, or null if unknown. */
+function resolveTown(slug: string, towns: string[]) {
+  const wanted = townFromSlug(slug).toLowerCase();
+  return towns.find((t) => t.toLowerCase() === wanted) ?? null;
+}
+
+interface TownPrices {
+  /** Price for the current cycle, or null if EPRA left this town out. */
+  latest: PriceRecord | null;
+  /** What to show: the current price, or the last one EPRA published. */
+  shown: PriceRecord | null;
+  previous: PriceRecord | null;
+  history: PriceRecord[];
+  currentCycle: PriceRecord | null;
+}
+
+async function fetchTownPrices(town: string): Promise<TownPrices> {
+  const [history, allLatest] = await Promise.all([
+    fetchHistory(town),
+    fetchLatestPrices()
+  ]);
+  const latest =
+    allLatest.find((r) => r.town.toLowerCase() === town.toLowerCase()) ?? null;
+  return {
+    latest,
+    shown: latest ?? history[0] ?? null,
+    previous: latest && history.length > 1 ? history[1] : null,
+    history,
+    currentCycle: allLatest[0] ?? null
+  };
+}
 
 const FAQ_ITEMS = [
   {
@@ -58,37 +119,47 @@ const FAQ_ITEMS = [
   }
 ];
 
-export const revalidate = 3600;
-
-async function fetchTownData(town: string) {
-  const [history, latestPrices] = await Promise.all([
-    fetchHistory(town),
-    fetchLatestPrices(town)
-  ]);
-  return { history, latestPrices };
-}
+// Matches the API's own edge cache window, so review-day prices show up
+// within minutes without re-rendering on every visit.
+export const revalidate = 300;
 
 export async function generateStaticParams() {
-  try {
-    const towns = await fetchTowns();
-    return towns.map((town) => ({ slug: slugifyTown(town) }));
-  } catch {
-    return [];
-  }
+  return PRERENDERED_TOWNS.map((town) => ({ slug: slugifyTown(town) }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const slugTown = townFromSlug(params.slug);
-  const latestPrices = await fetchLatestPrices(slugTown);
-  const current = latestPrices[0];
-  const town = current?.town ?? slugTown;
+  const towns = await fetchTowns();
+  const town = resolveTown(params.slug, towns);
+  // Calling notFound() here, before streaming starts, is what makes the
+  // response a real 404. From the page body alone, the root loading.tsx has
+  // already sent a 200, which Google treats as a soft 404.
+  if (!town) notFound();
+
+  const { latest, shown, previous, currentCycle } = await fetchTownPrices(town);
+  const cycleMonth = currentCycle
+    ? formatMonthYear(currentCycle.valid_from)
+    : String(new Date().getFullYear());
+  const title = `${town} Fuel Prices Today: Petrol & Diesel | EPRA ${cycleMonth}`;
+
+  // Lead with what changed and what else the page offers. Listing all three
+  // prices in the snippet answered the search on Google, so nobody clicked.
+  let description: string;
+  if (latest) {
+    description =
+      `Petrol in ${town} is ${describeChange(latest.super_petrol, previous?.super_petrol ?? null)} ` +
+      `per litre until ${formatDayMonth(latest.valid_to)}. See diesel and kerosene, ` +
+      `how ${town} compares with the cheapest town, and a year of price history.`;
+  } else if (shown) {
+    description =
+      `EPRA did not list ${town} in the current pricing cycle. See the last published ` +
+      `${town} fuel prices (${formatCycle(shown.valid_from, shown.valid_to)}) and prices in nearby towns.`;
+  } else {
+    description = `EPRA maximum pump prices for Super Petrol, Diesel and Kerosene in ${town}, Kenya, updated every pricing cycle.`;
+  }
   const year = new Date().getFullYear();
-  const title = `${town} Fuel Prices Today ${year} | EPRA Petrol & Diesel Price`;
-  const description = current
-    ? `EPRA fuel prices in ${town} ${year}: Super Petrol KSh ${current.super_petrol.toFixed(2)}/L, Diesel KSh ${current.diesel.toFixed(2)}/L, Kerosene KSh ${current.kerosene.toFixed(2)}/L. Updated monthly.`
-    : `Check the latest EPRA fuel prices for ${town}, Kenya ${year}: Super Petrol, Diesel, and Kerosene updated every pricing cycle.`;
-  const canonicalUrl = `https://fuelkenya.com/town/${params.slug}`;
-  const ogImageUrl = `https://fuelkenya.com/town/${encodeURIComponent(params.slug)}/opengraph-image`;
+  const slug = slugifyTown(town);
+  const canonicalUrl = `https://fuelkenya.com/town/${slug}`;
+  const ogImageUrl = `https://fuelkenya.com/town/${encodeURIComponent(slug)}/opengraph-image`;
 
   return {
     title,
@@ -156,35 +227,45 @@ function buildFAQ(
 }
 
 export default async function TownPage({ params }: Props) {
-  const slugTown = decodeURIComponent(params.slug).replace(/-/g, " ");
   const towns = await fetchTowns();
-  const { history, latestPrices } = await fetchTownData(slugTown);
-  const latest = latestPrices[0] ?? null;
-  const town = latest?.town ?? towns.find((t) => t.toLowerCase() === slugTown.toLowerCase()) ?? slugTown;
-  const previous = history.length > 1 ? history[1] : null;
-  const petrolDelta = latest
-    ? Number(
-        (
-          latest.super_petrol - (previous?.super_petrol ?? latest.super_petrol)
-        ).toFixed(2)
-      )
-    : null;
-  const dieselDelta = latest
-    ? Number((latest.diesel - (previous?.diesel ?? latest.diesel)).toFixed(2))
-    : null;
-  const keroseneDelta = latest
-    ? Number(
-        (latest.kerosene - (previous?.kerosene ?? latest.kerosene)).toFixed(2)
-      )
-    : null;
+  const town = resolveTown(params.slug, towns);
+  if (!town) notFound();
+
+  const [{ latest, shown, previous, history }, allLatest] = await Promise.all([
+    fetchTownPrices(town),
+    fetchLatestPrices()
+  ]);
+  const delta = (pick: (r: PriceRecord) => number) =>
+    latest && previous ? Number((pick(latest) - pick(previous)).toFixed(2)) : null;
+  const petrolDelta = delta((r) => r.super_petrol);
+  const dieselDelta = delta((r) => r.diesel);
+  const keroseneDelta = delta((r) => r.kerosene);
+  // Only state a "current price" in the FAQ when this cycle has one.
   const faqItems = buildFAQ(town, latest);
+
+  // Live comparison: cheapest and dearest towns this cycle, Nairobi as the
+  // reference most people know, and this town.
+  const byPetrol = [...allLatest].sort((a, b) => a.super_petrol - b.super_petrol);
+  const comparisonNames = new Set(
+    [byPetrol[0]?.town, byPetrol[byPetrol.length - 1]?.town, "Nairobi", latest?.town].filter(
+      (t): t is string => Boolean(t)
+    )
+  );
+  const comparison = allLatest
+    .filter((r) => comparisonNames.has(r.town))
+    .map((r) => ({
+      name: r.town,
+      super_petrol: r.super_petrol,
+      diesel: r.diesel,
+      kerosene: r.kerosene
+    }));
 
   const jsonLd = [
     {
       "@context": "https://schema.org",
       "@type": "WebPage",
       name: `${town} Fuel Prices Today`,
-      url: `https://fuelkenya.com/town/${params.slug}`,
+      url: `https://fuelkenya.com/town/${slugifyTown(town)}`,
       description: `Official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene in ${town}, Kenya.`,
       breadcrumb: {
         "@type": "BreadcrumbList",
@@ -199,7 +280,7 @@ export default async function TownPage({ params }: Props) {
             "@type": "ListItem",
             position: 2,
             name: `${town} Fuel Prices`,
-            item: `https://fuelkenya.com/town/${params.slug}`
+            item: `https://fuelkenya.com/town/${slugifyTown(town)}`
           }
         ]
       }
@@ -247,16 +328,16 @@ export default async function TownPage({ params }: Props) {
             <SearchBar activeTown={town} towns={towns} />
           </div>
           <div className="rounded-xl border border-black/[0.08] dark:border-white/[0.07] bg-white dark:bg-white/[0.025] p-6">
-            <div className="text-sm uppercase tracking-[0.3em] text-stone-500">
+            <h2 className="text-sm font-normal uppercase tracking-[0.3em] text-stone-500">
               Town snapshot
-            </div>
+            </h2>
             <div className="mt-6 space-y-4 text-sm text-stone-600 dark:text-stone-400">
               <div>
                 <div className="font-semibold text-stone-900 dark:text-stone-100">
-                  Current cycle
+                  {latest ? "Current cycle" : "Last cycle with a price"}
                 </div>
                 <div className="mt-1">
-                  {latest?.valid_from} – {latest?.valid_to}
+                  {shown ? formatCycle(shown.valid_from, shown.valid_to) : "—"}
                 </div>
               </div>
               <div>
@@ -267,58 +348,66 @@ export default async function TownPage({ params }: Props) {
               </div>
               <div>
                 <div className="font-semibold text-stone-900 dark:text-stone-100">
-                  Last update
+                  Prices took effect
                 </div>
-                <div className="mt-1">{latest?.valid_from ?? "—"}</div>
+                <div className="mt-1">{shown ? formatDayMonth(shown.valid_from) : "—"}</div>
               </div>
             </div>
           </div>
         </div>
 
+        {!latest && shown && (
+          <div
+            role="status"
+            className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-6 py-4 text-sm text-amber-900 dark:text-amber-200"
+          >
+            EPRA did not publish a price for {town} in the current pricing cycle. The prices
+            below are the last ones EPRA published for {town}, for{" "}
+            {formatCycle(shown.valid_from, shown.valid_to)}.
+          </div>
+        )}
+
+        <h2 className="sr-only">{town} fuel prices per litre</h2>
         <div className="grid gap-6 lg:grid-cols-3">
           <PriceCard
             title="Super Petrol"
-            value={latest?.super_petrol ?? 0}
+            value={shown?.super_petrol ?? 0}
             delta={petrolDelta}
             accent="forest"
           />
           <PriceCard
             title="Diesel"
-            value={latest?.diesel ?? 0}
+            value={shown?.diesel ?? 0}
             delta={dieselDelta}
             accent="maasai"
           />
           <PriceCard
             title="Kerosene"
-            value={latest?.kerosene ?? 0}
+            value={shown?.kerosene ?? 0}
             delta={keroseneDelta}
             accent="obsidian"
           />
         </div>
 
+        <h2 className="sr-only">{town} price history</h2>
         <TrendChart history={history} />
 
-        <RegionVariance
-          overview={[
-            {
-              name: "Mombasa",
-              super_petrol: 199.99,
-              diesel: 185.5,
-              kerosene: 155.0
-            },
-            {
-              name: "Mandera",
-              super_petrol: 221.75,
-              diesel: 205.3,
-              kerosene: 170.0
-            }
-          ]}
-        />
+        <h2 className="sr-only">How {town} compares with other towns</h2>
+        <RegionVariance overview={comparison} activeTown={latest?.town} />
 
         <div className="rounded-xl border border-black/[0.08] dark:border-white/[0.07] bg-white dark:bg-white/[0.025] p-6">
-          <div className="text-sm uppercase tracking-[0.3em] text-stone-500">
-            Frequently asked questions
+          <h2 className="text-sm font-normal uppercase tracking-[0.3em] text-stone-500">
+            Fuel prices in other towns
+          </h2>
+          <div className="mt-4">
+            <TownLinks towns={towns} currentTown={town} />
           </div>
+        </div>
+
+        <div className="rounded-xl border border-black/[0.08] dark:border-white/[0.07] bg-white dark:bg-white/[0.025] p-6">
+          <h2 className="text-sm font-normal uppercase tracking-[0.3em] text-stone-500">
+            Frequently asked questions
+          </h2>
           <div className="mt-6 space-y-5 text-sm text-stone-600 dark:text-stone-400">
             {faqItems.map((item) => (
               <div key={item.question}>

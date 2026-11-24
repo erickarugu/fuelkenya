@@ -64,7 +64,7 @@ Town names are title-cased (e.g. `"Nairobi"` not `"NAIROBI"`). When filtering ot
 Responses carry:
 
 ```
-Cache-Control: public, max-age=86400, s-maxage=604800
+Cache-Control: public, max-age=300, s-maxage=600, stale-while-revalidate=3600
 ```
 
 The town list is stable within a pricing cycle. New towns are only added when a new EPRA dataset is ingested.
@@ -82,7 +82,7 @@ const towns = await fetch("https://api.fuelkenya.com/v1/towns")
   .then(r => r.json());
 
 console.log(`${towns.length} towns available`);
-// e.g. "224 towns available"
+// e.g. "230 towns available"
 ```
 
 ## Usage notes

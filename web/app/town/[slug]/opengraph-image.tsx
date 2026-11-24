@@ -13,11 +13,11 @@ export default async function OpenGraphImage({
   const town = decodeURIComponent(params.slug).replace(/-/g, " ");
 
   const [fontData, latest] = await Promise.all([
-    fetch(new URL("../../fonts/Inter-Bold.otf", import.meta.url)).then((r) =>
+    fetch(new URL("../../fonts/Inter-Bold.woff", import.meta.url)).then((r) =>
       r.arrayBuffer()
     ),
     fetch(`${apiBase}/prices/latest?town=${encodeURIComponent(town)}`, {
-      cache: "no-store"
+      next: { revalidate: 300 }
     })
       .then((r) => r.json())
       .then((d) => d[0] ?? null)
@@ -56,7 +56,7 @@ export default async function OpenGraphImage({
           FUEL PRICES IN
         </div>
         <div style={{ fontSize: "72px", fontWeight: 700, color: "#ffffff", lineHeight: 1 }}>
-          {town}
+          {latest?.town ?? town.replace(/\b\w/g, (c) => c.toUpperCase())}
         </div>
       </div>
 

@@ -69,16 +69,19 @@ def create_app() -> FastAPI:
         "http://localhost:3000",
     ]
 
+    # The middleware added last runs first. CORS goes outermost so that 429
+    # responses still carry CORS headers and preflight requests are not
+    # counted against the rate limit.
+    app.add_middleware(RateLimitMiddleware)
+    app.add_middleware(RequestTimingMiddleware)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
         allow_credentials=True,
         allow_methods=["GET", "POST", "OPTIONS"],
         allow_headers=["*"],
+        expose_headers=["Retry-After", "X-RateLimit-Limit", "X-RateLimit-Remaining"],
     )
-
-    app.add_middleware(RequestTimingMiddleware)
-    app.add_middleware(RateLimitMiddleware)
     app.include_router(v1_router, prefix=settings.api_prefix)
 
     return app

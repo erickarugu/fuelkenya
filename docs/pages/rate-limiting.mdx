@@ -32,11 +32,16 @@ Exceeding the limit returns:
 ```http
 HTTP/1.1 429 Too Many Requests
 Content-Type: application/json
+Retry-After: 12
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 0
 
 {
   "detail": "Rate limit exceeded. Try again later."
 }
 ```
+
+`Retry-After` is the number of seconds until you can send another request. Every successful response also carries `X-RateLimit-Limit` and `X-RateLimit-Remaining`, so you can slow down before you hit the limit.
 
 ## Best practices
 
@@ -45,10 +50,10 @@ Content-Type: application/json
 The API itself sets the following cache header on all responses to signal this:
 
 ```
-Cache-Control: public, max-age=86400, s-maxage=604800
+Cache-Control: public, max-age=300, s-maxage=600, stale-while-revalidate=3600
 ```
 
-This means edge/CDN caches may store responses for up to 7 days. Your own application cache can follow the same policy.
+Edge caches keep responses for up to 10 minutes, so new prices reach everyone shortly after EPRA publishes them on the 14th. In your own application you can cache the current cycle until its `valid_to` date, then refetch on the 14th.
 
 **Batch over pagination.** If you need prices for multiple towns, use a single `/prices/latest` call without a `town` filter - it returns all towns at once - rather than making one request per town.
 
@@ -56,7 +61,7 @@ This means edge/CDN caches may store responses for up to 7 days. Your own applic
 # Efficient - one request for all towns
 curl https://api.fuelkenya.com/v1/prices/latest
 
-# Inefficient - 224 requests for 224 towns
+# Inefficient - 230 requests for 230 towns
 for town in "${TOWNS[@]}"; do
   curl "https://api.fuelkenya.com/v1/prices/latest?town=$town"
 done
