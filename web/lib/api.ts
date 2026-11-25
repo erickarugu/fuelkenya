@@ -72,3 +72,31 @@ export async function fetchTownPriceSummary(town: string) {
   const list = await fetchLatestPrices(town);
   return list[0] ?? null;
 }
+
+export interface ExportRow {
+  town: string;
+  valid_from: string;
+  valid_to: string;
+  super_petrol: number;
+  diesel: number;
+  kerosene: number;
+  towns_in_cycle: number;
+  coverage: string;
+  source: string;
+}
+
+export interface ExportPayload {
+  license: string;
+  attribution: string;
+  columns: string[];
+  count: number;
+  data: ExportRow[];
+}
+
+/** The full price history (every town, every cycle); powers the /data page. */
+export async function fetchExport() {
+  return apiFetch<ExportPayload>("/export.json");
+}
+
+export const EXPORT_CSV_URL = `${BASE_URL}/export.csv`;
+export const EXPORT_JSON_URL = `${BASE_URL}/export.json`;

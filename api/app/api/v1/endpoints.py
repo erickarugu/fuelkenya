@@ -300,3 +300,104 @@ async def list_towns(response: Response, db: AsyncSession = Depends(get_db)):
     result = await db.execute(stmt)
     # use `scalars()` to return a list of plain town strings instead of tuples
     return result.scalars().all()
+
+
+# ---------------------------------------------------------------------------
+# Full-history downloads (linked from fuelkenya.com/data)
+# ---------------------------------------------------------------------------
+
+EXPORT_CACHE_CONTROL = "public, max-age=3600, s-maxage=3600"
+EXPORT_COLUMNS = [
+    "town",
+    "valid_from",
+    "valid_to",
+    "super_petrol",
+    "diesel",
+    "kerosene",
+    "towns_in_cycle",
+    "coverage",
+    "source",
+]
+MAJOR_TOWNS_ONLY_MAX = 5
+
+
+def describe_source(valid_from: date, towns_in_cycle: int) -> Dict[str, str]:
+    """Where a cycle's numbers came from, so users can judge each row.
+
+    Cycles with only a handful of towns were backfilled from published news
+    reports of EPRA's monthly review; everything else is a full official table.
+    """
+    if towns_in_cycle <= MAJOR_TOWNS_ONLY_MAX:
+        return {
+            "coverage": "major towns only",
+            "source": "EPRA/ERC monthly review as published in Kenyan news reports",
+        }
+    # ERC became EPRA under the Energy Act 2019 (mid-2019).
+    if valid_from < date(2019, 7, 1):
+        source = "Energy Regulatory Commission (ERC) public notice"
+    elif valid_from < date(2024, 11, 1):
+        source = "EPRA public notice (archived copy, Internet Archive)"
+    else:
+        source = "EPRA maximum retail prices (epra.go.ke)"
+    return {"coverage": "full official table", "source": source}
+
+
+async def load_export_rows(db: AsyncSession) -> List[Dict[str, Any]]:
+    result = await db.execute(
+        select(fuel_prices).order_by(fuel_prices.c.valid_from, fuel_prices.c.town)
+    )
+    rows = [dict(r._mapping) for r in result]
+    counts: Dict[date, int] = {}
+    for r in rows:
+        counts[r["valid_from"]] = counts.get(r["valid_from"], 0) + 1
+    out = []
+    for r in rows:
+        n = counts[r["valid_from"]]
+        out.append(
+            {
+                "town": r["town"],
+                "valid_from": r["valid_from"].isoformat(),
+                "valid_to": r["valid_to"].isoformat(),
+                "super_petrol": float(r["super_petrol"]),
+                "diesel": float(r["diesel"]),
+                "kerosene": float(r["kerosene"]),
+                "towns_in_cycle": n,
+                **describe_source(r["valid_from"], n),
+            }
+        )
+    return out
+
+
+@router.get("/export.csv", tags=["export"], response_class=Response)
+async def export_csv(db: AsyncSession = Depends(get_db)):
+    """Every cycle for every town, oldest first, as CSV (CC BY 4.0)."""
+    import io
+
+    rows = await load_export_rows(db)
+    buf = io.StringIO()
+    writer = csv.DictWriter(buf, fieldnames=EXPORT_COLUMNS)
+    writer.writeheader()
+    for r in rows:
+        writer.writerow({**r, **{k: f"{r[k]:.2f}" for k in ("super_petrol", "diesel", "kerosene")}})
+    return Response(
+        content=buf.getvalue(),
+        media_type="text/csv; charset=utf-8",
+        headers={
+            "Cache-Control": EXPORT_CACHE_CONTROL,
+            "Content-Disposition": 'attachment; filename="fuelkenya-pump-prices.csv"',
+        },
+    )
+
+
+@router.get("/export.json", tags=["export"])
+async def export_json(response: Response, db: AsyncSession = Depends(get_db)):
+    """Every cycle for every town, oldest first, as JSON (CC BY 4.0)."""
+    rows = await load_export_rows(db)
+    response.headers["Cache-Control"] = EXPORT_CACHE_CONTROL
+    return {
+        "license": "CC BY 4.0",
+        "attribution": "Source: EPRA/ERC, compiled by FuelKenya (fuelkenya.com)",
+        "columns": EXPORT_COLUMNS,
+        "count": len(rows),
+        "data": rows,
+    }

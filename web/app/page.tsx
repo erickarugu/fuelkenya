@@ -548,6 +548,9 @@ export default async function Page({ searchParams }: Props) {
             >
               All Towns
             </Link>
+            <Link href="/data" className="transition-colors hover:text-stone-700 dark:hover:text-stone-400">
+              Download data
+            </Link>
             <a
               href="https://docs.fuelkenya.com"
               target="_blank"
