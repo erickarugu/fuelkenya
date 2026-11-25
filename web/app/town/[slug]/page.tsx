@@ -148,7 +148,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description =
       `Petrol in ${town} is ${describeChange(latest.super_petrol, previous?.super_petrol ?? null)} ` +
       `per litre until ${formatDayMonth(latest.valid_to)}. See diesel and kerosene, ` +
-      `how ${town} compares with the cheapest town, and price history going back to 2018.`;
+      `how ${town} compares with the cheapest town, and price history going back to 2014.`;
   } else if (shown) {
     description =
       `EPRA did not list ${town} in the current pricing cycle. See the last published ` +
