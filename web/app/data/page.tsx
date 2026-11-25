@@ -55,8 +55,10 @@ const card =
   "rounded-xl border border-black/[0.08] dark:border-white/[0.07] bg-white dark:bg-white/[0.025] px-6 py-5";
 
 export default async function DataPage() {
-  const payload = await fetchExport();
-  const s = summarise(payload.data);
+  // The downloads must stay reachable even if the stats can't be loaded.
+  const payload = await fetchExport().catch(() => null);
+  const s = payload ? summarise(payload.data) : null;
+  const attribution = payload?.attribution ?? "Source: EPRA/ERC, compiled by FuelKenya (fuelkenya.com)";
 
   return (
     <div className="min-h-screen bg-[#fafafa] dark:bg-[#080808] px-6 py-8 text-stone-900 dark:text-stone-100 sm:px-10 lg:px-16">
@@ -79,11 +81,11 @@ export default async function DataPage() {
           <p className="mt-4 max-w-3xl text-sm leading-relaxed text-stone-500">
             Official maximum retail pump prices for Super Petrol (PMS), Diesel (AGO) and Kerosene (IK), set
             monthly by EPRA (and until mid-2019 by its predecessor, the Energy Regulatory Commission). Every town, every cycle we
-            hold, from {fmt(s.first)} to {fmt(s.last)}. These are the regulator&apos;s published ceilings,
+            hold{s ? `, from ${fmt(s.first)} to ${fmt(s.last)}` : ""}. These are the regulator&apos;s published ceilings,
             never estimates.
           </p>
 
-          <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {s && (<div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[
               ["Price records", s.rows.toLocaleString("en-GB")],
               ["Monthly cycles", String(s.cycles)],
@@ -95,7 +97,7 @@ export default async function DataPage() {
                 <p className="font-mono text-xl font-bold tabular-nums">{value}</p>
               </div>
             ))}
-          </div>
+          </div>)}
 
           <div className="mt-5 flex flex-wrap gap-3">
             <a
@@ -140,7 +142,7 @@ export default async function DataPage() {
           </dl>
         </div>
 
-        <div className={card}>
+        {s && (<div className={card}>
           <h2 className="text-lg font-bold">Coverage by year</h2>
           <p className="mt-1 text-sm text-stone-500">
             Some months are missing because no complete official notice survives online. We leave gaps rather
@@ -170,7 +172,7 @@ export default async function DataPage() {
               </tbody>
             </table>
           </div>
-        </div>
+        </div>)}
 
         <div className={card}>
           <h2 className="text-lg font-bold">Sources, licence and citation</h2>
@@ -186,7 +188,7 @@ export default async function DataPage() {
             <a href="https://creativecommons.org/licenses/by/4.0/" className="underline hover:text-stone-800 dark:hover:text-stone-200">
               CC BY 4.0
             </a>
-            . Please credit: <span className="font-mono text-xs text-stone-700 dark:text-stone-300">{payload.attribution}</span>
+            . Please credit: <span className="font-mono text-xs text-stone-700 dark:text-stone-300">{attribution}</span>
           </p>
           <p className="mt-2 text-sm text-stone-500">
             Spotted an error or have an official notice we&apos;re missing?{" "}
