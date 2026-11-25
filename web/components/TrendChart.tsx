@@ -219,8 +219,10 @@ export default function TrendChart({ history }: TrendChartProps) {
     scales: {
       x: {
         type:   "linear" as const,
-        min:    xMin,
-        max:    xMax,
+        // A little room on both sides so the first and latest points (often
+        // isolated dots) aren't clipped against the chart edge.
+        min:    xMin - Math.max(spanMs * 0.02, 5 * DAY_MS),
+        max:    xMax + Math.max(spanMs * 0.02, 5 * DAY_MS),
         grid:   { display: false },
         border: { display: false },
         ticks:  {
