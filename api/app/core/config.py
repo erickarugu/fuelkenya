@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     redoc_url: str = "/redoc"
     database_url: str = "postgresql+asyncpg://postgres:admin@localhost:5432/fuel_kenya"
     ingest_token: str = ""
+    # After a successful ingest the API POSTs here (Bearer ingest_token) so the
+    # website drops its cached prices immediately. Empty disables it.
+    web_revalidate_url: str = "https://fuelkenya.com/api/revalidate"
     # Shared secret sent by our own servers in X-FuelKenya-Client-Token to
     # skip the per-IP rate limit. Empty means no client is trusted.
     trusted_client_token: str = ""

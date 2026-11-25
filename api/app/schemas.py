@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import date
 from decimal import Decimal
-from typing import List
+from typing import Optional, List
 
 from pydantic import BaseModel
 
@@ -25,6 +25,8 @@ class IngestResponse(BaseModel):
     status: str
     records_processed: int
     timestamp: str
+    # Whether fuelkenya.com confirmed it dropped its cached prices.
+    cache_cleared: Optional[bool] = None
 
 
 class TownList(BaseModel):

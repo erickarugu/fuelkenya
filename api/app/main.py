@@ -46,6 +46,22 @@ class RequestTimingMiddleware(BaseHTTPMiddleware):
             )
 
 
+class FreshResponseMiddleware(BaseHTTPMiddleware):
+    """`?fresh=1` responses are never stored by the CDN.
+
+    fuelkenya.com's server fetches with fresh=1 and keeps its own tagged cache,
+    which the ingest endpoint clears. Without this, the site could refill its
+    cache from an up-to-10-minute-old CDN copy right after new data lands.
+    Public callers without the flag keep the cached responses.
+    """
+
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        if request.query_params.get("fresh") == "1":
+            response.headers["Cache-Control"] = "private, no-store"
+        return response
+
+
 def create_app() -> FastAPI:
     settings = get_settings()
     configure_logging(settings)
@@ -73,6 +89,7 @@ def create_app() -> FastAPI:
     # responses still carry CORS headers and preflight requests are not
     # counted against the rate limit.
     app.add_middleware(RateLimitMiddleware)
+    app.add_middleware(FreshResponseMiddleware)
     app.add_middleware(RequestTimingMiddleware)
     app.add_middleware(
         CORSMiddleware,

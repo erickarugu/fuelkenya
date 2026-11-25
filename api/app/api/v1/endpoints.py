@@ -21,6 +21,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.cache import clear_latest_cache, get_latest_cache, set_latest_cache
 from app.core.config import get_settings, Settings
+from app.core.web_cache import clear_web_cache
 from app.db import build_upsert_statement, fuel_prices, get_db
 from app.schemas import FuelPriceOut, IngestResponse
 
@@ -167,6 +168,7 @@ async def ingest_csv(
     file: UploadFile = File(...),
     db: AsyncSession = Depends(get_db),
     _auth: None = Depends(verify_ingest_token),
+    settings: Settings = Depends(get_settings),
 ):
     response_cache_control(response)
     if file.content_type not in {
@@ -200,11 +202,13 @@ async def ingest_csv(
     await db.execute(stmt)
     await db.commit()
     clear_latest_cache()
+    cache_cleared = await clear_web_cache(settings)
 
     return IngestResponse(
         status="success",
         records_processed=len(records),
         timestamp=datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        cache_cleared=cache_cleared,
     )
 
 

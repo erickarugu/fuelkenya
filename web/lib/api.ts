@@ -24,11 +24,17 @@ function apiHeaders(): HeadersInit | undefined {
   return token ? { "X-FuelKenya-Client-Token": token } : undefined;
 }
 
+/** Every price fetch carries this tag; POST /api/revalidate clears it after an upload. */
+export const PRICE_CACHE_TAG = "prices";
+
 async function apiFetch<T>(path: string): Promise<T> {
-  const url = `${BASE_URL}${path}`;
+  // fresh=1 makes the API answer with no-store, so the CDN in front of it never
+  // hands us a copy from before the latest upload. Our own data cache (tagged
+  // below) is what keeps traffic off the API.
+  const url = `${BASE_URL}${path}${path.includes("?") ? "&" : "?"}fresh=1`;
   const res = await fetch(url, {
     headers: apiHeaders(),
-    next: { revalidate: PRICE_REVALIDATE_SECONDS }
+    next: { revalidate: PRICE_REVALIDATE_SECONDS, tags: [PRICE_CACHE_TAG] }
   });
   if (!res.ok) {
     throw new Error(`Failed to fetch ${url}: ${res.status}`);
