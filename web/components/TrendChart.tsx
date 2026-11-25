@@ -234,8 +234,9 @@ export default function TrendChart({ history }: TrendChartProps) {
         },
       },
       y: {
-        grid:   { color: isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.04)", drawTicks: false },
-        border: { display: false },
+        // Faint dashed guides that recede behind the data instead of competing with it.
+        grid:   { color: isDark ? "rgba(255,255,255,0.035)" : "rgba(0,0,0,0.05)", drawTicks: false },
+        border: { display: false, dash: [3, 6] },
         ticks:  { color: "#78716c", font: { size: 11 }, padding: 10, callback: (v: any) => `${v}` },
       },
     },
@@ -246,7 +247,7 @@ export default function TrendChart({ history }: TrendChartProps) {
   const pillText  = isDark ? "#e7e5e4" : "#111827";
   const pillOff   = isDark ? "#57534e" : "#78716c";
   return (
-    <div className="overflow-hidden rounded-2xl border border-black/[0.08] dark:border-white/[0.07] bg-black/[0.02] dark:bg-white/[0.02]">
+    <div className="overflow-hidden rounded-2xl border border-black/[0.08] dark:border-white/[0.07] bg-[#f7f7f6] dark:bg-[#0c0c0c]">
 
       {/* ── header ── */}
       <div className="border-b border-black/[0.05] dark:border-white/[0.05] px-4 pb-5 pt-5 sm:px-6">

@@ -183,17 +183,32 @@ body {
       radial-gradient(ellipse 55% 40% at 95% 105%, rgba(187, 0, 39, 0.06) 0%, transparent 60%);
   }
 
+  /* Background grid drawn on a masked layer so it fades out from the top
+     centre instead of covering the page with solid lines. isolation keeps the
+     z-index:-1 layer above the page background but below the content. */
   .grid-bg {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .grid-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
     background-image:
       linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
       linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
     background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 75% 45% at 50% 0%, #000 0%, rgba(0, 0, 0, 0.35) 55%, transparent 100%);
+    mask-image: radial-gradient(ellipse 75% 45% at 50% 0%, #000 0%, rgba(0, 0, 0, 0.35) 55%, transparent 100%);
   }
 
-  .dark .grid-bg {
+  .dark .grid-bg::before {
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.016) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.016) 1px, transparent 1px);
+      linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
   }
 
   .live-dot {
