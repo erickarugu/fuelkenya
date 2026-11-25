@@ -95,11 +95,9 @@ const FAQ_ITEMS = [
     answer:
       "As of the latest EPRA pricing cycle, the retail price for Super Petrol in [TownName] is KSh [SuperPrice], Diesel is KSh [DieselPrice], and Kerosene is KSh [KerosenePrice]."
   },
-  {
-    question: "Why does fuel cost more in [TownName] than Mombasa?",
-    answer:
-      "Fuel prices in inland towns like [TownName] are higher than coastal Mombasa because of the pipeline and road transit costs incurred to transport the petroleum products from the Mombasa port."
-  },
+  // Placeholder: replaced per town by mombasaComparison(), since the right
+  // question depends on whether this town is Mombasa, dearer, or not dearer.
+  { question: "[MombasaComparison]", answer: "" },
   {
     question: "How often do fuel prices change in Kenya?",
     answer:
@@ -205,11 +203,44 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function buildFAQ(
-  town: string,
-  current: { super_petrol: number; diesel: number; kerosene: number } | null
-) {
+type Prices = { super_petrol: number; diesel: number; kerosene: number };
+
+const TRANSPORT_NOTE =
+  "Imported fuel lands at the port of Mombasa and is moved inland by pipeline and road, so EPRA adds each town's transport and depot costs to its maximum price.";
+
+function mombasaComparison(town: string, current: Prices | null, mombasa: Prices | null) {
+  if (town.toLowerCase() === "mombasa") {
+    return {
+      question: "Why is fuel cheaper in Mombasa than in inland towns?",
+      answer: `${TRANSPORT_NOTE} Mombasa carries almost none of those costs, so it is among the cheapest towns in Kenya, while far-off towns such as Mandera pay the most.`
+    };
+  }
+  if (!current || !mombasa) {
+    return {
+      question: `How do fuel prices in ${town} compare with Mombasa?`,
+      answer: `${TRANSPORT_NOTE} Towns further from the port and the pipeline depots generally pay more per litre than Mombasa.`
+    };
+  }
+  const diff = Number((current.super_petrol - mombasa.super_petrol).toFixed(2));
+  if (diff > 0) {
+    return {
+      question: `Why does fuel cost more in ${town} than Mombasa?`,
+      answer: `Super Petrol in ${town} costs KSh ${diff.toFixed(2)} more per litre than in Mombasa this cycle. ${TRANSPORT_NOTE}`
+    };
+  }
+  return {
+    question: `How do fuel prices in ${town} compare with Mombasa?`,
+    answer:
+      (diff === 0
+        ? `Super Petrol in ${town} costs the same as in Mombasa this cycle (KSh ${current.super_petrol.toFixed(2)} per litre). `
+        : `Super Petrol in ${town} costs KSh ${Math.abs(diff).toFixed(2)} less per litre than in Mombasa this cycle. `) +
+      `${TRANSPORT_NOTE} Towns close to the port or a depot can match or slightly undercut Mombasa.`
+  };
+}
+
+function buildFAQ(town: string, current: Prices | null, mombasa: Prices | null) {
   return FAQ_ITEMS.map((item) => {
+    if (item.question === "[MombasaComparison]") return mombasaComparison(town, current, mombasa);
     const question = item.question.replace(/\[TownName\]/g, town);
     const answer = item.answer
       .replace(/\[TownName\]/g, town)
@@ -241,7 +272,8 @@ export default async function TownPage({ params }: Props) {
   const dieselDelta = delta((r) => r.diesel);
   const keroseneDelta = delta((r) => r.kerosene);
   // Only state a "current price" in the FAQ when this cycle has one.
-  const faqItems = buildFAQ(town, latest);
+  const mombasaNow = allLatest.find((r) => r.town.toLowerCase() === "mombasa") ?? null;
+  const faqItems = buildFAQ(town, latest, mombasaNow);
 
   // Live comparison: cheapest and dearest towns this cycle, Nairobi as the
   // reference most people know, and this town.
