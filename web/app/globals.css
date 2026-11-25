@@ -183,8 +183,8 @@ body {
       radial-gradient(ellipse 55% 40% at 95% 105%, rgba(187, 0, 39, 0.06) 0%, transparent 60%);
   }
 
-  /* Background grid drawn on a masked layer so it fades out from the top
-     centre instead of covering the page with solid lines. isolation keeps the
+  /* Background grid drawn on a masked layer so it fades with distance from
+     the top centre (still faintly visible lower down) instead of solid lines. isolation keeps the
      z-index:-1 layer above the page background but below the content. */
   .grid-bg {
     position: relative;
@@ -201,8 +201,8 @@ body {
       linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
       linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
     background-size: 56px 56px;
-    -webkit-mask-image: radial-gradient(ellipse 75% 45% at 50% 0%, #000 0%, rgba(0, 0, 0, 0.35) 55%, transparent 100%);
-    mask-image: radial-gradient(ellipse 75% 45% at 50% 0%, #000 0%, rgba(0, 0, 0, 0.35) 55%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 140% 100% at 50% 0%, #000 0%, rgba(0, 0, 0, 0.45) 45%, rgba(0, 0, 0, 0.15) 100%);
+    mask-image: radial-gradient(ellipse 140% 100% at 50% 0%, #000 0%, rgba(0, 0, 0, 0.45) 45%, rgba(0, 0, 0, 0.15) 100%);
   }
 
   .dark .grid-bg::before {

@@ -61,7 +61,7 @@ export default async function DataPage() {
   const attribution = payload?.attribution ?? "Source: EPRA/ERC, compiled by FuelKenya (fuelkenya.com)";
 
   return (
-    <div className="min-h-screen bg-[#fafafa] dark:bg-[#080808] px-6 py-8 text-stone-900 dark:text-stone-100 sm:px-10 lg:px-16">
+    <div className="min-h-screen page-bg grid-bg bg-[#fafafa] dark:bg-[#080808] px-6 py-8 text-stone-900 dark:text-stone-100 sm:px-10 lg:px-16">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
         <div className={card}>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
