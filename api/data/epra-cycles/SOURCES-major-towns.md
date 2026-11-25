@@ -1,0 +1,129 @@
+# Sources: major-town backfill
+
+Maximum retail pump prices for Nairobi, Mombasa, Kisumu, Nakuru and Eldoret, copied as published. A town is listed only where all three prices were stated for that cycle. One decimal in a source (for example Sh88.5) is written as 88.50.
+
+"EPRA/ERC" = the regulator's own press release, notice or price page (most via the Internet Archive; scanned pages were transcribed by eye). "News" = media report of the monthly review.
+
+## Left out on purpose
+
+- Whole cycles: 2011-01 and 2013-02 (no source with all three prices found), 2011-08 (the report's petrol figure contradicts neighbouring months), 2012-04 (sources differ on diesel), 2014-06 and 2016-10 (kerosene or full prices not stated), 2018-09 (ERC revised prices from 21 September for the VAT cut, so the cycle has two official price sets).
+- Single towns inside a cycle where a source was visibly mistyped, self-contradictory, gave whole shillings only, or omitted a product.
+
+## Cycles
+
+- 2024-10-15 to 2024-11-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20250117061030/https://www.epra.go.ke/sites/default/files/2024-10/Maximum%20Retail%20Petroleum%20Prices%20in%20Kenya%20for%20the%20Period%2015th%20October%20to%2014th%20November%202024_0.pdf
+- 2024-09-15 to 2024-10-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240915173600/https://www.epra.go.ke/sites/default/files/2024-09/SEPTEMBER%2015TH%20-%2014TH%20OCTOBER%202024%20PUMP%20PRICES.pdf
+- 2024-08-15 to 2024-09-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20250516082442/http://epra.go.ke/sites/default/files/2024-09/PUMP%20PRICES%2015%20AUGUST%20-%2014%20SEPTEMBER%202024_1.pdf
+- 2024-07-15 to 2024-08-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://hapakenya.com/2024/07/15/epra-reduces-petrol-price-cost-by-ksh-1-diesel-by-ksh-1-50-kerosene-by-ksh-1-30/ ; https://nairobiwire.com/2024/07/nairobi-fuel-prices-drop-as-epra-lowers-petrol-diesel-and-kerosene-rates.html
+- 2024-05-15 to 2024-06-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://the-star.co.ke/news/2024-05-15-how-fuel-will-retail-in-five-major-towns
+- 2024-04-15 to 2024-05-14 | Nairobi, Mombasa, Nakuru | News | https://sokodirectory.com/2024/04/relief-as-epra-reduces-fuel-prices-by-up-to-ksh-18/
+- 2024-03-15 to 2024-04-14 | Nairobi, Mombasa, Kisumu | News | https://www.kbc.co.ke/epra-slashes-pump-prices-in-latest-fuel-review/ ; https://khusoko.com/2024/03/14/pump-prices-fall-in-kenya-super-petrol-now-ksh-199-15-litre/
+- 2024-01-15 to 2024-02-14 | Nairobi | News | https://www.kbc.co.ke/reprieve-at-the-pump-as-fuel-prices-drop-by-5-shillings/
+- 2023-11-15 to 2023-12-14 | Nairobi | News | https://www.kbc.co.ke/govt-subsidizes-fuel-to-cool-prices-in-latest-review/
+- 2023-09-15 to 2023-10-14 | Nairobi, Nakuru | News | https://sokodirectory.com/2023/09/more-wailing-for-kenyans-as-super-petrol-diesel-and-kerosene-move-past-ksh-200-per-litre/ ; https://www.kbc.co.ke/fuel-crosses-ksh-200-mark-in-epras-latest-price-review/
+- 2023-05-15 to 2023-06-14 | Nairobi | News | https://businesstoday.co.ke/end-of-fuel-subsidy-as-govt-hikes-fuel-prices/
+- 2023-04-15 to 2023-05-14 | Nairobi, Mombasa, Kisumu | News | https://capitalfm.africa/fuel-prices-remain-unchanged-in-latest-epra-review-2/
+- 2023-03-15 to 2023-04-14 | Nairobi | News | https://sokodirectory.com/2023/03/a-liter-of-super-petrol-up-by-ksh-2-in-latest-review/
+- 2023-01-15 to 2023-02-14 | Mombasa, Nakuru, Eldoret | News | https://khusoko.com/2023/01/15/fuel-prices-remain-unchanged-for-the-third-consecutive-month/
+- 2022-12-15 to 2023-01-14 | Nairobi, Mombasa, Kisumu | News | https://capitalfm.africa/relief-for-kenyans-as-fuel-prices-remain-unchanged/
+- 2022-11-15 to 2022-12-14 | Nairobi, Mombasa, Kisumu | News | https://capitalfm.africa/fuel-prices-drop-by-sh1-in-latest-epra-review/
+- 2022-10-15 to 2022-11-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://standardmedia.co.ke/business/article/2001458126/fuel-prices-go-down-in-latest-epra-review
+- 2022-09-15 to 2022-10-14 | Nairobi | News | https://sokodirectory.com/2022/09/a-liter-of-super-petrol-will-now-cost-you-179-shillings-in-nairobi/ ; https://tech-ish.com/2022/10/15/fuel-prices-october-november-2022
+- 2022-07-15 to 2022-08-14 | Nairobi | News | https://capitalfm.africa/fuel-prices-unchanged-as-govt-injects-additional-sh16bn-subsidy/ ; https://capitalfm.africa/relief-as-fuel-prices-remain-unchanged-in-latest-review/
+- 2022-06-15 to 2022-07-14 | Nairobi | News | https://www.kenyanews.go.ke/national-treasury-to-progressively-eliminate-fuel-subsidy/
+- 2022-05-15 to 2022-06-14 | Nairobi, Mombasa, Kisumu | News | https://khusoko.com/2022/05/15/kenya-petrol-diesel-kerosene-prices-up-by-ksh-5-50-in-may-review/
+- 2022-03-15 to 2022-04-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://sokodirectory.com/2022/03/super-petrol-and-diesel-prices-up-by-ksh-5-kerosene-retained/
+- 2022-01-15 to 2022-02-14 | Nairobi, Mombasa, Kisumu | News | https://peopledaily.digital/business/fuel-prices-remain-unchanged-in-latest-review/amp ; https://khusoko.com/2022/01/14/fuel-prices-remain-unchanged-on-thursday-petrol-in-nairobi-at-ksh129-72/
+- 2021-12-15 to 2022-01-14 | Nairobi | News | https://businesstoday.co.ke/petroleum-levy-save-kenyans-fuel-prices-hike/ ; https://sokodirectory.com/2021/12/fuel-prices-unchanged-ahead-of-christmas/
+- 2021-10-15 to 2021-11-14 | Nairobi, Mombasa, Eldoret | News | https://sokodirectory.com/2021/10/super-petrol-and-diesel-down-by-ksh-5-kerosene-down-by-ksh-7-28/
+- 2021-07-15 to 2021-08-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240814154524/https://www.epra.go.ke/wp-content/uploads/2021/07/July-2021-Pump-Price-Press-Release.pdf
+- 2021-03-15 to 2021-04-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240715034048/https://www.epra.go.ke/wp-content/uploads/2021/03/Pump-prices-for-the-period-15th-March-2021-14th-April-2021.pdf
+- 2020-12-15 to 2021-01-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240808115957/https://www.epra.go.ke/wp-content/uploads/2020/12/Maximum-Petroleum-Pump-Prices-for-the-Period-15th-December-2020-to-14th-January-2021.pdf
+- 2020-11-15 to 2020-12-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20201203145425/https://www.epra.go.ke/wp-content/uploads/2020/11/Maximum-Petroleum-Pump-Prices-for-the-Period-15th-November-2020-to-14th-December-2020.pdf
+- 2020-08-15 to 2020-09-14 | Nairobi, Kisumu, Eldoret | News | https://sokodirectory.com/2020/08/pain-at-the-pump-as-fuel-prices-spike-kerosene-up-by-ksh-18/ ; https://khusoko.com/2020/08/14/petrol-price-up-ksh-3-47-diesel-ksh-2-76-paraffin-ksh-18-20-in-august-review/
+- 2020-07-15 to 2020-08-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20200813200029/https://www.epra.go.ke/?services=petroleum/petroleum-prices
+- 2020-06-15 to 2020-07-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240814215218/https://www.epra.go.ke/wp-content/uploads/2020/06/Maximum-petroleum-pump-prices-for-the-period-15th-June-2020-14th-July-2020.pdf
+- 2020-05-15 to 2020-06-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240715200843/https://www.epra.go.ke/wp-content/uploads/2020/05/Maximum-pump-prices-press-release-15th-May-14th-June-2020-.pdf
+- 2020-04-15 to 2020-05-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240812163803/https://www.epra.go.ke/wp-content/uploads/2020/04/Press-Release-Maximum-Petroleum-Pump-Prices-for-the-Period-15th-April-14th-May-2020.pdf
+- 2020-03-15 to 2020-04-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240813181957/https://www.epra.go.ke/wp-content/uploads/2020/09/Petroleum-Prices-15th-March-2020-14th-April-2020-pdf-1.pdf
+- 2020-02-15 to 2020-03-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240715155753/https://www.epra.go.ke/wp-content/uploads/2020/09/Maximum-wholesale-and-retail-petroleum-prices-in-Kenya-for-the-period15th-February-14th-March-2020-1.pdf
+- 2020-01-15 to 2020-02-14 | Nairobi, Mombasa | News | https://nairobiwire.com/2020/01/pain-at-the-pump-fuel-prices-go-up-in-latest-review.html
+- 2019-12-15 to 2020-01-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20201214093428/https://www.epra.go.ke/wp-content/uploads/2019/12/Maximum-Retail-Petroleum-Pump-Prices-15th-Dec-2019-14th-Jan-2020.pdf
+- 2019-11-15 to 2019-12-14 | Nairobi | News | https://sokodirectory.com/2019/11/pain-at-the-pump-as-fuel-prices-jump-to-a-new-level/
+- 2019-09-15 to 2019-10-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20190923002852/https://www.erc.go.ke/services/petroleum/petroleum-prices/
+- 2019-08-15 to 2019-09-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20190923002852/https://www.erc.go.ke/services/petroleum/petroleum-prices/
+- 2019-07-15 to 2019-08-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20190923002852/https://www.erc.go.ke/services/petroleum/petroleum-prices/
+- 2019-06-15 to 2019-07-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20190923002852/https://www.erc.go.ke/services/petroleum/petroleum-prices/
+- 2019-04-15 to 2019-05-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20191101062232/http://epra.go.ke:80/wp-content/uploads/2019/04/Maximum-Petroleum-Pump-Prices-in-Kenya-for-the-Period-15th-April-14th-May-2019.pdf
+- 2019-02-15 to 2019-03-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20191101062148/http://epra.go.ke:80/wp-content/uploads/2019/02/Maximum-retail-pump-prices-in-Kenya-for-the-period-15th-Feb-2019-14th-March-2019.pdf
+- 2018-12-15 to 2019-01-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20191101061238/http://epra.go.ke:80/wp-content/uploads/2018/12/Maximum-Petroleum-Pump-Prices-for-the-period-15th-December-2018-14th-January-2019.pdf
+- 2018-11-15 to 2018-12-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240626191130/http://epra.go.ke/wp-content/uploads/2018/11/Maximum-Petroleum-Pump-Prices-15th-November-14th-December-2018.pdf
+- 2018-10-15 to 2018-11-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20191101061236/http://epra.go.ke:80/wp-content/uploads/2018/10/Maximum-Retail-Pump-Prices-in-Kenya-15th-October-2018-14th-November-2018.pdf
+- 2018-06-15 to 2018-07-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240714092045/http://epra.go.ke/wp-content/uploads/2018/06/Press-Release-Maximum-Petroleum-Pump-Prices-for-the-period-15th-June-to-14th-July-2018.pdf
+- 2018-03-15 to 2018-04-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240718003032/http://epra.go.ke/wp-content/uploads/2018/06/15th-March-2018-to-14th-April-2018-fuel-prices-1.pdf
+- 2018-02-15 to 2018-03-14 | Nairobi | News | https://sokodirectory.com/2018/02/erc-increases-fuel-prices-current-prices-highest-40-months/
+- 2018-01-15 to 2018-02-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20211130085803/http://epra.go.ke/wp-content/uploads/2018/06/15th-January-14th-February-2017-Press-release-Maximum-retail-pump-prices-in-Kenya.pdf
+- 2017-12-15 to 2018-01-14 | Nairobi, Mombasa, Kisumu, Eldoret | News | https://businesstoday.co.ke/pain-pump-fuel-prices-rise/
+- 2017-11-15 to 2017-12-14 | Nairobi, Mombasa, Kisumu, Eldoret | News | https://capitalfm.africa/petrol-sh1-03-november-fuel-review-kerosene-increases-sh5/
+- 2017-10-15 to 2017-11-14 | Nairobi, Mombasa, Kisumu | News | https://www.capitalfm.co.ke/business/2017/10/fuel-pump-prices-oct-nov-period-rise/
+- 2017-09-15 to 2017-10-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/super-petrol-sh2-22-september-fuel-review/ ; https://businesstoday.co.ke/pain-pump-fuel-prices-go/
+- 2017-08-15 to 2017-09-14 | Nairobi | News | https://sokodirectory.com/2017/08/fuel-prices-decrease-slightly-month-august/
+- 2017-07-15 to 2017-08-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/petrol-down-by-sh1-64-in-july-fuel-review-diesel-and-kerosene-shed-off-sh2/
+- 2017-06-15 to 2017-07-14 | Nairobi, Mombasa, Kisumu, Nakuru | News | https://capitalfm.africa/petrol-reduces-marginally-by-sh86-cents-per-litre/
+- 2017-05-15 to 2017-06-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/motorists-to-pay-more-for-petrol-as-erc-increases-price-to-sh99-59/ ; https://sokodirectory.com/2017/06/relief-pump-fuel-prices-drop-signaling-drop-inflation/
+- 2017-04-15 to 2017-05-14 | Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/easter-eases-car-owners-burden-as-fuel-prices-drops/
+- 2017-03-15 to 2017-04-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://sokodirectory.com/2017/03/petrol-diesel-fuel-prices-increases-across-country/
+- 2017-02-15 to 2017-03-14 | Mombasa, Kisumu, Eldoret | News | https://capitalfm.africa/petrol-in-nairobi-hits-sh100-mark-in-latest-fuel-review/
+- 2017-01-15 to 2017-02-14 | Nairobi, Mombasa | News | https://capitalfm.africa/petrol-cost-shoots-diesel-decreases/
+- 2016-12-15 to 2017-01-14 | Nairobi | News | https://sokodirectory.com/2016/12/kenyans-tough-christmas-diesel-paraffin-prices-up/
+- 2016-11-15 to 2016-12-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://sokodirectory.com/2016/11/fuel-prices-increase-across-country/
+- 2016-09-15 to 2016-10-14 | Nairobi, Kisumu, Nakuru, Eldoret | News | https://www.capitalfm.co.ke/business/2016/09/relief-consumers-fuel-prices-drop-latest-review/
+- 2016-07-15 to 2016-08-14 | Nairobi | EPRA/ERC | https://web.archive.org/web/20160801004510/http://www.erc.go.ke:80/index.php?option=com_content&view=article&id=296:revised-roads-levy-takes-effect-in-july-august-2016-pump-prices&catid=98:latest-news&Itemid=579
+- 2016-05-15 to 2016-06-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/after-reduced-prices-cost-of-fuel-rises-in-kenya/
+- 2016-04-15 to 2016-05-14 | Nairobi | News | https://sokodirectory.com/2016/04/smiles-pump-common-man-streets-continues-cry/
+- 2016-03-15 to 2016-04-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/fuel-pump-prices-continue-to-drop/
+- 2016-02-15 to 2016-03-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/fuel-costs-significantly-new-review/
+- 2016-01-15 to 2016-02-14 | Nairobi | EPRA/ERC | https://web.archive.org/web/20171130133358/http://erc.go.ke/index.php?option=com_content&view=article&id=262:pump-prices-continue-to-drop-in-latest-price-review&catid=108&Itemid=700
+- 2015-12-15 to 2016-01-14 | Nairobi | EPRA/ERC | https://web.archive.org/web/20151227043226/http://www.erc.go.ke:80/index.php?option=com_content&view=article&id=260:marginal-impact-of-excise-duty-in-december-2015-pump-prices-review&catid=98:latest-news&Itemid=579
+- 2015-11-15 to 2015-12-14 | Nairobi, Mombasa, Kisumu, Eldoret | News | https://capitalfm.africa/fuel-costs-down-in-new-price-review/
+- 2015-09-15 to 2015-10-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/petrol-unchanged-diesel-and-kerosene-cost-drops/
+- 2015-04-15 to 2015-05-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/motorists-to-pay-less-for-petrol-more-for-diesel/
+- 2015-03-15 to 2015-04-14 | Nairobi, Mombasa, Kisumu, Nakuru | News | https://capitalfm.africa/no-drop-in-fuel-prices-this-time-around/
+- 2015-02-15 to 2015-03-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/fuel-prices-drops-significantly-in-new-erc-review/
+- 2015-01-15 to 2015-02-14 | Nairobi, Mombasa, Kisumu, Nakuru | News | https://capitalfm.africa/another-significant-drop-in-fuel-prices/
+- 2014-11-15 to 2014-12-14 | Nairobi, Mombasa | News | https://capitalfm.africa/significant-drop-in-kenyas-fuel-prices/
+- 2014-10-15 to 2014-11-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/overall-drop-in-fuel-prices-in-latest-review/
+- 2014-09-15 to 2014-10-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/relief-for-motorists-as-pump-prices-drop/
+- 2014-08-15 to 2014-09-14 | Mombasa, Nakuru | News | https://capitalfm.africa/super-increases-as-diesel-kerosene-drop/
+- 2014-07-15 to 2014-08-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/fuel-prices-rise-marginally-for-july/
+- 2014-05-15 to 2014-06-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/super-diesel-prices-rise-but-kerosene-drops/
+- 2014-04-15 to 2014-05-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/diesel-kerosene-prices-drop-in-april/
+- 2014-03-15 to 2014-04-14 | Nairobi, Mombasa, Kisumu, Nakuru | News | https://capitalfm.africa/motorists-to-pay-more-for-super-petrol/
+- 2014-02-15 to 2014-03-14 | Nairobi, Mombasa, Nakuru | News | https://capitalfm.africa/cost-of-super-petrol-rises-kerosene-drops/
+- 2014-01-15 to 2014-02-14 | Nairobi, Mombasa, Kisumu, Nakuru | News | https://capitalfm.africa/january-agony-fuelled-with-higher-gas-prices/
+- 2013-12-15 to 2014-01-14 | Nairobi | News | https://capitalfm.africa/fuel-prices-up-marginally-countrywide/
+- 2013-11-15 to 2013-12-14 | Nairobi, Kisumu, Nakuru | News | https://capitalfm.africa/fuel-pump-prices-drop-further-in-latest-review/
+- 2013-10-15 to 2013-11-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/marginal-drop-in-fuel-pump-prices/
+- 2013-09-15 to 2013-10-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/weak-shilling-pumps-fuel-prices/
+- 2013-08-15 to 2013-09-14 | Nairobi, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/new-taxes-bite-as-fuel-prices-go-up/
+- 2013-07-15 to 2013-08-14 | Nairobi | News | https://capitalfm.africa/petrol-diesel-price-up-as-kerosene-drops-by-sh2/
+- 2013-06-15 to 2013-07-14 | Nairobi, Mombasa, Kisumu, Nakuru | News | https://capitalfm.africa/relief-at-the-pump-as-petrol-drops-by-sh5/
+- 2013-05-15 to 2013-06-14 | Nairobi, Nakuru | News | https://capitalfm.africa/relief-at-the-pump-as-fuel-drops-by-sh4/
+- 2013-03-15 to 2013-04-14 | Nairobi, Mombasa, Kisumu, Nakuru | News | https://capitalfm.africa/shocker-at-pumps-as-petrol-rises-by-sh4/
+- 2012-12-15 to 2013-01-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20130124020122/http://www.erc.go.ke:80/erc/erc_news/Pump%20Prices%20Dec%202012.pdf
+- 2012-11-15 to 2012-12-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/erc-lowers-fuel-prices-marginally/
+- 2012-10-15 to 2012-11-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/agony-for-motorists-as-fuel-prices-rises-again/
+- 2012-09-15 to 2012-10-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20130124014904/http://www.erc.go.ke:80/erc/erc_news/Pump%20Prices%20-Sep%202012.pdf
+- 2012-08-15 to 2012-09-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20130124014910/http://www.erc.go.ke:80/erc/erc_news/Pump%20Prices%20August%202012-Sept.pdf
+- 2012-07-15 to 2012-08-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20130124020130/http://www.erc.go.ke:80/erc/erc_news/Pump%20prices%20July-August%202012.pdf
+- 2012-06-15 to 2012-07-14 | Nairobi, Mombasa, Kisumu | News | https://capitalfm.africa/cost-of-super-petrol-drops-by-sh3/
+- 2012-05-15 to 2012-06-14 | Nairobi | News | https://www.standardmedia.co.ke/amp/article/2000058159/standard-digital
+- 2012-03-15 to 2012-04-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20120417114219/http://www.erc.go.ke:80/erc/erc_news/pump%20Prices%2015-3-12.pdf
+- 2012-02-15 to 2012-03-14 | Nairobi | News | https://capitalfm.africa/fuel-prices-dip-further-in-latest-review/
+- 2012-01-15 to 2012-02-14 | Nairobi | News | https://diasporamessenger.com/2012/01/kenya-cuts-fuel-prices-citing-stronger-shilling ; https://capitalfm.africa/32478/
+- 2011-11-15 to 2011-12-14 | Nairobi | News | https://capitalfm.africa/more-agony-as-fuel-prices-hiked-again/
+- 2011-10-15 to 2011-11-14 | Nairobi | News | https://capitalfm.africa/petrol-prices-up-again/
+- 2011-09-15 to 2011-10-14 | Nairobi | News | https://capitalfm.africa/no-reprieve-at-the-pump-for-motorists/
+- 2011-07-15 to 2011-08-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20110812153435/http://www.erc.go.ke:80/erc/erc_news/PUMP%20PRICES%20JULY%202011.pdf
+- 2011-06-15 to 2011-07-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20110725023232/http://www.erc.go.ke:80/erc/erc_news/PUMP%20PRICES%20JUNE%202011.pdf
+- 2011-05-15 to 2011-06-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20110725023148/http://www.erc.go.ke:80/erc/erc_news/PRESS%20RELEASE%20ON%20%20PUMP%20PRICES-%20May%202011.pdf
