@@ -17,7 +17,8 @@ const card =
   "rounded-xl border border-black/[0.08] dark:border-white/[0.07] bg-white dark:bg-white/[0.025] px-6 py-5";
 
 export default async function EpraReviewIndex() {
-  const cycles = await fetchCycles();
+  // Stay up (just without the list) if the API is briefly unreachable.
+  const cycles = await fetchCycles().catch(() => []);
   const months = new Map<string, { from: string; towns: number }>();
   for (const c of [...cycles].reverse()) {
     const slug = reviewSlug(c.valid_from);
