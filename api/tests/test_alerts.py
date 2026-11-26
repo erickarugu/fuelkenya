@@ -133,3 +133,22 @@ def test_unchanged_after_start():
     )
     assert msg["subject"] == "⛽ No change: Nairobi fuel prices hold for another month"
     assert "now in effect" in msg["html"]
+
+
+def _subject(petrol, diesel, prev_petrol, prev_diesel, today=date(2026, 12, 14)):
+    latest = {"nairobi": _row("Nairobi", petrol, diesel, 200)}
+    previous = {"nairobi": _row("Nairobi", prev_petrol, prev_diesel, 200)}
+    return alert_email.build_email(
+        _settings(), "a@b.co", None, latest, previous, date(2026, 12, 15), date(2027, 1, 14), today=today
+    )["subject"]
+
+
+def test_subject_includes_diesel():
+    assert _subject(230, 220, 227, 218) == (
+        "⛽ Petrol up KSh 3.00, diesel up KSh 2.00 in Nairobi at midnight — fill up today"
+    )
+    assert _subject(225, 216, 227, 218) == "⛽ Petrol down KSh 2.00, diesel down KSh 2.00 in Nairobi at midnight"
+    assert _subject(230, 216, 227, 218) == (
+        "⛽ Petrol up KSh 3.00, diesel down KSh 2.00 in Nairobi at midnight — fill up today"
+    )
+    assert _subject(227, 220, 227, 218) == "⛽ Diesel goes up KSh 2.00 in Nairobi at midnight — fill up today"

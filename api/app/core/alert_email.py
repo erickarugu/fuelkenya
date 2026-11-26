@@ -79,34 +79,48 @@ def _pill(d: Optional[float]) -> str:
     )
 
 
-def _headline(town: str, d: Optional[float], starts: str, upcoming: bool) -> Dict[str, str]:
-    """Subject, headline and the nudge, worded by direction of the change."""
+def _move(fuel: str, d: float) -> str:
+    return f"{fuel} {'up' if d > 0 else 'down'} KSh {abs(d):.2f}"
+
+
+def _headline(
+    town: str, d_petrol: Optional[float], d_diesel: Optional[float], starts: str, upcoming: bool
+) -> Dict[str, str]:
+    """Subject, headline and nudge, worded from the petrol and diesel changes."""
     when = "at midnight" if upcoming else f"from {starts}"
-    if d is None:
+    if d_petrol is None and d_diesel is None:
         return {
             "subject": f"⛽ New EPRA fuel prices are out for {town}",
             "headline": f"New fuel prices for {town}",
             "nudge": f"The new maximum pump prices apply {when}.",
         }
-    if d > 0:
+    moves = [(f, d) for f, d in (("Petrol", d_petrol), ("Diesel", d_diesel)) if d]
+    if not moves:
         return {
-            "subject": f"⛽ Petrol goes up KSh {d:.2f} in {town} {when}" + (" — fill up today" if upcoming else ""),
-            "headline": f"Petrol goes up KSh {d:.2f} {when}",
-            "nudge": "Fill up before midnight to pay today's price." if upcoming
-            else "Prices have gone up. Budget for it on your next fill-up.",
+            "subject": f"⛽ No change: {town} fuel prices hold for another month",
+            "headline": "Prices hold for another month",
+            "nudge": "EPRA kept pump prices where they were. Nothing to rush for.",
         }
-    if d < 0:
-        return {
-            "subject": f"⛽ Petrol drops KSh {abs(d):.2f} in {town} {when}",
-            "headline": f"Good news: petrol drops KSh {abs(d):.2f}",
-            "nudge": "If you can wait, fill up after midnight." if upcoming
-            else "Cheaper fuel is here. Make sure your station passes it on.",
-        }
-    return {
-        "subject": f"⛽ No change: {town} fuel prices hold for another month",
-        "headline": "Prices hold for another month",
-        "nudge": "EPRA kept pump prices where they were. Nothing to rush for.",
-    }
+    rising = any(d > 0 for _, d in moves)
+    if len(moves) == 1:
+        f, d = moves[0]
+        verb = "goes up" if d > 0 else "drops"
+        phrase = f"{f} {verb} KSh {abs(d):.2f}"
+    elif moves[0][1] * moves[1][1] > 0:
+        dir_ = "up" if rising else "down"
+        phrase = f"Petrol {dir_} KSh {abs(moves[0][1]):.2f}, diesel {dir_} KSh {abs(moves[1][1]):.2f}"
+    else:
+        phrase = f"{_move('Petrol', moves[0][1])}, {_move('diesel', moves[1][1])}"
+    subject = f"⛽ {phrase} in {town} {when}" + (" — fill up today" if rising and upcoming else "")
+    if rising:
+        headline = phrase if len(moves) > 1 else f"{phrase} {when}"
+        nudge = ("Fill up before midnight to pay today's price." if upcoming
+                 else "Prices have gone up. Budget for it on your next fill-up.")
+    else:
+        headline = f"Good news: {phrase[0].lower() + phrase[1:]}"
+        nudge = ("If you can wait, fill up after midnight." if upcoming
+                 else "Cheaper fuel is here. Make sure your station passes it on.")
+    return {"subject": subject, "headline": headline, "nudge": nudge}
 
 
 def build_email(
@@ -143,7 +157,8 @@ def build_email(
     e = html.escape
 
     d_petrol = _delta(lead["super_petrol"], lead_prev and lead_prev["super_petrol"]) if lead else None
-    words = _headline(lead_name, d_petrol, starts, upcoming)
+    d_diesel = _delta(lead["diesel"], lead_prev and lead_prev["diesel"]) if lead else None
+    words = _headline(lead_name, d_petrol, d_diesel, starts, upcoming)
 
     # Three price cards for the subscriber's town.
     cards = []
