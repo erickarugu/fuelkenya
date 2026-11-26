@@ -203,7 +203,8 @@ async def send_alerts(
         recipients = [(r.email, r.town) for r in result]
 
     messages = [
-        alert_email.build_email(settings, e, t, latest, previous, latest_from, valid_to)
+        # Everyone gets the Nairobi edition, whatever town they signed up from.
+        alert_email.build_email(settings, e, "Nairobi", latest, previous, latest_from, valid_to)
         for e, t in recipients
     ]
     example = messages[0]["subject"] if messages else None
