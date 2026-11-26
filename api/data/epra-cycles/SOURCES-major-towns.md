@@ -6,7 +6,6 @@ Maximum retail pump prices for Nairobi, Mombasa, Kisumu, Nakuru and Eldoret, cop
 
 ## Left out on purpose
 
-- Whole cycles: 2014-06 (no published figures found).
 - 2018-09 appears as two periods: ERC revised prices from 21 September for the VAT cut.
 - Single towns inside a cycle where a source was visibly mistyped, self-contradictory, gave whole shillings only, or omitted a product.
 
@@ -14,6 +13,7 @@ Maximum retail pump prices for Nairobi, Mombasa, Kisumu, Nakuru and Eldoret, cop
 
 - 2012-04 Nairobi: reports differ by KSh 0.01 on diesel and kerosene. Chosen: 108.80 and 86.28 (The Standard, May 2012), which agree with the May changes; Capital FM printed 108.79 and 86.27.
 - 2017-04 Nairobi: petrol chosen as 98.00 (Soko Directory; Capital FM prints Sh98). Stated month-on-month changes would also allow 97.99.
+- 2014-06 Nairobi: **all three prices are calculated, not quoted**, from the July 2014 review: 115.86 less the 1.24 rise, 104.67 plus the 0.14 fall, 84.12 less the 0.99 rise. No second source confirms them.
 - 2014-08 Nairobi: **petrol 116.62 and kerosene 83.05 are calculated, not quoted**: July's 115.86 plus the 0.76 rise, and July's 84.12 less the 1.07 fall. September's figures and ERC's announced changes give the same results. Capital FM prints 116.20 and 82.05. Diesel is quoted.
 - 2016-10 Nairobi: **kerosene 58.71 is calculated, not quoted**: September's 59.10 less the 0.39 fall ERC announced. November's 62.16 less its 3.45 rise gives the same figure. Petrol and diesel are quoted.
 
@@ -107,6 +107,7 @@ Maximum retail pump prices for Nairobi, Mombasa, Kisumu, Nakuru and Eldoret, cop
 - 2014-09-15 to 2014-10-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/relief-for-motorists-as-pump-prices-drop/
 - 2014-08-15 to 2014-09-14 | Nairobi, Mombasa, Nakuru | News; Nairobi petrol and kerosene calculated | https://capitalfm.africa/super-increases-as-diesel-kerosene-drop/ ; https://capitalfm.africa/fuel-prices-rise-marginally-for-july/ ; https://capitalfm.africa/relief-for-motorists-as-pump-prices-drop/ ; https://web.archive.org/web/20140923183620/http://www.erc.go.ke:80/index.php?option=com_content&view=article&id=198:petroleum-pump-prices-15-sept-14-october-2014&catid=98:latest-news&Itemid=579
 - 2014-07-15 to 2014-08-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/fuel-prices-rise-marginally-for-july/
+- 2014-06-15 to 2014-07-14 | Nairobi | Calculated from news report | https://capitalfm.africa/fuel-prices-rise-marginally-for-july/
 - 2014-05-15 to 2014-06-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/super-diesel-prices-rise-but-kerosene-drops/
 - 2014-04-15 to 2014-05-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/diesel-kerosene-prices-drop-in-april/
 - 2014-03-15 to 2014-04-14 | Nairobi, Mombasa, Kisumu, Nakuru | News | https://capitalfm.africa/motorists-to-pay-more-for-super-petrol/
