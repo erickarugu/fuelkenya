@@ -5,6 +5,7 @@ import logging
 import re
 from datetime import date, datetime, timezone
 from typing import List, Literal, Optional
+from zoneinfo import ZoneInfo
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from fastapi.responses import HTMLResponse
@@ -118,8 +119,23 @@ class SendIn(BaseModel):
     # dry_run: count recipients and show the subject, send nothing.
     # test: send this cycle's email to test_email only (repeatable).
     # send: email every active subscriber, once per cycle.
-    mode: Literal["dry_run", "test", "send"] = "dry_run"
+    # auto: like send, run by upload_cycles.sh. Skips quietly unless the upload
+    #   included the newest cycle, that cycle is recent, and it hasn't been sent.
+    mode: Literal["dry_run", "test", "send", "auto"] = "dry_run"
     test_email: Optional[str] = None
+    uploaded: List[date] = Field(default_factory=list)
+
+
+AUTO_MAX_AGE_DAYS = 7
+
+
+def auto_skip_reason(latest_from: date, uploaded: List[date], today: date) -> Optional[str]:
+    """Why an automatic send should not go out, or None if it should."""
+    if latest_from not in uploaded:
+        return "this upload did not include the newest cycle"
+    if (today - latest_from).days > AUTO_MAX_AGE_DAYS:
+        return f"the newest cycle started more than {AUTO_MAX_AGE_DAYS} days ago"
+    return None
 
 
 class SendOut(BaseModel):
@@ -128,6 +144,7 @@ class SendOut(BaseModel):
     recipients: int
     sent: int
     subject_example: Optional[str] = None
+    skipped: Optional[str] = None
 
 
 async def _cycle_rows(db: AsyncSession, valid_from: date):
@@ -167,6 +184,11 @@ async def send_alerts(
     previous = await _cycle_rows(db, prev_from) if prev_from else {}
     valid_to = max(r["valid_to"] for r in latest.values())
 
+    if payload.mode == "auto":
+        reason = auto_skip_reason(latest_from, payload.uploaded, datetime.now(ZoneInfo("Africa/Nairobi")).date())
+        if reason:
+            return SendOut(mode="auto", valid_from=latest_from, recipients=0, sent=0, skipped=reason)
+
     if payload.mode == "test":
         email = (payload.test_email or "").strip().lower()
         if not EMAIL_RE.match(email):
@@ -191,13 +213,17 @@ async def send_alerts(
     if not settings.resend_api_key:
         raise HTTPException(status_code=503, detail="RESEND_API_KEY is not configured.")
 
-    if payload.mode == "send":
+    claims = payload.mode in ("send", "auto")
+    if claims:
         # Claim the cycle first so a double click or retry can't email everyone twice.
         try:
             await db.execute(pg_insert(alert_sends).values(valid_from=latest_from, recipients=0))
             await db.commit()
         except IntegrityError:
             await db.rollback()
+            if payload.mode == "auto":
+                return SendOut(mode="auto", valid_from=latest_from, recipients=0, sent=0,
+                               skipped="alerts for this cycle were already sent")
             raise HTTPException(status_code=409, detail=f"Alerts for the {latest_from} cycle were already sent.")
 
     sent = 0
@@ -213,7 +239,7 @@ async def send_alerts(
             detail=f"Sending stopped after {sent} of {len(messages)} emails. Check the API logs.",
         )
     finally:
-        if payload.mode == "send":
+        if claims:
             await db.execute(
                 update(alert_sends).where(alert_sends.c.valid_from == latest_from).values(recipients=sent)
             )
