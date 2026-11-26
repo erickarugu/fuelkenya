@@ -95,11 +95,12 @@ def test_email_leads_with_subscribers_town_and_shows_change():
         "kisumu": _row("Kisumu", 228.01, 227.31, 219.43),
     }
     msg = alert_email.build_email(
-        s, "jane@example.com", "kisumu", latest, previous, date(2026, 11, 15), date(2026, 12, 14)
+        s, "jane@example.com", "kisumu", latest, previous, date(2026, 11, 15), date(2026, 12, 14),
+        today=date(2026, 11, 14),
     )
     assert msg["to"] == ["jane@example.com"]
-    assert msg["subject"].startswith("Kisumu petrol down KSh 1.50 at KSh 226.51")
-    assert "November 2026" in msg["subject"]
+    assert msg["subject"] == "⛽ Petrol drops KSh 1.50 in Kisumu at midnight"
+    assert "fill up after midnight" in msg["html"]
     assert msg["html"].index("Kisumu") < msg["html"].index("Nairobi")
     assert "/epra-review/2026-11" in msg["text"]
     assert "List-Unsubscribe" in msg["headers"]
@@ -111,3 +112,24 @@ def test_email_escapes_town_names():
     latest = {"<b>x": _row("<b>x", 1, 1, 1)}
     msg = alert_email.build_email(s, "a@b.co", "<b>x", latest, {}, date(2026, 11, 15), date(2026, 12, 14))
     assert "<b>x" not in msg["html"]
+
+
+def test_price_rise_before_start_urges_filling_up():
+    s = _settings()
+    latest = {"nairobi": _row("Nairobi", 230.00, 228, 220)}
+    previous = {"nairobi": _row("Nairobi", 226.96, 228, 220)}
+    msg = alert_email.build_email(
+        s, "a@b.co", None, latest, previous, date(2026, 12, 15), date(2027, 1, 14), today=date(2026, 12, 14)
+    )
+    assert msg["subject"] == "⛽ Petrol goes up KSh 3.04 in Nairobi at midnight — fill up today"
+
+
+def test_unchanged_after_start():
+    s = _settings()
+    row = _row("Nairobi", 226.96, 227.76, 219.87)
+    msg = alert_email.build_email(
+        s, "a@b.co", None, {"nairobi": row}, {"nairobi": row}, date(2026, 11, 15), date(2026, 12, 14),
+        today=date(2026, 11, 26),
+    )
+    assert msg["subject"] == "⛽ No change: Nairobi fuel prices hold for another month"
+    assert "now in effect" in msg["html"]
