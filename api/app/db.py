@@ -83,6 +83,15 @@ alert_subscribers = Table(
     Column("unsubscribed_at", DateTime(timezone=True), nullable=True),
 )
 
+# One row per cycle whose alert email went out, so a cycle is never sent twice.
+alert_sends = Table(
+    "alert_sends",
+    metadata,
+    Column("valid_from", Date, primary_key=True),
+    Column("recipients", Integer, nullable=False),
+    Column("sent_at", DateTime(timezone=True), server_default=func.current_timestamp()),
+)
+
 
 async def init_db() -> None:
     async with engine.begin() as conn:

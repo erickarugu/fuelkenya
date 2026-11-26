@@ -42,4 +42,9 @@ for csv in "$@"; do
 done
 
 echo "uploaded: $ok  failed: $failed"
+if [ "$failed" -eq 0 ] && [ "$ok" -gt 0 ]; then
+  echo "Next, once you have checked the new prices on fuelkenya.com:"
+  echo "  api/scripts/send_alerts.sh --test you@example.com   # preview the alert email"
+  echo "  api/scripts/send_alerts.sh --send                   # email all subscribers"
+fi
 [ "$failed" -eq 0 ]
