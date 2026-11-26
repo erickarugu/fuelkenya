@@ -1,0 +1,26 @@
+---
+title: Full history export (CSV / JSON)
+description: Download every Kenyan fuel price FuelKenya holds, every town and cycle since 2010, as CSV or JSON under CC BY 4.0.
+---
+
+# Full history export
+
+The complete dataset in one file: every town, every cycle since December 2010.
+
+```http
+GET /v1/export.csv
+GET /v1/export.json
+```
+
+| Column | Meaning |
+| --- | --- |
+| `town` | Town name as listed by EPRA/ERC |
+| `valid_from`, `valid_to` | The pricing cycle (normally the 15th to the 14th) |
+| `super_petrol`, `diesel`, `kerosene` | Maximum retail price, KSh per litre, VAT inclusive |
+| `towns_in_cycle` | How many towns that cycle covers |
+| `coverage` | `full official table` or `major towns only` |
+| `source` | Where that cycle's numbers come from |
+
+The JSON version wraps the rows with `license`, `attribution`, `columns` and `count`.
+
+Licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Credit: *Source: EPRA/ERC, compiled by FuelKenya (fuelkenya.com)*. There is also a download page at [fuelkenya.com/data](https://fuelkenya.com/data).

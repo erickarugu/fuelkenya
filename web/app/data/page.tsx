@@ -60,8 +60,28 @@ export default async function DataPage() {
   const s = payload ? summarise(payload.data) : null;
   const attribution = payload?.attribution ?? "Source: EPRA/ERC, compiled by FuelKenya (fuelkenya.com)";
 
+  const datasetLd = {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    name: "Kenya fuel pump prices (EPRA/ERC), monthly since 2010",
+    description:
+      "Official maximum retail pump prices for Super Petrol (PMS), Diesel (AGO) and Kerosene (IK) in every Kenyan town, set monthly by EPRA and before mid-2019 by the Energy Regulatory Commission. KSh per litre, VAT inclusive.",
+    url: "https://fuelkenya.com/data",
+    keywords: ["Kenya", "fuel prices", "petrol", "diesel", "kerosene", "EPRA", "ERC", "pump prices"],
+    license: "https://creativecommons.org/licenses/by/4.0/",
+    isAccessibleForFree: true,
+    temporalCoverage: s ? `${s.first}/${s.last}` : "2010-12-15/..",
+    spatialCoverage: { "@type": "Place", name: "Kenya" },
+    creator: { "@type": "Organization", name: "FuelKenya", url: "https://fuelkenya.com" },
+    distribution: [
+      { "@type": "DataDownload", encodingFormat: "text/csv", contentUrl: EXPORT_CSV_URL },
+      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: EXPORT_JSON_URL }
+    ]
+  };
+
   return (
     <div className="min-h-screen page-bg grid-bg bg-[#fafafa] dark:bg-[#080808] px-6 py-8 text-stone-900 dark:text-stone-100 sm:px-10 lg:px-16">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(datasetLd) }} />
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
         <div className={card}>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s | FuelKenya"
   },
   description:
-    "Track official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across every town in Kenya. Updated every pricing cycle on the 14th.",
+    "Official EPRA maximum pump prices for Super Petrol, Diesel and Kerosene in every Kenyan town, with monthly reviews and price history since 2010. Updated on the 14th.",
   keywords: [
     "EPRA fuel prices Kenya",
     "petrol prices Kenya today",
@@ -49,7 +49,10 @@ export const metadata: Metadata = {
     "Total fuel prices Kenya",
     "Rubis fuel prices Kenya",
     "Vivo fuel prices Kenya",
-    "EPRA fuel prices today Kenya"
+    "EPRA fuel prices today Kenya",
+    "EPRA fuel price review",
+    "Kenya fuel price history",
+    "Kenya fuel prices dataset"
   ],
   authors: [{ name: "FuelKenya", url: "https://fuelkenya.com" }],
   creator: "FuelKenya",

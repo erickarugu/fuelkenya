@@ -1,0 +1,31 @@
+---
+title: GET /cycles
+description: List every EPRA/ERC pricing cycle in the FuelKenya dataset, newest first, with the number of towns each covers.
+---
+
+# GET /cycles
+
+Every pricing cycle on record, newest first. History starts in December 2010.
+
+```http
+GET /v1/cycles
+```
+
+## Response
+
+```json
+[
+  { "valid_from": "2026-11-15", "valid_to": "2026-12-14", "towns": 229 },
+  { "valid_from": "2026-10-15", "valid_to": "2026-11-14", "towns": 229 }
+]
+```
+
+`towns` is how many towns that cycle covers. Cycles with five or fewer towns hold only the major-town prices reported in the news, where no full official table survives.
+
+To get every town's price for one cycle, pass its dates to [`/prices`](/endpoints/prices):
+
+```bash
+curl "https://api.fuelkenya.com/v1/prices?start_date=2026-11-15&end_date=2026-12-14&limit=1000"
+```
+
+Each cycle also has a page on the website, for example [fuelkenya.com/epra-review/2026-11](https://fuelkenya.com/epra-review/2026-11).
