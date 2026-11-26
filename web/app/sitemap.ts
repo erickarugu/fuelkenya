@@ -49,31 +49,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   return [
-    {
-      url: `${baseUrl}/epra-review`,
-      lastModified,
-      changeFrequency: "monthly" as const,
-      priority: 0.8
-    },
-    ...reviewUrls,
-    {
-      url: baseUrl,
-      lastModified,
-      changeFrequency: "monthly" as const,
-      priority: 1.0
-    },
-    {
-      url: `${baseUrl}/data`,
-      lastModified,
-      changeFrequency: "monthly" as const,
-      priority: 0.7
-    },
-    {
-      url: `${baseUrl}/towns`,
-      lastModified,
-      changeFrequency: "monthly" as const,
-      priority: 0.9
-    },
-    ...townUrls
+    { url: baseUrl, lastModified, changeFrequency: "monthly" as const, priority: 1.0 },
+    { url: `${baseUrl}/towns`, lastModified, changeFrequency: "monthly" as const, priority: 0.9 },
+    { url: `${baseUrl}/epra-review`, lastModified, changeFrequency: "monthly" as const, priority: 0.8 },
+    { url: `${baseUrl}/data`, lastModified, changeFrequency: "monthly" as const, priority: 0.7 },
+    ...townUrls,
+    ...reviewUrls
   ];
 }

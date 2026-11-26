@@ -6,14 +6,14 @@ import EmbedBuilder from "@/components/EmbedBuilder";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Download Kenya Fuel Price Data (2010–today) | FuelKenya",
+  title: "Kenya Fuel Price Data: Download or Embed (2010 to today) | FuelKenya",
   description:
-    "Free download of official EPRA and ERC maximum pump prices for Super Petrol, Diesel and Kerosene in every Kenyan town, monthly since December 2010. CSV and JSON, CC BY 4.0.",
+    "Free download of official EPRA and ERC maximum pump prices for Super Petrol, Diesel and Kerosene in every Kenyan town, monthly since December 2010. CSV and JSON, CC BY 4.0, plus a free price chart to embed on your site.",
   alternates: { canonical: "https://fuelkenya.com/data" },
   openGraph: {
-    title: "Download Kenya Fuel Price Data | FuelKenya",
+    title: "Kenya Fuel Price Data: Download or Embed | FuelKenya",
     description:
-      "Official EPRA/ERC maximum pump prices for every Kenyan town since 2010. CSV and JSON, CC BY 4.0.",
+      "Official EPRA/ERC maximum pump prices for every Kenyan town since 2010. CSV and JSON, CC BY 4.0, or embed a live chart.",
     url: "https://fuelkenya.com/data",
     type: "website"
   }

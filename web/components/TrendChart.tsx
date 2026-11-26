@@ -95,7 +95,7 @@ function useIsDark() {
 export default function TrendChart({ history, initialDuration, onDurationChange, embedded }: TrendChartProps) {
   const [hidden,   setHidden]   = useState<Set<string>>(new Set());
   const [duration, setDurationState] = useState<DurLabel>(
-    (DURATIONS.find(d => d.label.toLowerCase() === initialDuration?.toLowerCase())?.label ?? "All") as DurLabel,
+    (DURATIONS.find(d => d.label.toLowerCase() === initialDuration?.toLowerCase())?.label ?? "1Y") as DurLabel,
   );
   const setDuration = (d: DurLabel) => {
     setDurationState(d);

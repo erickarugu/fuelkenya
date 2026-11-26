@@ -6,7 +6,7 @@ const PERIODS = ["3M", "6M", "1Y", "2Y", "5Y", "All"];
 
 export default function EmbedBuilder({ towns }: { towns: string[] }) {
   const [town, setTown] = useState("Nairobi");
-  const [period, setPeriod] = useState("All");
+  const [period, setPeriod] = useState("1Y");
   const [theme, setTheme] = useState("dark");
   const [copied, setCopied] = useState(false);
 

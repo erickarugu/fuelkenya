@@ -8,6 +8,8 @@
 - [Town pages](https://fuelkenya.com/towns): one page per town, e.g. https://fuelkenya.com/town/nairobi
 - [Monthly EPRA reviews](https://fuelkenya.com/epra-review): one page per pricing cycle, e.g. https://fuelkenya.com/epra-review/2026-11, with every town's price and the change from the previous cycle.
 - [Open data download](https://fuelkenya.com/data): full history as CSV or JSON, CC BY 4.0.
+- [Embeddable chart](https://fuelkenya.com/data#embed): a live price-history chart for any town, for use on other websites via an iframe, e.g. https://fuelkenya.com/embed?town=Mombasa&period=1Y&theme=light
+- [Email alerts](https://fuelkenya.com/#alerts): one free email a month when EPRA announces new prices, sent on the 14th.
 
 ## Public API (free, no key, JSON)
 
