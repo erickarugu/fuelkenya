@@ -17,6 +17,14 @@ class Settings(BaseSettings):
     # Shared secret sent by our own servers in X-FuelKenya-Client-Token to
     # skip the per-IP rate limit. Empty means no client is trusted.
     trusted_client_token: str = ""
+    # Monthly price-alert emails (Resend). Empty RESEND_API_KEY disables sending.
+    resend_api_key: str = ""
+    alerts_from: str = "FuelKenya <alerts@fuelkenya.com>"
+    alerts_reply_to: str = ""
+    # Signs unsubscribe links. Falls back to ingest_token when unset.
+    alerts_secret: str = ""
+    public_api_url: str = "https://api.fuelkenya.com/v1"
+    site_url: str = "https://fuelkenya.com"
     rate_limit_max_requests: int = 60
     rate_limit_window_seconds: int = 60
     rate_limit_exempt_paths: list[str] = ["/v1/health"]
