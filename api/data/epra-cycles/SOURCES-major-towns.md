@@ -25,7 +25,7 @@ Maximum retail pump prices for Nairobi, Mombasa, Kisumu, Nakuru and Eldoret, cop
 - 2023-05-15 to 2023-06-14 | Nairobi | News | https://businesstoday.co.ke/end-of-fuel-subsidy-as-govt-hikes-fuel-prices/
 - 2023-04-15 to 2023-05-14 | Nairobi, Mombasa, Kisumu | News | https://capitalfm.africa/fuel-prices-remain-unchanged-in-latest-epra-review-2/
 - 2023-03-15 to 2023-04-14 | Nairobi | News | https://sokodirectory.com/2023/03/a-liter-of-super-petrol-up-by-ksh-2-in-latest-review/
-- 2023-01-15 to 2023-02-14 | Mombasa, Nakuru, Eldoret | News | https://khusoko.com/2023/01/15/fuel-prices-remain-unchanged-for-the-third-consecutive-month/
+- 2023-01-15 to 2023-02-14 | Nairobi, Mombasa, Nakuru, Eldoret | News | https://khusoko.com/2023/01/15/fuel-prices-remain-unchanged-for-the-third-consecutive-month/ ; https://capitalfm.africa/epra-keeps-fuel-prices-unchanged-in-latest-review-maintains-kerosene-subsidy/
 - 2022-12-15 to 2023-01-14 | Nairobi, Mombasa, Kisumu | News | https://capitalfm.africa/relief-for-kenyans-as-fuel-prices-remain-unchanged/
 - 2022-11-15 to 2022-12-14 | Nairobi, Mombasa, Kisumu | News | https://capitalfm.africa/fuel-prices-drop-by-sh1-in-latest-epra-review/
 - 2022-10-15 to 2022-11-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://standardmedia.co.ke/business/article/2001458126/fuel-prices-go-down-in-latest-epra-review
@@ -76,7 +76,7 @@ Maximum retail pump prices for Nairobi, Mombasa, Kisumu, Nakuru and Eldoret, cop
 - 2017-05-15 to 2017-06-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/motorists-to-pay-more-for-petrol-as-erc-increases-price-to-sh99-59/ ; https://sokodirectory.com/2017/06/relief-pump-fuel-prices-drop-signaling-drop-inflation/
 - 2017-04-15 to 2017-05-14 | Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/easter-eases-car-owners-burden-as-fuel-prices-drops/
 - 2017-03-15 to 2017-04-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://sokodirectory.com/2017/03/petrol-diesel-fuel-prices-increases-across-country/
-- 2017-02-15 to 2017-03-14 | Mombasa, Kisumu, Eldoret | News | https://capitalfm.africa/petrol-in-nairobi-hits-sh100-mark-in-latest-fuel-review/
+- 2017-02-15 to 2017-03-14 | Nairobi, Mombasa, Kisumu, Eldoret | News | https://capitalfm.africa/petrol-in-nairobi-hits-sh100-mark-in-latest-fuel-review/ ; https://sokodirectory.com/2017/02/tough-times-ahead-fuel-prices-skyrocket-hitting-ksh-100/ ; https://sokodirectory.com/2017/02/inflation-likely-higher-cbk-projections/ ; https://businesstoday.co.ke/fresh-rise-in-prices-to-slow-down-demand-for-cars/
 - 2017-01-15 to 2017-02-14 | Nairobi, Mombasa | News | https://capitalfm.africa/petrol-cost-shoots-diesel-decreases/
 - 2016-12-15 to 2017-01-14 | Nairobi | News | https://sokodirectory.com/2016/12/kenyans-tough-christmas-diesel-paraffin-prices-up/
 - 2016-11-15 to 2016-12-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://sokodirectory.com/2016/11/fuel-prices-increase-across-country/
