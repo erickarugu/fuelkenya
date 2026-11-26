@@ -5,7 +5,7 @@ import EmbedChart from "@/components/EmbedChart";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Kenya fuel price chart | FuelKenya",
+  title: "Kenya fuel price chart",
   robots: { index: false, follow: true }
 };
 
