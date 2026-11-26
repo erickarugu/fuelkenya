@@ -68,6 +68,21 @@ Index("idx_fuel_prices_town", func.lower(fuel_prices.c.town))
 Index("idx_fuel_prices_valid_from", fuel_prices.c.valid_from)
 Index("idx_fuel_prices_date_range", fuel_prices.c.valid_from, fuel_prices.c.valid_to)
 
+# People who asked to be told when EPRA publishes new prices (signup box on
+# fuelkenya.com). Email is stored lower-cased; one row per address.
+alert_subscribers = Table(
+    "alert_subscribers",
+    metadata,
+    Column("id", Integer, primary_key=True),
+    Column("email", String(254), nullable=False, unique=True),
+    Column("town", String(100), nullable=True),
+    Column("source", String(50), nullable=True),
+    Column(
+        "created_at", DateTime(timezone=True), server_default=func.current_timestamp()
+    ),
+    Column("unsubscribed_at", DateTime(timezone=True), nullable=True),
+)
+
 
 async def init_db() -> None:
     async with engine.begin() as conn:

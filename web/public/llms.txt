@@ -1,16 +1,24 @@
-# Fuel Kenya
+# FuelKenya
 
-> High-precision, historical, and current EPRA-regulated fuel prices in Kenya. Updated monthly on the 14th.
+> Official maximum retail pump prices for Super Petrol (PMS), Diesel (AGO) and Kerosene (IK) in every Kenyan town, as set by the Energy and Petroleum Regulatory Authority (EPRA). EPRA announces new prices on the 14th of each month; they apply from the 15th to the 14th of the next month. FuelKenya publishes them for about 230 towns, with history back to December 2010 (prices before mid-2019 were set by EPRA's predecessor, the Energy Regulatory Commission). All figures are the regulator's published ceilings in KSh per litre, VAT inclusive. FuelKenya never estimates prices; missing months are left as gaps.
 
-## Core API Endpoints
+## Website
 
-All endpoints return raw JSON. No authentication is required for read-only GET requests.
+- [Live tracker](https://fuelkenya.com/): current prices, price history chart, town ranking and trip cost calculator.
+- [Town pages](https://fuelkenya.com/towns): one page per town, e.g. https://fuelkenya.com/town/nairobi
+- [Monthly EPRA reviews](https://fuelkenya.com/epra-review): one page per pricing cycle, e.g. https://fuelkenya.com/epra-review/2026-11, with every town's price and the change from the previous cycle.
+- [Open data download](https://fuelkenya.com/data): full history as CSV or JSON, CC BY 4.0.
 
-- [Current National Prices](https://api.fuelkenya.com/api/v1/prices/latest): Returns a JSON list of prices for all ~150 towns in the active EPRA cycle.
-- [Town Specific History](https://api.fuelkenya.com/api/v1/prices/history?town={town}): Returns chronological pricing cycles for a given town.
-- [Town List](https://api.fuelkenya.com/api/v1/towns): Returns a flat JSON array of all registered towns.
+## Public API (free, no key, JSON)
 
-## Web Directory Structure
+- [Latest prices, all towns](https://api.fuelkenya.com/v1/prices/latest)
+- [Latest price for one town](https://api.fuelkenya.com/v1/prices/latest?town=Nairobi)
+- [Price history for one town](https://api.fuelkenya.com/v1/prices?town=Nairobi&limit=1000)
+- [List of pricing cycles](https://api.fuelkenya.com/v1/cycles)
+- [List of towns](https://api.fuelkenya.com/v1/towns)
+- [Full history, CSV](https://api.fuelkenya.com/v1/export.csv)
+- [API documentation](https://docs.fuelkenya.com)
 
-- [/](https://fuelkenya.com/): National dashboard, visual trend charts, and maximum/minimum price indices.
-- [/town/{slug}](https://fuelkenya.com/town/{slug}): Dedicated, crawlable landing pages for every town (e.g., `/town/nairobi`, `/town/mombasa`).
+## Citation
+
+Source: EPRA/ERC, compiled by FuelKenya (fuelkenya.com). Licensed CC BY 4.0.
