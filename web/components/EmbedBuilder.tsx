@@ -11,10 +11,10 @@ export default function EmbedBuilder({ towns }: { towns: string[] }) {
   const [copied, setCopied] = useState(false);
 
   const src = `https://fuelkenya.com/embed?town=${encodeURIComponent(town)}&period=${period}&theme=${theme}`;
-  const code = `<iframe src="${src}" width="100%" height="640" style="border:0;border-radius:12px" loading="lazy" title="Kenya fuel prices: ${town}"></iframe>`;
+  const code = `<iframe src="${src}" width="100%" height="700" style="border:0;border-radius:12px;overflow:hidden" loading="lazy" title="Kenya fuel prices: ${town}"></iframe>`;
 
   const select =
-    "rounded-full border border-black/[0.1] dark:border-white/[0.1] bg-white dark:bg-white/[0.04] px-3 py-1.5 text-sm";
+    "rounded-full border border-black/[0.1] dark:border-white/[0.1] bg-white dark:bg-white/[0.04] px-3 py-1.5 text-sm dark:[color-scheme:dark]";
 
   return (
     <div>
@@ -49,7 +49,7 @@ export default function EmbedBuilder({ towns }: { towns: string[] }) {
         key={src}
         src={src.replace("https://fuelkenya.com", "")}
         title="Embed preview"
-        className="mt-4 h-[640px] w-full rounded-xl border-0"
+        className="mt-4 h-[700px] w-full rounded-xl border-0"
         loading="lazy"
       />
     </div>
