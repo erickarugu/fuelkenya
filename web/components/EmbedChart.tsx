@@ -1,5 +1,7 @@
 "use client";
 
+// Rendered by /embed inside other sites' iframes.
+
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
