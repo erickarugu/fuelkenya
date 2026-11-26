@@ -49,6 +49,8 @@ const fmtTick = (ms: number, spanMs: number) =>
 
 interface TrendChartProps {
   history: PriceRecord[];
+  initialDuration?: string;
+  onDurationChange?: (label: string) => void;
 }
 
 const SERIES = [
@@ -88,9 +90,15 @@ function useIsDark() {
   return isDark;
 }
 
-export default function TrendChart({ history }: TrendChartProps) {
+export default function TrendChart({ history, initialDuration, onDurationChange }: TrendChartProps) {
   const [hidden,   setHidden]   = useState<Set<string>>(new Set());
-  const [duration, setDuration] = useState<DurLabel>("All");
+  const [duration, setDurationState] = useState<DurLabel>(
+    (DURATIONS.find(d => d.label.toLowerCase() === initialDuration?.toLowerCase())?.label ?? "All") as DurLabel,
+  );
+  const setDuration = (d: DurLabel) => {
+    setDurationState(d);
+    onDurationChange?.(d);
+  };
   const isDark = useIsDark();
 
   const toggle = (key: string) =>

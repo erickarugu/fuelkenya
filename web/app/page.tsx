@@ -340,6 +340,13 @@ export default async function Page({ searchParams }: Props) {
             </div>
             <span className="hidden text-stone-300 dark:text-stone-700 sm:inline">·</span>
             <a
+              href="#alerts"
+              className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 font-medium text-emerald-700 transition-colors hover:bg-emerald-500/15 dark:text-emerald-300"
+            >
+              Get alerts
+            </a>
+            <span className="hidden text-stone-300 dark:text-stone-700 sm:inline">·</span>
+            <a
               href="https://docs.fuelkenya.com"
               target="_blank"
               rel="noopener noreferrer"
@@ -518,7 +525,7 @@ export default async function Page({ searchParams }: Props) {
         </div>
 
         {/* ── Price alerts ───────────────────────────────────────────────────── */}
-        <div className="mb-14 fade-up delay-5">
+        <div id="alerts" className="mb-14 scroll-mt-24 fade-up delay-5">
           <AlertSignup source="home" />
         </div>
 

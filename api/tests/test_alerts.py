@@ -152,3 +152,12 @@ def test_subject_includes_diesel():
         "⛽ Petrol up KSh 3.00, diesel down KSh 2.00 in Nairobi at midnight. Fill up today"
     )
     assert _subject(227, 220, 227, 218) == "⛽ Diesel goes up KSh 2.00 in Nairobi at midnight. Fill up today"
+
+
+def test_auto_send_guard():
+    from app.api.v1.alerts import auto_skip_reason
+    nov = date(2026, 11, 15)
+    assert auto_skip_reason(nov, [nov], date(2026, 11, 14)) is None
+    assert auto_skip_reason(nov, [nov], date(2026, 11, 20)) is None
+    assert "did not include" in auto_skip_reason(nov, [date(2018, 3, 15)], date(2026, 11, 14))
+    assert "more than" in auto_skip_reason(nov, [nov], date(2026, 12, 1))

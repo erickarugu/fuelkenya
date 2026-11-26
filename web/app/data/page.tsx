@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { EXPORT_CSV_URL, EXPORT_JSON_URL, fetchExport, type ExportRow } from "@/lib/api";
+import { EXPORT_CSV_URL, EXPORT_JSON_URL, fetchExport, fetchTowns, type ExportRow } from "@/lib/api";
+import EmbedBuilder from "@/components/EmbedBuilder";
 
 export const revalidate = 3600;
 
@@ -56,7 +57,10 @@ const card =
 
 export default async function DataPage() {
   // The downloads must stay reachable even if the stats can't be loaded.
-  const payload = await fetchExport().catch(() => null);
+  const [payload, towns] = await Promise.all([
+    fetchExport().catch(() => null),
+    fetchTowns().catch(() => [] as string[])
+  ]);
   const s = payload ? summarise(payload.data) : null;
   const attribution = payload?.attribution ?? "Source: EPRA/ERC, compiled by FuelKenya (fuelkenya.com)";
 
@@ -193,6 +197,15 @@ export default async function DataPage() {
             </table>
           </div>
         </div>)}
+
+        <div id="embed" className={card}>
+          <h2 className="text-lg font-bold">Embed the chart</h2>
+          <p className="mt-1 mb-4 text-sm text-stone-500">
+            Put a live price-history chart on your site or blog. Pick a town and period, then paste the code.
+            Readers can switch town and period inside the chart, and it updates every cycle.
+          </p>
+          <EmbedBuilder towns={towns} />
+        </div>
 
         <div className={card}>
           <h2 className="text-lg font-bold">Sources, licence and citation</h2>

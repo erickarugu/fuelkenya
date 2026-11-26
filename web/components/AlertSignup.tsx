@@ -52,8 +52,7 @@ export default function AlertSignup({ town, source }: AlertSignupProps) {
         Get new fuel prices on the 14th
       </h2>
       <p className="mt-1 text-sm text-stone-600 dark:text-stone-400">
-        One email a month when EPRA announces new pump prices
-        {town ? `, with ${town}'s price first` : ""}. No spam, unsubscribe any time.
+        One email a month when EPRA announces new pump prices. No spam, unsubscribe any time.
       </p>
       {state === "done" ? (
         <p role="status" className="mt-4 text-sm font-semibold text-emerald-700 dark:text-emerald-300">
