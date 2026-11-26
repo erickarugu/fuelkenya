@@ -6,7 +6,8 @@ Maximum retail pump prices for Nairobi, Mombasa, Kisumu, Nakuru and Eldoret, cop
 
 ## Left out on purpose
 
-- Whole cycles: 2011-01 and 2013-02 (no source with all three prices found), 2011-08 (the report's petrol figure contradicts neighbouring months), 2012-04 (sources differ on diesel), 2014-06 and 2016-10 (kerosene or full prices not stated), 2018-09 (ERC revised prices from 21 September for the VAT cut, so the cycle has two official price sets).
+- Whole cycles: 2012-04 (sources differ by a cent on diesel and kerosene), 2014-06 (no published figures found), 2016-10 (kerosene price not stated).
+- 2018-09 appears as two periods: ERC revised prices from 21 September for the VAT cut.
 - Single towns inside a cycle where a source was visibly mistyped, self-contradictory, gave whole shillings only, or omitted a product.
 
 ## Cycles
@@ -59,6 +60,8 @@ Maximum retail pump prices for Nairobi, Mombasa, Kisumu, Nakuru and Eldoret, cop
 - 2018-12-15 to 2019-01-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20191101061238/http://epra.go.ke:80/wp-content/uploads/2018/12/Maximum-Petroleum-Pump-Prices-for-the-period-15th-December-2018-14th-January-2019.pdf
 - 2018-11-15 to 2018-12-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240626191130/http://epra.go.ke/wp-content/uploads/2018/11/Maximum-Petroleum-Pump-Prices-15th-November-14th-December-2018.pdf
 - 2018-10-15 to 2018-11-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20191101061236/http://epra.go.ke:80/wp-content/uploads/2018/10/Maximum-Retail-Pump-Prices-in-Kenya-15th-October-2018-14th-November-2018.pdf
+- 2018-09-21 to 2018-10-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240514163824/http://epra.go.ke/wp-content/uploads/2018/09/Addendum-to-the-Maximum-Retail-Petroleum-Prices-Released-on-14th-September-2018.pdf
+- 2018-09-15 to 2018-09-20 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20191101062144/http://epra.go.ke:80/wp-content/uploads/2018/09/Maximum-Retail-Pump-Prices-15th-September-2018-14th-October-2018.pdf (released for 15 Sep to 14 Oct; superseded from 21 Sep)
 - 2018-06-15 to 2018-07-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240714092045/http://epra.go.ke/wp-content/uploads/2018/06/Press-Release-Maximum-Petroleum-Pump-Prices-for-the-period-15th-June-to-14th-July-2018.pdf
 - 2018-03-15 to 2018-04-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240718003032/http://epra.go.ke/wp-content/uploads/2018/06/15th-March-2018-to-14th-April-2018-fuel-prices-1.pdf
 - 2018-02-15 to 2018-03-14 | Nairobi | News | https://sokodirectory.com/2018/02/erc-increases-fuel-prices-current-prices-highest-40-months/
@@ -88,7 +91,7 @@ Maximum retail pump prices for Nairobi, Mombasa, Kisumu, Nakuru and Eldoret, cop
 - 2015-11-15 to 2015-12-14 | Nairobi, Mombasa, Kisumu, Eldoret | News | https://capitalfm.africa/fuel-costs-down-in-new-price-review/
 - 2015-09-15 to 2015-10-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/petrol-unchanged-diesel-and-kerosene-cost-drops/
 - 2015-04-15 to 2015-05-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/motorists-to-pay-less-for-petrol-more-for-diesel/
-- 2015-03-15 to 2015-04-14 | Nairobi, Mombasa, Kisumu, Nakuru | News | https://capitalfm.africa/no-drop-in-fuel-prices-this-time-around/
+- 2015-03-15 to 2015-04-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/no-drop-in-fuel-prices-this-time-around/ ; https://www.oilnewskenya.com/maximum-retail-pump-prices-petroleum-15th-march-14th-april-2015/
 - 2015-02-15 to 2015-03-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/fuel-prices-drops-significantly-in-new-erc-review/
 - 2015-01-15 to 2015-02-14 | Nairobi, Mombasa, Kisumu, Nakuru | News | https://capitalfm.africa/another-significant-drop-in-fuel-prices/
 - 2014-11-15 to 2014-12-14 | Nairobi, Mombasa | News | https://capitalfm.africa/significant-drop-in-kenyas-fuel-prices/
@@ -100,7 +103,7 @@ Maximum retail pump prices for Nairobi, Mombasa, Kisumu, Nakuru and Eldoret, cop
 - 2014-04-15 to 2014-05-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/diesel-kerosene-prices-drop-in-april/
 - 2014-03-15 to 2014-04-14 | Nairobi, Mombasa, Kisumu, Nakuru | News | https://capitalfm.africa/motorists-to-pay-more-for-super-petrol/
 - 2014-02-15 to 2014-03-14 | Nairobi, Mombasa, Nakuru | News | https://capitalfm.africa/cost-of-super-petrol-rises-kerosene-drops/
-- 2014-01-15 to 2014-02-14 | Nairobi, Mombasa, Kisumu, Nakuru | News | https://capitalfm.africa/january-agony-fuelled-with-higher-gas-prices/
+- 2014-01-15 to 2014-02-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/january-agony-fuelled-with-higher-gas-prices/ ; https://www.oilnewskenya.com/pump-prices-jan-15th-to-feb-14-2014/
 - 2013-12-15 to 2014-01-14 | Nairobi | News | https://capitalfm.africa/fuel-prices-up-marginally-countrywide/
 - 2013-11-15 to 2013-12-14 | Nairobi, Kisumu, Nakuru | News | https://capitalfm.africa/fuel-pump-prices-drop-further-in-latest-review/
 - 2013-10-15 to 2013-11-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/marginal-drop-in-fuel-pump-prices/
@@ -109,21 +112,24 @@ Maximum retail pump prices for Nairobi, Mombasa, Kisumu, Nakuru and Eldoret, cop
 - 2013-07-15 to 2013-08-14 | Nairobi | News | https://capitalfm.africa/petrol-diesel-price-up-as-kerosene-drops-by-sh2/
 - 2013-06-15 to 2013-07-14 | Nairobi, Mombasa, Kisumu, Nakuru | News | https://capitalfm.africa/relief-at-the-pump-as-petrol-drops-by-sh5/
 - 2013-05-15 to 2013-06-14 | Nairobi, Nakuru | News | https://capitalfm.africa/relief-at-the-pump-as-fuel-drops-by-sh4/
-- 2013-03-15 to 2013-04-14 | Nairobi, Mombasa, Kisumu, Nakuru | News | https://capitalfm.africa/shocker-at-pumps-as-petrol-rises-by-sh4/
+- 2013-03-15 to 2013-04-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC + News | https://capitalfm.africa/shocker-at-pumps-as-petrol-rises-by-sh4/ ; https://open.africa/dataset/54a30d03-2bc7-44d2-8654-7b703a2e12d0/resource/1f0ce38f-0286-421a-a3b4-df8fb21c46c6/download/pump-prices-14-03-13.pdf
+- 2013-02-15 to 2013-03-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://open.africa/dataset/54a30d03-2bc7-44d2-8654-7b703a2e12d0/resource/104e46bf-072a-48b0-9009-0d08a8d5127d/download/pump-prices-14-02-13.pdf
 - 2012-12-15 to 2013-01-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20130124020122/http://www.erc.go.ke:80/erc/erc_news/Pump%20Prices%20Dec%202012.pdf
 - 2012-11-15 to 2012-12-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/erc-lowers-fuel-prices-marginally/
 - 2012-10-15 to 2012-11-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | News | https://capitalfm.africa/agony-for-motorists-as-fuel-prices-rises-again/
 - 2012-09-15 to 2012-10-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20130124014904/http://www.erc.go.ke:80/erc/erc_news/Pump%20Prices%20-Sep%202012.pdf
 - 2012-08-15 to 2012-09-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20130124014910/http://www.erc.go.ke:80/erc/erc_news/Pump%20Prices%20August%202012-Sept.pdf
 - 2012-07-15 to 2012-08-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20130124020130/http://www.erc.go.ke:80/erc/erc_news/Pump%20prices%20July-August%202012.pdf
-- 2012-06-15 to 2012-07-14 | Nairobi, Mombasa, Kisumu | News | https://capitalfm.africa/cost-of-super-petrol-drops-by-sh3/
+- 2012-06-15 to 2012-07-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC + News | https://capitalfm.africa/cost-of-super-petrol-drops-by-sh3/ ; https://open.africa/dataset/54a30d03-2bc7-44d2-8654-7b703a2e12d0/resource/b39d2ee9-422e-4dd2-950c-4a0bfc3b7db8/download/pump-prices-june-2012.pdf
 - 2012-05-15 to 2012-06-14 | Nairobi | News | https://www.standardmedia.co.ke/amp/article/2000058159/standard-digital
 - 2012-03-15 to 2012-04-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20120417114219/http://www.erc.go.ke:80/erc/erc_news/pump%20Prices%2015-3-12.pdf
 - 2012-02-15 to 2012-03-14 | Nairobi | News | https://capitalfm.africa/fuel-prices-dip-further-in-latest-review/
 - 2012-01-15 to 2012-02-14 | Nairobi | News | https://diasporamessenger.com/2012/01/kenya-cuts-fuel-prices-citing-stronger-shilling ; https://capitalfm.africa/32478/
 - 2011-11-15 to 2011-12-14 | Nairobi | News | https://capitalfm.africa/more-agony-as-fuel-prices-hiked-again/
 - 2011-10-15 to 2011-11-14 | Nairobi | News | https://capitalfm.africa/petrol-prices-up-again/
-- 2011-09-15 to 2011-10-14 | Nairobi | News | https://capitalfm.africa/no-reprieve-at-the-pump-for-motorists/
+- 2011-09-15 to 2011-10-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC + News | https://capitalfm.africa/no-reprieve-at-the-pump-for-motorists/ ; https://open.africa/dataset/54a30d03-2bc7-44d2-8654-7b703a2e12d0/resource/cd463da2-2ecf-45dc-a86f-93fa954a5ef9/download/pump-prices.pdf
+- 2011-08-15 to 2011-09-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://open.africa/dataset/54a30d03-2bc7-44d2-8654-7b703a2e12d0/resource/5a208a69-84c3-44dd-bc4b-033cc3e704e8/download/pumpprices.pdf
 - 2011-07-15 to 2011-08-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20110812153435/http://www.erc.go.ke:80/erc/erc_news/PUMP%20PRICES%20JULY%202011.pdf
 - 2011-06-15 to 2011-07-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20110725023232/http://www.erc.go.ke:80/erc/erc_news/PUMP%20PRICES%20JUNE%202011.pdf
 - 2011-05-15 to 2011-06-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20110725023148/http://www.erc.go.ke:80/erc/erc_news/PRESS%20RELEASE%20ON%20%20PUMP%20PRICES-%20May%202011.pdf
+- 2011-01-15 to 2011-02-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://open.africa/dataset/54a30d03-2bc7-44d2-8654-7b703a2e12d0/resource/a4881bd2-3ead-4bfd-be15-d00d380c7259/download/petroleum-prices-public-notice2.pdf
