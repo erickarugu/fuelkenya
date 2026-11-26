@@ -123,8 +123,8 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   const description = current
     ? `${current.town} petrol is ${describeChange(current.super_petrol, previous?.super_petrol ?? null)} ` +
       `until ${formatDayMonth(current.valid_to)}. Compare all ${townCount} towns, find the cheapest, ` +
-      `see price history and work out what your trip will cost.`
-    : `Official EPRA maximum pump prices for Super Petrol, Diesel and Kerosene in every town in Kenya. Compare towns, see price history and work out your trip cost.`;
+      `see prices back to 2010 and get the new prices by email on the 14th.`
+    : `Official EPRA maximum pump prices for Super Petrol, Diesel and Kerosene in every town in Kenya. Compare towns, see prices back to 2010 and get alerts on the 14th.`;
 
   return {
     title,
@@ -475,6 +475,20 @@ export default async function Page({ searchParams }: Props) {
         {/* ── Chart ──────────────────────────────────────────────────────────── */}
         <div className="mb-14 fade-up delay-3">
           <SectionHeader label="Price history" sub={`${town} · KSh / litre`} />
+          {latest && (
+            <p className="mb-3 text-sm text-stone-500">
+              <Link
+                href={`/epra-review/${latest.valid_from.slice(0, 7)}`}
+                className="underline underline-offset-2 hover:text-stone-800 dark:hover:text-stone-200"
+              >
+                This month&apos;s EPRA review: every town and what changed
+              </Link>{" "}
+              ·{" "}
+              <Link href="/epra-review" className="underline underline-offset-2 hover:text-stone-800 dark:hover:text-stone-200">
+                all reviews since 2010
+              </Link>
+            </p>
+          )}
           <TrendChart history={histAsc} />
         </div>
 
@@ -626,8 +640,10 @@ export default async function Page({ searchParams }: Props) {
               "@type": "Dataset",
               name: "Kenya EPRA Fuel Price Dataset",
               description:
-                "Official EPRA maximum pump prices for Super Petrol, Diesel, and Kerosene across all towns in Kenya, updated every pricing cycle.",
-              url: "https://fuelkenya.com",
+                "Official EPRA (and earlier ERC) maximum pump prices for Super Petrol, Diesel and Kerosene in every Kenyan town, monthly since December 2010.",
+              url: "https://fuelkenya.com/data",
+              temporalCoverage: "2010-12-15/..",
+              spatialCoverage: { "@type": "Place", name: "Kenya" },
               license: "https://creativecommons.org/licenses/by/4.0/",
               isAccessibleForFree: true,
               creator: {
@@ -643,8 +659,13 @@ export default async function Page({ searchParams }: Props) {
               distribution: [
                 {
                   "@type": "DataDownload",
+                  encodingFormat: "text/csv",
+                  contentUrl: "https://api.fuelkenya.com/v1/export.csv"
+                },
+                {
+                  "@type": "DataDownload",
                   encodingFormat: "application/json",
-                  contentUrl: "https://api.fuelkenya.com/v1/prices/latest"
+                  contentUrl: "https://api.fuelkenya.com/v1/export.json"
                 }
               ]
             }

@@ -134,7 +134,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // already sent a 200, which Google treats as a soft 404.
   if (!town) notFound();
 
-  const { latest, shown, previous, currentCycle } = await fetchTownPrices(town);
+  const { latest, shown, previous, currentCycle, history } = await fetchTownPrices(town);
+  const firstYear = history.length ? history[history.length - 1].valid_from.slice(0, 4) : null;
   const cycleMonth = currentCycle
     ? formatMonthYear(currentCycle.valid_from)
     : String(new Date().getFullYear());
@@ -147,7 +148,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description =
       `Petrol in ${town} is ${describeChange(latest.super_petrol, previous?.super_petrol ?? null)} ` +
       `per litre until ${formatDayMonth(latest.valid_to)}. See diesel and kerosene, ` +
-      `how ${town} compares with the cheapest town, and price history going back to 2014.`;
+      `how ${town} compares with the cheapest town` +
+      (firstYear && firstYear < String(new Date().getFullYear())
+        ? `, and price history back to ${firstYear}.`
+        : `, and its price history.`);
   } else if (shown) {
     description =
       `EPRA did not list ${town} in the current pricing cycle. See the last published ` +
@@ -263,7 +267,7 @@ export default async function TownPage({ params }: Props) {
   const town = resolveTown(params.slug, towns);
   if (!town) notFound();
 
-  const [{ latest, shown, previous, history }, allLatest] = await Promise.all([
+  const [{ latest, shown, previous, history, currentCycle }, allLatest] = await Promise.all([
     fetchTownPrices(town),
     fetchLatestPrices()
   ]);
@@ -312,6 +316,12 @@ export default async function TownPage({ params }: Props) {
           {
             "@type": "ListItem",
             position: 2,
+            name: "All towns",
+            item: "https://fuelkenya.com/towns"
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
             name: `${town} Fuel Prices`,
             item: `https://fuelkenya.com/town/${slugifyTown(town)}`
           }
@@ -421,6 +431,17 @@ export default async function TownPage({ params }: Props) {
             accent="obsidian"
           />
         </div>
+
+        {currentCycle && (
+          <p className="text-sm text-stone-500">
+            <Link
+              href={`/epra-review/${currentCycle.valid_from.slice(0, 7)}`}
+              className="underline underline-offset-2 hover:text-stone-800 dark:hover:text-stone-200"
+            >
+              See every town in the {formatMonthYear(currentCycle.valid_from)} EPRA review
+            </Link>
+          </p>
+        )}
 
         <h2 className="sr-only">{town} price history</h2>
         <TrendChart history={history} />

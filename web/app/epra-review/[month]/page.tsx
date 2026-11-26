@@ -112,14 +112,29 @@ export default async function EpraReviewPage({ params }: { params: Promise<Param
   const allRows = [...main.rows].sort((a, b) => a.town.localeCompare(b.town));
   const partial = main.rows.length <= 5;
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: `EPRA fuel prices for ${label}`,
-    datePublished: `${main.cycle.valid_from}T00:00:00+03:00`,
-    author: { "@type": "Organization", name: "FuelKenya", url: "https://fuelkenya.com" },
-    mainEntityOfPage: `https://fuelkenya.com/epra-review/${month}`
-  };
+  const pageUrl = `https://fuelkenya.com/epra-review/${month}`;
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: `EPRA fuel prices for ${label}`,
+      datePublished: `${main.cycle.valid_from}T00:00:00+03:00`,
+      dateModified: `${main.cycle.valid_from}T00:00:00+03:00`,
+      image: `${pageUrl}/opengraph-image`,
+      author: { "@type": "Organization", name: "FuelKenya", url: "https://fuelkenya.com" },
+      publisher: { "@type": "Organization", name: "FuelKenya", url: "https://fuelkenya.com" },
+      mainEntityOfPage: pageUrl
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "FuelKenya", item: "https://fuelkenya.com" },
+        { "@type": "ListItem", position: 2, name: "EPRA reviews", item: "https://fuelkenya.com/epra-review" },
+        { "@type": "ListItem", position: 3, name: label, item: pageUrl }
+      ]
+    }
+  ];
 
   return (
     <div className="min-h-screen page-bg grid-bg bg-[#fafafa] dark:bg-[#080808] px-6 py-8 text-stone-900 dark:text-stone-100 sm:px-10 lg:px-16">

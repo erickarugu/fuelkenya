@@ -4,5 +4,7 @@
   "towns": "GET /towns",
   "prices": "GET /prices",
   "prices-latest": "GET /prices/latest",
+  "cycles": "GET /cycles",
+  "export": "GET /export.csv & .json",
   "ingest-csv": "POST /ingest/csv"
 }
