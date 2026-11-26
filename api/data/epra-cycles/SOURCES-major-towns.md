@@ -6,7 +6,8 @@ Maximum retail pump prices for Nairobi, Mombasa, Kisumu, Nakuru and Eldoret, cop
 
 ## Left out on purpose
 
-- Whole cycles: 2012-04 (sources differ by a cent on diesel and kerosene), 2014-06 (no published figures found), 2016-10 (kerosene price not stated), 2018-09 (ERC revised prices from 21 September for the VAT cut, so the cycle has two official price sets).
+- Whole cycles: 2012-04 (sources differ by a cent on diesel and kerosene), 2014-06 (no published figures found), 2016-10 (kerosene price not stated).
+- 2018-09 appears as two periods: ERC revised prices from 21 September for the VAT cut.
 - Single towns inside a cycle where a source was visibly mistyped, self-contradictory, gave whole shillings only, or omitted a product.
 
 ## Cycles
@@ -59,6 +60,8 @@ Maximum retail pump prices for Nairobi, Mombasa, Kisumu, Nakuru and Eldoret, cop
 - 2018-12-15 to 2019-01-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20191101061238/http://epra.go.ke:80/wp-content/uploads/2018/12/Maximum-Petroleum-Pump-Prices-for-the-period-15th-December-2018-14th-January-2019.pdf
 - 2018-11-15 to 2018-12-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240626191130/http://epra.go.ke/wp-content/uploads/2018/11/Maximum-Petroleum-Pump-Prices-15th-November-14th-December-2018.pdf
 - 2018-10-15 to 2018-11-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20191101061236/http://epra.go.ke:80/wp-content/uploads/2018/10/Maximum-Retail-Pump-Prices-in-Kenya-15th-October-2018-14th-November-2018.pdf
+- 2018-09-21 to 2018-10-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240514163824/http://epra.go.ke/wp-content/uploads/2018/09/Addendum-to-the-Maximum-Retail-Petroleum-Prices-Released-on-14th-September-2018.pdf
+- 2018-09-15 to 2018-09-20 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20191101062144/http://epra.go.ke:80/wp-content/uploads/2018/09/Maximum-Retail-Pump-Prices-15th-September-2018-14th-October-2018.pdf (released for 15 Sep to 14 Oct; superseded from 21 Sep)
 - 2018-06-15 to 2018-07-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240714092045/http://epra.go.ke/wp-content/uploads/2018/06/Press-Release-Maximum-Petroleum-Pump-Prices-for-the-period-15th-June-to-14th-July-2018.pdf
 - 2018-03-15 to 2018-04-14 | Nairobi, Mombasa, Kisumu, Nakuru, Eldoret | EPRA/ERC | https://web.archive.org/web/20240718003032/http://epra.go.ke/wp-content/uploads/2018/06/15th-March-2018-to-14th-April-2018-fuel-prices-1.pdf
 - 2018-02-15 to 2018-03-14 | Nairobi | News | https://sokodirectory.com/2018/02/erc-increases-fuel-prices-current-prices-highest-40-months/
