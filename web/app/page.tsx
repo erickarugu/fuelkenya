@@ -12,6 +12,7 @@ import AnimatedTownSection from "@/components/AnimatedTownSection";
 import HeroVisual from "@/components/HeroVisual";
 import ThemeToggle from "@/components/ThemeToggle";
 import TownLinks from "@/components/TownLinks";
+import AlertSignup from "@/components/AlertSignup";
 import { fetchHistory, fetchLatestPrices, fetchTowns } from "@/lib/api";
 import { describeChange, formatDayMonth, formatMonthYear } from "@/lib/cycle";
 
@@ -502,6 +503,11 @@ export default async function Page({ searchParams }: Props) {
           <InfoCards />
         </div>
 
+        {/* ── Price alerts ───────────────────────────────────────────────────── */}
+        <div className="mb-14 fade-up delay-5">
+          <AlertSignup source="home" />
+        </div>
+
         {/* ── Town pages ─────────────────────────────────────────────────────── */}
         <div className="mb-14 fade-up delay-5">
           <SectionHeader label="Fuel prices by town" />
@@ -547,6 +553,9 @@ export default async function Page({ searchParams }: Props) {
               className="transition-colors hover:text-stone-700 dark:hover:text-stone-400"
             >
               All Towns
+            </Link>
+            <Link href="/epra-review" className="transition-colors hover:text-stone-700 dark:hover:text-stone-400">
+              Monthly reviews
             </Link>
             <Link href="/data" className="transition-colors hover:text-stone-700 dark:hover:text-stone-400">
               Download data

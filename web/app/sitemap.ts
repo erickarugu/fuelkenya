@@ -17,9 +17,10 @@ async function getJson<T>(path: string): Promise<T | null> {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [towns, newest] = await Promise.all([
+  const [towns, newest, cycles] = await Promise.all([
     getJson<string[]>("/towns"),
-    getJson<{ valid_from: string }[]>("/prices?limit=1")
+    getJson<{ valid_from: string }[]>("/prices?limit=1"),
+    getJson<{ valid_from: string; valid_to: string }[]>("/cycles")
   ]);
 
   // Pages only change when EPRA publishes a new cycle. Using the cycle start
@@ -35,7 +36,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8
   }));
 
+  const reviewMonths = new Map<string, string>();
+  for (const c of cycles ?? []) {
+    const slug = c.valid_from.slice(0, 7);
+    if (!reviewMonths.has(slug)) reviewMonths.set(slug, c.valid_from);
+  }
+  const reviewUrls = [...reviewMonths].map(([slug, from]) => ({
+    url: `${baseUrl}/epra-review/${slug}`,
+    lastModified: new Date(`${from}T00:00:00+03:00`),
+    changeFrequency: "yearly" as const,
+    priority: 0.6
+  }));
+
   return [
+    {
+      url: `${baseUrl}/epra-review`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.8
+    },
+    ...reviewUrls,
     {
       url: baseUrl,
       lastModified,

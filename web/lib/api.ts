@@ -100,3 +100,29 @@ export async function fetchExport() {
 
 export const EXPORT_CSV_URL = `${BASE_URL}/export.csv`;
 export const EXPORT_JSON_URL = `${BASE_URL}/export.json`;
+
+export interface Cycle {
+  valid_from: string;
+  valid_to: string;
+  towns: number;
+}
+
+/** Every pricing cycle on record, newest first. */
+export async function fetchCycles() {
+  return apiFetch<Cycle[]>("/cycles");
+}
+
+/** All town prices for one cycle. */
+export async function fetchCyclePrices(cycle: Pick<Cycle, "valid_from" | "valid_to">) {
+  return apiFetch<PriceRecord[]>(
+    `/prices?start_date=${cycle.valid_from}&end_date=${cycle.valid_to}&limit=1000&offset=0`
+  );
+}
+
+/** "2026-11-15" -> "2026-11", the slug of that month's /epra-review page. */
+export function reviewSlug(validFrom: string) {
+  return validFrom.slice(0, 7);
+}
+
+/** Public URL the browser posts alert signups to. */
+export const ALERTS_SUBSCRIBE_URL = `${BASE_URL}/alerts/subscribe`;

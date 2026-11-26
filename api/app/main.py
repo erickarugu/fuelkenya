@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.api.v1.endpoints import router as v1_router
+from app.api.v1.alerts import router as alerts_router
 from app.core.cache import clear_latest_cache
 from app.core.config import Settings, get_settings
 from app.core.rate_limit import RateLimitMiddleware
@@ -100,6 +101,7 @@ def create_app() -> FastAPI:
         expose_headers=["Retry-After", "X-RateLimit-Limit", "X-RateLimit-Remaining"],
     )
     app.include_router(v1_router, prefix=settings.api_prefix)
+    app.include_router(alerts_router, prefix=settings.api_prefix)
 
     return app
 

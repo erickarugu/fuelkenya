@@ -6,6 +6,7 @@ import SearchBar from "@/components/SearchBar";
 import PriceCard from "@/components/PriceCard";
 import RegionVariance from "@/components/RegionVariance";
 import TownLinks from "@/components/TownLinks";
+import AlertSignup from "@/components/AlertSignup";
 import {
   fetchHistory,
   fetchLatestPrices,
@@ -426,6 +427,8 @@ export default async function TownPage({ params }: Props) {
 
         <h2 className="sr-only">How {town} compares with other towns</h2>
         <RegionVariance overview={comparison} activeTown={latest?.town} />
+
+        <AlertSignup town={town} source="town" />
 
         <div className="rounded-xl border border-black/[0.08] dark:border-white/[0.07] bg-white dark:bg-white/[0.025] p-6">
           <h2 className="text-sm font-normal uppercase tracking-[0.3em] text-stone-500">
