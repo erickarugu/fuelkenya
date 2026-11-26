@@ -1,6 +1,6 @@
 # FuelKenya
 
-Live EPRA maximum pump fuel prices across all towns in Kenya — updated every pricing cycle.
+Live EPRA maximum pump fuel prices across all towns in Kenya, updated every pricing cycle.
 
 **[fuelkenya.com](https://fuelkenya.com)** · **[docs.fuelkenya.com](https://docs.fuelkenya.com)** · **[API](https://api.fuelkenya.com/v1)**
 
@@ -14,7 +14,7 @@ The project has three parts:
 
 | Package | Description | Stack |
 |---|---|---|
-| [`api/`](./api) | REST API — ingests EPRA CSVs, serves price data | FastAPI, PostgreSQL, Alembic |
+| [`api/`](./api) | REST API that ingests EPRA CSVs, serves price data | FastAPI, PostgreSQL, Alembic |
 | [`web/`](./web) | Public price tracker dashboard | Next.js 14, Tailwind CSS |
 | [`docs/`](./docs) | API documentation site | Nextra (MDX), static export |
 
@@ -103,9 +103,9 @@ Docs at `http://localhost:3001`.
 
 | Variable | Required | Default | Description |
 |---|---|---|---|
-| `DATABASE_URL` | Yes | — | PostgreSQL connection string (`postgresql+asyncpg://user:pass@host:5432/db`) |
-| `INGEST_TOKEN` | Yes | — | Bearer token for `POST /v1/ingest/csv`. Ingestion is refused while it is unset |
-| `TRUSTED_CLIENT_TOKEN` | Recommended | — | Shared secret that lets the web app's server renders skip the per-IP rate limit. Set the same value as `FUELKENYA_API_TOKEN` on the web app |
+| `DATABASE_URL` | Yes | - | PostgreSQL connection string (`postgresql+asyncpg://user:pass@host:5432/db`) |
+| `INGEST_TOKEN` | Yes | - | Bearer token for `POST /v1/ingest/csv`. Ingestion is refused while it is unset |
+| `TRUSTED_CLIENT_TOKEN` | Recommended | - | Shared secret that lets the web app's server renders skip the per-IP rate limit. Set the same value as `FUELKENYA_API_TOKEN` on the web app |
 | `LOG_LEVEL` | No | `INFO` | Logging level |
 | `SQL_ECHO` | No | `true` | Log SQL queries (set `false` in production) |
 
@@ -114,7 +114,7 @@ Docs at `http://localhost:3001`.
 | Variable | Required | Default | Description |
 |---|---|---|---|
 | `NEXT_PUBLIC_FUELKENYA_API_URL` | No | `http://localhost:8000/v1` | API base URL |
-| `FUELKENYA_API_TOKEN` | Recommended | — | Server-only. Sent as `X-FuelKenya-Client-Token` so page renders aren't rate limited. Must match the API's `TRUSTED_CLIENT_TOKEN` |
+| `FUELKENYA_API_TOKEN` | Recommended | - | Server-only. Sent as `X-FuelKenya-Client-Token` so page renders aren't rate limited. Must match the API's `TRUSTED_CLIENT_TOKEN` |
 
 ---
 
@@ -199,7 +199,7 @@ cd web && pnpm build
 
 # Docs (static export)
 cd docs && pnpm build
-# Output in docs/out/ — deploy to any static host
+# Output in docs/out/, deploy to any static host
 ```
 
 ---
@@ -226,4 +226,4 @@ Contributions are welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelin
 
 ## License
 
-[MIT](./LICENSE) — © 2026 Eric Kariuki
+[MIT](./LICENSE), © 2026 Eric Kariuki

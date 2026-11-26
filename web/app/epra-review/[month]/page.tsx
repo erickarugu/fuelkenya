@@ -84,7 +84,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 }
 
 function Delta({ value }: { value: number | null }) {
-  if (value === null) return <span className="text-stone-400">—</span>;
+  if (value === null) return <span className="text-stone-400">-</span>;
   if (value === 0) return <span className="text-stone-500">0.00</span>;
   return (
     <span className={value > 0 ? "text-red-600 dark:text-red-400" : "text-emerald-600 dark:text-emerald-400"}>

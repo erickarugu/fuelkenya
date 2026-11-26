@@ -79,7 +79,7 @@ export default async function OpenGraphImage({
               {f.label}
             </div>
             <div style={{ fontSize: "40px", fontWeight: 700, color: f.color }}>
-              {f.value != null ? `KSh ${f.value.toFixed(2)}` : "—"}
+              {f.value != null ? `KSh ${f.value.toFixed(2)}` : "-"}
             </div>
           </div>
         ))}

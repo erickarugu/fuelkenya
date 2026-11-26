@@ -111,7 +111,7 @@ def _headline(
         phrase = f"Petrol {dir_} KSh {abs(moves[0][1]):.2f}, diesel {dir_} KSh {abs(moves[1][1]):.2f}"
     else:
         phrase = f"{_move('Petrol', moves[0][1])}, {_move('diesel', moves[1][1])}"
-    subject = f"⛽ {phrase} in {town} {when}" + (" — fill up today" if rising and upcoming else "")
+    subject = f"⛽ {phrase} in {town} {when}" + (". Fill up today" if rising and upcoming else "")
     if rising:
         headline = phrase if len(moves) > 1 else f"{phrase} {when}"
         nudge = ("Fill up before midnight to pay today's price." if upcoming
@@ -181,7 +181,7 @@ def build_email(
         p = previous.get(t.lower())
         d = _delta(r["super_petrol"], p and p["super_petrol"])
         dc = FAINT if not d else (RED if d > 0 else GREEN)
-        dl = "—" if d is None else ("0.00" if d == 0 else f"{'+' if d > 0 else '−'}{abs(d):.2f}")
+        dl = "-" if d is None else ("0.00" if d == 0 else f"{'+' if d > 0 else '−'}{abs(d):.2f}")
         link = e(f"{settings.site_url}/town/{urllib.parse.quote(slugify(t))}")
         rows.append(
             f'<tr><td style="padding:11px 0;border-top:1px solid {BORDER};font:500 14px {SANS}">'
