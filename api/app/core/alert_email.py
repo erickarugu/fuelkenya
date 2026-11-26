@@ -5,6 +5,7 @@ import hashlib
 import hmac
 import html
 import json
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import date
@@ -149,8 +150,14 @@ def send_batch(settings: Settings, messages: List[Dict[str, Any]]) -> None:
         headers={
             "Authorization": f"Bearer {settings.resend_api_key}",
             "Content-Type": "application/json",
+            # Resend's firewall rejects Python's default "Python-urllib" agent (403).
+            "User-Agent": "fuelkenya-api/1.0",
         },
     )
-    with urllib.request.urlopen(req, timeout=30) as res:  # noqa: S310 (fixed https URL)
-        if res.status >= 300:
-            raise RuntimeError(f"Resend returned {res.status}")
+    try:
+        with urllib.request.urlopen(req, timeout=30) as res:  # noqa: S310 (fixed https URL)
+            if res.status >= 300:
+                raise RuntimeError(f"Resend returned {res.status}")
+    except urllib.error.HTTPError as err:
+        detail = err.read()[:500].decode(errors="replace")
+        raise RuntimeError(f"Resend returned {err.code}: {detail}") from err
