@@ -23,7 +23,7 @@ export default async function EmbedPage({ searchParams }: Props) {
       towns={towns}
       town={town}
       history={[...history].reverse()}
-      period={searchParams.period ?? "All"}
+      period={searchParams.period ?? "1Y"}
       theme={theme}
     />
   );

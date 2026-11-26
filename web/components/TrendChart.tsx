@@ -51,6 +51,8 @@ interface TrendChartProps {
   history: PriceRecord[];
   initialDuration?: string;
   onDurationChange?: (label: string) => void;
+  /** Inside the /embed iframe: no outer frame, shorter plot. */
+  embedded?: boolean;
 }
 
 const SERIES = [
@@ -90,10 +92,10 @@ function useIsDark() {
   return isDark;
 }
 
-export default function TrendChart({ history, initialDuration, onDurationChange }: TrendChartProps) {
+export default function TrendChart({ history, initialDuration, onDurationChange, embedded }: TrendChartProps) {
   const [hidden,   setHidden]   = useState<Set<string>>(new Set());
   const [duration, setDurationState] = useState<DurLabel>(
-    (DURATIONS.find(d => d.label.toLowerCase() === initialDuration?.toLowerCase())?.label ?? "All") as DurLabel,
+    (DURATIONS.find(d => d.label.toLowerCase() === initialDuration?.toLowerCase())?.label ?? "1Y") as DurLabel,
   );
   const setDuration = (d: DurLabel) => {
     setDurationState(d);
@@ -255,7 +257,9 @@ export default function TrendChart({ history, initialDuration, onDurationChange 
   const pillText  = isDark ? "#e7e5e4" : "#111827";
   const pillOff   = isDark ? "#57534e" : "#78716c";
   return (
-    <div className="overflow-hidden rounded-2xl border border-black/[0.08] dark:border-white/[0.07] bg-[#f7f7f6] dark:bg-[#0c0c0c]">
+    <div className={embedded
+      ? "overflow-hidden bg-[#f7f7f6] dark:bg-[#0c0c0c]"
+      : "overflow-hidden rounded-2xl border border-black/[0.08] dark:border-white/[0.07] bg-[#f7f7f6] dark:bg-[#0c0c0c]"}>
 
       {/* ── header ── */}
       <div className="border-b border-black/[0.05] dark:border-white/[0.05] px-4 pb-5 pt-5 sm:px-6">
@@ -339,7 +343,7 @@ export default function TrendChart({ history, initialDuration, onDurationChange 
 
                   <div className="mb-3 h-px" style={{ background: `${s.color}12` }} />
 
-                  <div className="flex items-center justify-between text-xs">
+                  <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs">
                     <div className="flex items-center gap-3">
                       <div className="flex items-center gap-1">
                         <span className="text-stone-500">Low</span>
@@ -350,7 +354,7 @@ export default function TrendChart({ history, initialDuration, onDurationChange 
                         <span className="font-semibold text-stone-600 dark:text-stone-400">{s.seriesHi.toFixed(2)}</span>
                       </div>
                     </div>
-                    <span className="font-bold tabular-nums" style={{ color: s.color }}>
+                    <span className="whitespace-nowrap font-bold tabular-nums" style={{ color: s.color }}>
                       {arrow} KSh {sign}{s.change.toFixed(2)}
                     </span>
                   </div>
@@ -387,7 +391,7 @@ export default function TrendChart({ history, initialDuration, onDurationChange 
       </div>
 
       {/* ── chart ── */}
-      <div className="h-[260px] px-3 py-4 sm:h-[360px] sm:px-4 lg:h-[440px]">
+      <div className={embedded ? "h-[300px] px-3 py-4 sm:px-4" : "h-[260px] px-3 py-4 sm:h-[360px] sm:px-4 lg:h-[440px]"}>
         <Line data={{ datasets }} options={options} />
       </div>
     </div>

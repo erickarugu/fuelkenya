@@ -217,7 +217,7 @@ def build_email(
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px">
 
 <tr><td style="padding:0 28px 24px">
-<a href="{e(settings.site_url)}" style="text-decoration:none;font:700 20px {DISPLAY}"><span style="color:{GREEN}">Fuel</span><span style="color:{TEXT}">Kenya</span></a>
+<a href="{e(settings.site_url)}" style="text-decoration:none;font:700 20px {DISPLAY}"><img src="{e(settings.site_url)}/kenya-fuel-logo.png" width="32" height="32" alt="" style="display:inline-block;vertical-align:middle;border:0;border-radius:8px;margin-right:10px"><span style="vertical-align:middle;color:{GREEN}">Fuel</span><span style="vertical-align:middle;color:{TEXT}">Kenya</span></a>
 <span style="font:500 12px {SANS};color:{FAINT};padding-left:8px">EPRA review · {e(month)}</span>
 </td></tr>
 
