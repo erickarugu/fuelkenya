@@ -1,13 +1,13 @@
 # Contributing to FuelKenya
 
-Thank you for your interest in contributing. This is a small, focused project — contributions that improve data accuracy, API usability, or the dashboard experience are most welcome.
+Thank you for your interest in contributing. This is a small, focused project. Contributions that improve data accuracy, API usability, or the dashboard experience are most welcome.
 
 ## Ways to contribute
 
-- **Bug reports** — if something is broken, open an issue with steps to reproduce
-- **Data issues** — if prices look wrong, include the source EPRA document
-- **New features** — open an issue first to discuss before writing code
-- **Docs improvements** — typos, unclear explanations, missing examples
+- **Bug reports**: if something is broken, open an issue with steps to reproduce
+- **Data issues**: if prices look wrong, include the source EPRA document
+- **New features**: open an issue first to discuss before writing code
+- **Docs improvements**: typos, unclear explanations, missing examples
 
 ## Development setup
 
@@ -31,11 +31,11 @@ cd web && pnpm install && pnpm dev
 ## Submitting a pull request
 
 1. Fork the repo and create a branch from `main`
-2. Make your changes — keep PRs focused; one concern per PR
+2. Make your changes. Keep PRs focused; one concern per PR
 3. Make sure the API still starts and the web builds (`pnpm build`) before opening a PR
 4. Open the PR with a clear description of what changed and why
 
-There are no automated tests yet — manual verification is enough for now.
+There are no automated tests yet. Manual verification is enough for now.
 
 ## Code style
 

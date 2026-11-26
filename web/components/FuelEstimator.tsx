@@ -111,7 +111,7 @@ export default function FuelEstimator({ petrolPrice, dieselPrice, town }: Props)
                   {f.label}
                 </span>
                 <span className="mt-0.5 font-mono text-xs tabular-nums text-stone-500">
-                  KSh {pv ? pv.toFixed(2) : "—"}
+                  KSh {pv ? pv.toFixed(2) : "-"}
                 </span>
               </button>
             );

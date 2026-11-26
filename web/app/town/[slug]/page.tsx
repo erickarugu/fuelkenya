@@ -251,12 +251,12 @@ function buildFAQ(town: string, current: Prices | null, mombasa: Prices | null) 
       .replace(/\[TownName\]/g, town)
       .replace(
         /\[SuperPrice\]/g,
-        current ? current.super_petrol.toFixed(2) : "—"
+        current ? current.super_petrol.toFixed(2) : "-"
       )
-      .replace(/\[DieselPrice\]/g, current ? current.diesel.toFixed(2) : "—")
+      .replace(/\[DieselPrice\]/g, current ? current.diesel.toFixed(2) : "-")
       .replace(
         /\[KerosenePrice\]/g,
-        current ? current.kerosene.toFixed(2) : "—"
+        current ? current.kerosene.toFixed(2) : "-"
       );
     return { question, answer };
   });
@@ -380,7 +380,7 @@ export default async function TownPage({ params }: Props) {
                   {latest ? "Current cycle" : "Last cycle with a price"}
                 </div>
                 <div className="mt-1">
-                  {shown ? formatCycle(shown.valid_from, shown.valid_to) : "—"}
+                  {shown ? formatCycle(shown.valid_from, shown.valid_to) : "-"}
                 </div>
               </div>
               <div>
@@ -393,7 +393,7 @@ export default async function TownPage({ params }: Props) {
                 <div className="font-semibold text-stone-900 dark:text-stone-100">
                   Prices took effect
                 </div>
-                <div className="mt-1">{shown ? formatDayMonth(shown.valid_from) : "—"}</div>
+                <div className="mt-1">{shown ? formatDayMonth(shown.valid_from) : "-"}</div>
               </div>
             </div>
           </div>

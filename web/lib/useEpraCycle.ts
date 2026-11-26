@@ -53,7 +53,7 @@ export function useEpraCycle(latestValidFrom?: string | null) {
   const countdown  = useMemo(() => getCountdown(target, now), [target, now]);
 
   // The clock reaching the target time only means EPRA has *announced* new
-  // prices — it doesn't mean they've been uploaded to FuelKenya yet. Only
+  // prices. It doesn't mean they've been uploaded to FuelKenya yet. Only
   // trust "live" once the displayed price record itself is from the new
   // cycle, so the site never claims new rates before they're actually in.
   const clockPastTarget = now.getTime() >= target.getTime();

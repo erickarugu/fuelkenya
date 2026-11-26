@@ -175,8 +175,8 @@ export default function TrendChart({ history }: TrendChartProps) {
   const visibleValues = filtered
     .flatMap(h => SERIES.filter(s => !hidden.has(s.key)).map(s => h[s.key]))
     .filter(Boolean);
-  const lo = visibleValues.length ? Math.min(...visibleValues).toFixed(2) : "—";
-  const hi = visibleValues.length ? Math.max(...visibleValues).toFixed(2) : "—";
+  const lo = visibleValues.length ? Math.min(...visibleValues).toFixed(2) : "-";
+  const hi = visibleValues.length ? Math.max(...visibleValues).toFixed(2) : "-";
 
   const fmtDate = (iso: string) =>
     new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
@@ -303,7 +303,7 @@ export default function TrendChart({ history }: TrendChartProps) {
             {stats.map(s => {
               const isUp   = s.change > 0;
               const isDown = s.change < 0;
-              const arrow  = isUp ? "▲" : isDown ? "▼" : "—";
+              const arrow  = isUp ? "▲" : isDown ? "▼" : "-";
               const sign   = isUp ? "+" : "";
               return (
                 <div

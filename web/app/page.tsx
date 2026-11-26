@@ -75,9 +75,9 @@ function buildFAQ(
     const answer = item.answer
       .replace(/\[CheapestAnswer\] ?/g, cheapestAnswer ? `${cheapestAnswer} ` : "")
       .replace(/\[TownName\]/g, town)
-      .replace(/\[SuperPrice\]/g, current ? current.super_petrol.toFixed(2) : "—")
-      .replace(/\[DieselPrice\]/g, current ? current.diesel.toFixed(2) : "—")
-      .replace(/\[KerosenePrice\]/g, current ? current.kerosene.toFixed(2) : "—");
+      .replace(/\[SuperPrice\]/g, current ? current.super_petrol.toFixed(2) : "-")
+      .replace(/\[DieselPrice\]/g, current ? current.diesel.toFixed(2) : "-")
+      .replace(/\[KerosenePrice\]/g, current ? current.kerosene.toFixed(2) : "-");
     return { question, answer };
   });
 }

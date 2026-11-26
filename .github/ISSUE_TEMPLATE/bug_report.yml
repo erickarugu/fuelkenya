@@ -49,5 +49,5 @@ body:
     id: version
     attributes:
       label: Relevant versions
-      description: Node version, Python version, browser, OS — whatever applies.
+      description: Node version, Python version, browser, OS, whatever applies.
       placeholder: "Node 20.x, Python 3.12, Chrome 125, Ubuntu 22.04"

@@ -136,7 +136,7 @@ export default function PriceCard({ title, value, delta, accent, sparkline }: Pr
   const badgeLabel =
     dir === "down" ? `▼ KSh ${Math.abs(delta!).toFixed(2)}` :
     dir === "up"   ? `▲ KSh ${Math.abs(delta!).toFixed(2)}` :
-    dir === "flat" ? "No change" : "—";
+    dir === "flat" ? "No change" : "-";
 
   return (
     <div className={`group relative overflow-hidden rounded-2xl border ${c.border} bg-black/[0.02] dark:bg-white/[0.025] shadow-xl transition-all duration-300 ${c.hover}`}>
@@ -173,7 +173,7 @@ export default function PriceCard({ title, value, delta, accent, sparkline }: Pr
         <div className="mb-5 flex items-baseline gap-1.5">
           <span className="text-base font-medium text-stone-500">KSh</span>
           <span className="font-display text-5xl font-bold leading-none tracking-tight text-stone-900 dark:text-white tabular-nums">
-            {value > 0 ? value.toFixed(2) : "—"}
+            {value > 0 ? value.toFixed(2) : "-"}
           </span>
         </div>
 
