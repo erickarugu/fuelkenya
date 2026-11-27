@@ -4,6 +4,7 @@
   "authentication": "Authentication",
   "rate-limiting": "Rate Limiting",
   "endpoints": "API Reference",
+  "embed": "Embed the Chart",
   "reference": "Data Reference",
   "examples": "Code Examples"
 }

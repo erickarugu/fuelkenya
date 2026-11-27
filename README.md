@@ -170,6 +170,18 @@ Full documentation: [docs.fuelkenya.com](https://docs.fuelkenya.com)
 
 ---
 
+## Embed the chart
+
+Anyone can put a live price-history chart on their site:
+
+```html
+<iframe src="https://fuelkenya.com/embed?town=Nairobi&period=1Y&theme=dark"
+  width="100%" height="700" style="border:0;border-radius:12px" loading="lazy"
+  title="Kenya fuel prices: Nairobi"></iframe>
+```
+
+`town` is any town name, `period` is `3M`, `6M`, `1Y`, `2Y`, `5Y` or `All`, and `theme` is `dark` or `light`. Readers can change all three inside the chart. There is a code builder on [fuelkenya.com/data](https://fuelkenya.com/data#embed) and full details in the [docs](https://docs.fuelkenya.com/embed).
+
 ## Development workflow
 
 ### Running both web and API together
