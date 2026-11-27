@@ -1,0 +1,55 @@
+---
+title: Embed the price chart
+description: Put a live Kenya fuel price chart on your website or blog with one iframe. Pick the town, period and theme; it updates every EPRA cycle.
+---
+
+# Embed the price chart
+
+Add a live price-history chart for any Kenyan town to your site with a single iframe. It shows Super Petrol, Diesel and Kerosene, updates automatically every EPRA cycle, and is free to use.
+
+The quickest way is the builder on [fuelkenya.com/data](https://fuelkenya.com/data#embed): pick a town, period and theme, copy the code and see a live preview.
+
+## Code
+
+```html
+<iframe
+  src="https://fuelkenya.com/embed?town=Nairobi&period=1Y&theme=dark"
+  width="100%"
+  height="700"
+  style="border:0;border-radius:12px;overflow:hidden"
+  loading="lazy"
+  title="Kenya fuel prices: Nairobi"
+></iframe>
+```
+
+## Options
+
+Set these in the `src` address. All are optional.
+
+| Parameter | Values | Default |
+| --- | --- | --- |
+| `town` | Any town from [`/v1/towns`](/endpoints/towns), case-insensitive. Unknown towns fall back to Nairobi. | `Nairobi` |
+| `period` | `3M`, `6M`, `1Y`, `2Y`, `5Y`, `All` | `1Y` |
+| `theme` | `dark` or `light` | `dark` |
+
+Town names with spaces need encoding, for example `town=Nairobi%20West` or `town=Nairobi+West`.
+
+## What readers can do
+
+- Search for and switch to any other town
+- Change the period with the 3M to All buttons
+- Flip between light and dark mode
+- Hide or show each fuel by clicking its legend pill
+- Hover the chart for the exact price on each cycle
+
+The options only set what readers see first.
+
+## Sizing
+
+The chart fills the iframe's width. A height of `700` fits the header, price cards and chart at desktop widths. On narrow pages (under about 640px) the price cards stack, so use around `900`, or set the height with CSS media queries.
+
+## Credit
+
+The chart carries a FuelKenya link to the town's page and a source line. Please keep them visible. The data is [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/): *Source: EPRA/ERC, compiled by FuelKenya (fuelkenya.com)*.
+
+Prefer to draw your own chart? Use [`/v1/prices`](/endpoints/prices) for one town's history, or the [full export](/endpoints/export).
